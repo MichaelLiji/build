@@ -17,10 +17,8 @@
 	<!--Remove apple toolbar and titlebar-->
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 
-	<link href="common/css/import.css" rel="stylesheet" type="text/css" />
-	<link href="directory/css/index/import.css" rel="stylesheet" type="text/css" />
-<!--	<link href="../../common/css/import.css" rel="stylesheet" type="text/css" />
-	<link href="../css/index/import.css" rel="stylesheet" type="text/css" />-->
+	<link href="../../common/css/import.css" rel="stylesheet" type="text/css" />
+	<link href="../css/index/import.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 	<div class="main">
@@ -40,6 +38,52 @@
 				}
 			</script>
 		</header>
+		<div id="guidance">
+			<header id="guidance_header">
+				<script statichtml type="text/html">
+					<ul class="inlineBlock">
+						@for(7 ->> i){
+							<li class="projectColor_{i}"></li>
+						}
+					</ul>
+				</script>
+			</header>
+			<article id="login">
+				<header>
+					<p>你好！</p>
+					已经有
+					<br />
+					<span></span>人
+					<br />
+					使用暴脾气工作，
+					<br />
+					现在，
+					<br />
+					该你了！
+				</header>
+				<section>
+					<script statichtml type="text/html">
+						<ul>
+							@for([
+								{ placeholder : "姓名", vtype : "userInfo", desc : "name", type : "text" },
+								{ placeholder : "邮箱", vtype : "email", desc : "email", type : "text" },
+								{ placeholder : "密码", vtype : "userInfo", desc : "pwd", type : "password" },
+								{ placeholder : "确认密码", vtype : "userInfo", desc : "repwd", type : "password" }
+							] ->> item){
+								<li>
+									<input class="lightBdColor smallRadius" type="{item.type}" vtype="{item.vtype}" placeholder="{item.placeholder}" desc="{item.desc}" />
+								</li>
+							}
+						</ul>
+					</script>
+					<p class="whiteFont">
+						<button class="normalRadius">登录</button>
+						<button class="normalRadius">立即注册</button>
+					</p>
+				</section>
+			</article>
+			<footer></footer>
+		</div>
 		<div id="SPP">
 			<article id="schedule">
 				<header></header>
@@ -71,7 +115,9 @@
 								<dl>
 									<dd class="inlineBlock">
 										@for(pro.users ->> user){
-											<img src="{user.avatar}" />
+											<a class="smallAvatarPanel" href="javascript:void(0);" userid="{user.id}">
+												<img src="{user.avatar}" />
+											</a>
 										}
 									</dd>
 									<dd>
@@ -113,19 +159,20 @@
 				</script>
 			</article>
 			<footer id="tab_SPP">
-				<ul class="inlineBlock"></ul>
-				<script id="spp_item_html" type="text/html">
-					@for([
-						{ tab : "schedule", text : "Schedule 日程" },
-						{ tab : "project", text : "PROJECTS 项目" },
-						{ tab : "partner", text : "PARTNERS 拍档" }
-					] ->> t){
-						<li tab="{t.tab}">
-							<button>
-								<span class="themeBgColor" text="{t.text}"></span>
-							</button>
-						</li>
-					}
+				<script statichtml type="text/html">
+					<ul class="inlineBlock">
+						@for([
+							{ tab : "schedule", text : "Schedule 日程" },
+							{ tab : "project", text : "PROJECTS 项目" },
+							{ tab : "partner", text : "PARTNERS 拍档" }
+						] ->> t){
+							<li tab="{t.tab}">
+								<button>
+									<span class="themeBgColor" text="{t.text}"></span>
+								</button>
+							</li>
+						}
+					</ul>
 				</script>
 			</footer>
 		</div>
@@ -205,6 +252,49 @@
 				<footer>
 					<button class="whiteFont">登出</button>
 				</footer>
+			</article>
+			<article id="singleProject">
+				<header>
+					<ul class="singleProject_tab inlineBlock smallRadius lightBdColor">
+						<li class="lightBdColor whiteFont focused">讨论</li>
+						<li class="lightBdColor whiteFont">
+							To Do
+							<span class="whiteFont">3</span>
+						</li>
+						<li class="lightBdColor whiteFont">工作集</li>
+					</ul>
+					<dl class="singleProject_info"></dl>
+					<script id="singleProject_info_html" type="text/html">
+						<dt class="whiteFont projectColor_{color} largeRadius">{title}</dt>
+						<dd class="lightBdColor projectColor_{color} largeRadius">
+							<figure class="inlineBlock">
+								<a class="smallAvatarPanel" userid="{creator.id}" href="javascript:void(0);">
+									<img src="{creator.avatar}" />
+								</a>
+								<figcaption class="grayFont">{creator.name}</figcaption>
+							</figure>
+							<p>{desc}</p>
+							<nav class="inlineBlock">
+								<span>参与人：</span>
+								<p class="inlineBlock">
+									@for(users ->> u){
+										<a class="smallAvatarPanel" userid="{u.id}" href="javascript:void(0);">
+											<img src="{u.avatar}" title="{u.name}" />
+										</a>
+									}
+								</p>
+							</nav>
+							<aside class="lightBdColor inlineBlock">
+								@for(attachments ->> a){
+									<a href="javascript:void(0);">
+										<img />
+									</a>
+								}
+							</aside>
+						</dd>
+					</script>
+				</header>
+				<section></section>
 			</article>
 		</div>
 		<div class="deep">
@@ -308,8 +398,7 @@
 				<header>
 					<figure>
 						<p class="largeRadius">
-							<!--<img src="../../../common/image/icon.png" />-->
-							<img src="common/image/icon.png" />
+							<img src="../../../common/image/icon.png" />
 						</p>
 						<figcaption>暴脾气 0.1</figcaption>
 					</figure>
@@ -353,31 +442,8 @@
 		<article class="normalRadius"></article>
 		<footer></footer>
 	</div>
-        <!--<script type="text/javascript" src="cordova.js"></script>-->
-        <script type="text/javascript" src="phonegap.js"></script>
-	<script src="common/javascript/jQun.js" type="text/javascript"></script>
-	<script src="common/javascript/jQun_mobile.js" type="text/javascript"></script>
-	<script src="common/javascript/structure.js" type="text/javascript"></script>
-	<script src="common/javascript/global.js" type="text/javascript"></script>
-	<script src="test/callServer/index_callServer.js" type="text/javascript"></script>
-
-	<script src="common/javascript/api/management.js" type="text/javascript"></script>
-	<script src="common/javascript/api/data.js" type="text/javascript"></script>
-	<script src="common/javascript/api/dom.js" type="text/javascript"></script>
-
-	<script src="common/javascript/ui/fixed.js" type="text/javascript"></script>
-	<script src="common/javascript/ui/control/wait.js" type="text/javascript"></script>
-	<script src="common/javascript/ui/control/drag.js" type="text/javascript"></script>
-	<script src="common/javascript/ui/control/list.js" type="text/javascript"></script>
-	<script src="common/javascript/ui/control/time.js" type="text/javascript"></script>
-
-	<script src="directory/javascript/index/home.js" type="text/javascript"></script>
-	<script src="directory/javascript/index/secondary.js" type="text/javascript"></script>
-	<script src="directory/javascript/index/deep.js" type="text/javascript"></script>
-
-	<script src="test/dummyData/generate.js" type="text/javascript"></script>
-	<script src="test/dummyData/index_dummyData.js" type="text/javascript"></script>
-<!--	<script src="../../common/javascript/jQun.js" type="text/javascript"></script>
+	<script src="../../common/javascript/jQun.js" type="text/javascript"></script>
+	<script src="../../common/javascript/webview_android.js" type="text/javascript"></script>
 	<script src="../../common/javascript/jQun_mobile.js" type="text/javascript"></script>
 	<script src="../../common/javascript/structure.js" type="text/javascript"></script>
 	<script src="../../common/javascript/global.js" type="text/javascript"></script>
@@ -393,11 +459,12 @@
 	<script src="../../common/javascript/ui/control/list.js" type="text/javascript"></script>
 	<script src="../../common/javascript/ui/control/time.js" type="text/javascript"></script>
 
-	<script src="../javascript/index/home.js" type="text/javascript"></script>
+	<script src="../javascript/index/spp.js" type="text/javascript"></script>
 	<script src="../javascript/index/secondary.js" type="text/javascript"></script>
 	<script src="../javascript/index/deep.js" type="text/javascript"></script>
+	<script src="../javascript/index/guidance.js" type="text/javascript"></script>
 
 	<script src="../../test/dummyData/generate.js" type="text/javascript"></script>
-	<script src="../../test/dummyData/index_dummyData.js" type="text/javascript"></script>-->
+	<script src="../../test/dummyData/index_dummyData.js" type="text/javascript"></script>
 </body>
 </html>
