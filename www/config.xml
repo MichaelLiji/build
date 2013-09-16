@@ -16,7 +16,7 @@
         PhoneGap Team
     </author>
 	
-	<content src="directory/page/index.htm" />
+	<content src="directory/page/index.html" />
 
     <!--
         Enable individual API permissions here.
