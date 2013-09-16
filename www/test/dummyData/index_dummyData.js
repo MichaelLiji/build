@@ -21,14 +21,14 @@ this.Common = Common = (function(){
 				id : Number.id(),
 				name : name,
 				pinyin : firstLetter.match(/[A-Za-z]/) ? firstLetter : isNaN(firstLetter - 0) ? "z" : "a", // 这里只返回拼音首字母
-				avatar : "../../test/image/avatar/" + Number.random(16) + ".jpg",
+				avatar : "test/image/avatar/" + Number.random(16) + ".jpg",
 				company : String.random(10),
 				companyAdress : String.random(30),
 				position : String.random(4),
 				phoneNum : Number.random(14000000000),
 				email : String.random(8) + "@BaoPiQi.com",
 				adress : String.random(30),
-				QRCode : "../../test/image/avatar/" + Number.random(16) + ".jpg"
+				QRCode : "test/image/avatar/" + Number.random(16) + ".jpg"
 			};
 		},
 		getUsers : function(_len){
