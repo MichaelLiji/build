@@ -2327,7 +2327,7 @@ function onDeviceReady() {
                                                     }
                                                     ;
                                                     /* PARENT */
-                                                    extend(Files, Phone);
+                                                    
 
                                                     function Files() {
                                                         Files.superclass.constructor.call(this);
@@ -2419,7 +2419,8 @@ function onDeviceReady() {
                                                             }
                                                         };
                                                     }
-
+                                                    extend(Files, Phone);
+                                                    
                                                     /* Voice_message */
                                                     function VoiceMessage() {
                                                         VoiceMessage.superclass.constructor.call(this);
@@ -2498,8 +2499,8 @@ function onDeviceReady() {
                                                         };
 
                                                     }
-//                                                    extend(VoiceMessage, Phone);
-                                                    extend(VoiceMessage, Files);
+                                                    extend(VoiceMessage, Phone);
+//                                                    extend(VoiceMessage, Files);
                                                     /* Voice_message */
 
                                                     //                    function PhoneFiles(){
