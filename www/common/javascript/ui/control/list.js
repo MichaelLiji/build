@@ -62,13 +62,6 @@ this.AnchorList = (function(Global, anchorListHtml, clickAnchorEvent){
 	new jQun.Event("clickanchor")
 ));
 
-this.ChatList = (function(){
-	function ChatList(){};
-	ChatList = new NonstaticClass(ChatList, "Bao.UI.Control.List.ChatList", Panel.prototype);
-
-	return ChatList.constructor;
-}());
-
 this.UserAnchorList = (function(AnchorList, forEach, avatarHtml){
 	function UserAnchorList(listData){
 		///	<summary>
@@ -306,14 +299,14 @@ this.UserSelectionList = (function(UserIndexList, CallServer, Global, selectUser
 		userIndexList.appendTo(this.find(">article")[0]);
 		
 		userIndexList.attach({
-			userclick : function(e){
-				var el, targetEl = jQun(e.target);
-
-				el = targetEl.between(">ol figure>p", this);
+			clickavatar : function(e, targetEl){
+				var el = targetEl.between(">ol figure>p", this);
 
 				if(el.length > 0){
 					el.classList.toggle("selected");
 				}
+
+				e.stopPropagation();
 			}
 		});
 
@@ -340,9 +333,6 @@ this.UserSelectionList = (function(UserIndexList, CallServer, Global, selectUser
 					});
 					clickButtonEvent.trigger(targetEl[0]);
 				}
-			},
-			clickavatar : function(e){
-				e.stopPropagation();
 			},
 			clickbutton : function(e){
 				// 隐藏遮罩

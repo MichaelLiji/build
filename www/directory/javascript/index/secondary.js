@@ -1,11 +1,10 @@
-﻿(function(Secondary, NonstaticClass, StaticClass, PagePanel,  CallServer){
+﻿(function(Secondary, NonstaticClass, StaticClass, PagePanel, CallServer){
 this.AddProject = (function(Global, Validation, UserManagementList){
-	function AddProject(selector, colorHtml){
+	function AddProject(selector){
 		///	<summary>
 		///	添加项目。
 		///	</summary>
 		/// <param name="selector" type="string">对应的元素选择器</param>
-		/// <param name="colorHtml" type="jQun.HTML">颜色模板</param>
 		var titleValidation, colorValidation, addProject = this;
 
 		// 标题验证
@@ -23,7 +22,6 @@ this.AddProject = (function(Global, Validation, UserManagementList){
 		);
 
 		this.assign({
-			colorHtml : colorHtml,
 			colorValidation : colorValidation,
 			titleValidation : titleValidation,
 			userManagementList : new UserManagementList("添加项目拍档")
@@ -46,20 +44,12 @@ this.AddProject = (function(Global, Validation, UserManagementList){
 					if(!colorValidation.validate())
 						return;
 
-					var a = {
+					CallServer.open("addProject", {
 						title : addProject.find('>section[desc="title"]>input').value,
 						color : addProject.find('>section[desc="color"] button.selected').get("colormark", "attr"),
 						desc : addProject.find('>footer textarea').value,
 						users : addProject.userManagementList.getAllUsers()
-					};
-
-					CallServer.open("addProject", {
-						title : addProject.find('>section[desc="title"]>input').value,
-						colormark : addProject.find('>section[desc="color"] button.selected').get("colormark", "attr"),
-						desc : addProject.find('>footer textarea').value,
-						users : addProject.userManagementList.getAllUsers()
 					}, function(data){
-						// todo : 添加数据
 						Global.history.go("project");
 					}, true);
 				};
@@ -78,7 +68,7 @@ this.AddProject = (function(Global, Validation, UserManagementList){
 			// 清空已选择的用户
 			this.userManagementList.clearUsers();
 			// 还原颜色
-			this.find('>section[desc="color"] dd').innerHTML = this.colorHtml.render();
+			this.find('>section[desc="color"] dd .selected').classList.remove("selected");
 			// 清空错误
 			this.colorValidation.clearError();
 			this.titleValidation.clearError();
@@ -90,7 +80,6 @@ this.AddProject = (function(Global, Validation, UserManagementList){
 	});
 
 	AddProject.properties({
-		colorHtml : undefined,
 		colorValidation : undefined,
 		titleValidation : undefined,
 		userManagementList : undefined
@@ -108,7 +97,9 @@ this.BusinessCard = (function(Global, LoadingBar, clickAvatarEvent){
 		///	<summary>
 		///	点击用户头像。
 		///	</summary>
-		jQun(document.body).attach({
+		var bodyEl = jQun(document.body);
+		
+		bodyEl.attach({
 			userclick : function(e){
 				var avatarPanel = jQun(e.target).between('[class*="AvatarPanel"]');
 
@@ -119,7 +110,12 @@ this.BusinessCard = (function(Global, LoadingBar, clickAvatarEvent){
 					userId : avatarPanel.get("userid", "attr")
 				});
 				clickAvatarEvent.trigger(e.target);
-			},
+				
+				e.stopPropagation();
+			}
+		}, true, 2);
+
+		bodyEl.attach({
 			clickavatar : function (e){
 				Global.history.go("businessCard").fillUser(e.userId);
 			}
@@ -179,12 +175,16 @@ this.BusinessCard = (function(Global, LoadingBar, clickAvatarEvent){
 
 this.SystemOption = (function(AnchorList, anchorData){
 	function SystemOption(selector){
+		///	<summary>
+		///	系统项。
+		///	</summary>
+		/// <param name="selector" type="string">对应的元素选择器</param>
 		new AnchorList(anchorData).appendTo(this.find(">section")[0]);
 	};
 	SystemOption = new NonstaticClass(SystemOption, "Bao.Page.Index.Secondary.SystemOption", PagePanel.prototype);
 
 	SystemOption.override({
-		title : "设置"
+		title : "系统项"
 	});
 
 	return SystemOption.constructor;
@@ -199,38 +199,6 @@ this.SystemOption = (function(AnchorList, anchorData){
 		{ key : "file", title : "查看归档" },
 		{ key : "aboutBaoPiQi", title : "关于暴脾气" }
 	]
-));
-
-this.SingleProject = (function(Global){
-	function SingleProject(selector, infoHtml){
-		this.assign({
-			infoHtml : infoHtml
-		});
-
-		this.fill(1);
-		console.log(this);
-	};
-	SingleProject = new NonstaticClass(SingleProject, "Bao.Page.Index.Secondary.SingleProject", PagePanel.prototype);
-
-	SingleProject.override({
-		title : "单个项目"
-	});
-
-	SingleProject.properties({
-		fill : function(id){
-			var singleProject = this;
-
-			CallServer.open("getSingleProject", { id : id }, function(project){
-				Global.titleBar.resetTitle(project.title);
-				singleProject.find(">header>dl").innerHTML = singleProject.infoHtml.render(project);
-			});
-		},
-		infoHtml : undefined
-	});
-
-	return SingleProject.constructor;
-}(
-	Bao.Global
 ));
 
 Secondary.members(this);

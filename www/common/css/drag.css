@@ -1,6 +1,6 @@
 ﻿.scroll {
 	width : 8px;
-	position : absolute;
+	position : fixed;
 	z-index : 5;
 	overflow : hidden;
 }

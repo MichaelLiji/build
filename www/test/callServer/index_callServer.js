@@ -27,22 +27,34 @@ this.CallServer = (function(CallServer, Wait, open, allHandlers){
 
 					LoadingBar.hide();
 					_complete(data);
-				}, 1000);
+				}, 500);
 			});
 		}
 	});
 
 	CallServer.save([
-		["getUser",				new Text("url?id={id}"),					"", true],
-		["getPartnerGroups",			"url",								"", true],
+		["addProject",			new Text("url?title={title}&color={color}&desc={desc}&users={users}"), "POST"],
+		["getLoginInfo",		"url",										""],
+		["getMessages",			new Text("url?id={id}&type={type}"),		"", true],
+		["getPartnerGroups",	"url",										"", true],
 		["getPartners",			new Text("url?groupId={groupId}"),			"", true],
 		["getProjects",			"url",										"", true],
 		["getSchedules",		new Text("url?last={last}&next={next}"),	"", true],
-		["addProject",			new Text("url?title={title}&color={color}&desc={desc}&users={users}"), "POST"],
+		["getSingleProject",	new Text("url?id={id}"),					"", true],
+		["getUser",				new Text("url?id={id}"),					"", true],
+		["globalSearch",		new Text("url?search={search}"),			"", true],
+		["invitation",			new Text("url?emails={emails}"),			""],
+		["login",				new Text("url?email={email}&pwd={pwd}"),	""],
 		["myInformation",		"url",										"", true],
-		["globalSearch",		new Text("url?search={search}"),				"", true],
-		["getSingleProject",		new Text("url?id={id}"),				"", true],
-		["getLoginInfo",		"url",										""]
+		["praise",				new Text("url?messageId={messageId}"),		""],
+		["register",			new Text("url?name={name}&pwd={pwd}&email={email}&validation={validation}"),	""],
+		["getToDoInfo",				new Text("url?id={id}"),					"", true],
+		["getToDoList",			new Text("url?id={id}"),					"",	true],
+		["sendToDo",			new Text("url?title={title}&remind={remind}&desc={desc}&attachments={attachments}&date={date}"), "POST"],
+		["toDoCompleted",		new Text("url?id={id}"),					""],
+		["getWorkStream",		new Text("url?id={id}"),					"", true],
+		["addComment",			new Text("url?text={text}&type={type}&projectId={projectId}&attachment={attachment}"),	""],
+		["createGroup",		new Text("url?users=[users]&name={name}"),	""]
 	], allHandlers);
 
 	return CallServer;
@@ -185,16 +197,88 @@ this.CallServer = (function(CallServer, Wait, open, allHandlers){
 
 			return data;
 		},
-		getSingleProject : function(data){
-			data = Index.SPP.getSingleProject();
+		getSingleProject : function(data, params){
+			data = Index.SingleProject.getSingleProject();
+
+			data.id = params.id;
+			data.pageMax = data.pageIndex + (data.emptyFolders > 0 ? 0 : 1);
 
 			return data;
 		},
-		getLoginInfo : function(){
+		getLoginInfo : function(data){
 			data = {
 				count : Bao.Test.DummyData.Generate.Number.random(9999999),
 				validationImage : "javascript:void(0);"
 			};
+
+			return data;
+		},
+		getMessages : function(data){
+			var id = Bao.Global.loginUser.id;
+
+			data = Index.SingleProject.getMessages();
+
+			data.forEach(function(dt){
+				var poster = dt.poster;
+
+				poster.isLoginUser = poster.id === id;
+			});
+
+			return data;
+		},
+		login : function(data){
+			data = {
+				user : Index.Common.getUser(),
+				status : 0
+			};
+
+			return data;
+		},
+		getToDoInfo : function(data){
+			data = Index.Deep.getToDoInfo();
+
+			return data;
+		},
+		getToDoList : function(data){
+			var completed = [], uncompleted = [];
+
+			jQun.forEach(Bao.Test.DummyData.Generate.Number.random(15), function(){
+				completed.push(Index.Deep.getToDoInfo());
+			}, this);
+
+			jQun.forEach(Bao.Test.DummyData.Generate.Number.random(15), function(){
+				uncompleted.push(Index.Deep.getToDoInfo());
+			}, this);
+
+			data = {
+				completed : completed,
+				uncompleted : uncompleted
+			};
+
+			return data;
+		},
+		sendToDo : function(data){
+			data = { id : Bao.Test.DummyData.Generate.Number.random(15) };
+
+			return data;
+		},
+		getWorkStream : function(data){
+			var ws = [];
+
+			jQun.forEach(Bao.Test.DummyData.Generate.Number.random(15), function(){
+				var toDoList = [];
+
+				jQun.forEach(Bao.Test.DummyData.Generate.Number.random(5), function(){
+					toDoList.push(Index.Deep.getToDoInfo());
+				});
+
+				ws.push({
+					toDoList : toDoList,
+					user : Index.Common.getUser()
+				});
+			}, this);
+
+			data = ws;
 
 			return data;
 		}

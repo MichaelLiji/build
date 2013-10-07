@@ -162,3 +162,54 @@
 #mask .userIndexList aside {
 	bottom : 110px;
 }
+
+#createFirstProject > section li, #addProject > * {
+	height : 45px;
+	line-height : 25px;
+	padding : 10px;
+	overflow : hidden;
+	background-color : #fff;
+}
+#createFirstProject > section button, #addProject > section button {
+	width : 22px;
+	height : 22px;
+	border-radius : 22px;
+	border : 0 none;
+	margin-right : 10px;
+}
+#createFirstProject > section button:last-child, #addProject > section button:last-child {
+	margin-right : 0;
+}
+#createFirstProject > section button.selected, #addProject > section button.selected {
+	width : 30px;
+	height : 30px;
+	padding : 3px;
+	border-radius : 30px;
+	background-clip : content-box;
+	border : 1px solid;
+	margin : -4px 6px -4px -4px;
+}
+#createFirstProject > section button.selected:last-child, #addProject > section button.selected:last-child {
+	margin-right : -4px;
+}
+
+[attachmenttype] {
+	height : 34px;
+	width : 34px;
+	overflow : hidden;
+	margin : 2px;
+}
+[attachmenttype]:not([attachmenttype="voice"]) {
+	border : 0 none;
+}
+[attachmenttype="voice"] {
+	background : url(../../../common/image/width24.png) 0 -575px no-repeat content-box content-box;
+	padding : 4px;
+}
+[attachmenttype="voice"] > img {
+	display : none;
+}
+[attachmenttype] > img {
+	width : 100%;
+	height : 100%;
+}

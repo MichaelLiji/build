@@ -6,29 +6,36 @@ this.Global = (function(Fixed, Management, HTML){
 		///	</summary>
 		var Global = this;
 
-		window.onload = function(){
-			//jQun("body").set("zoom", window.screen.width / 640, "css");
+		jQun(window).attach({
+			load : function(){
+				//jQun("body").set("zoom", window.screen.width / 640, "css");
 			
-			// 初始化历史记录
-			var history = new Management.History();
+				// 初始化历史记录
+				var history = new Management.History();
 
-			Global.assign({
-				history :　history,
-				mask : new Fixed.Mask("#mask"),
-				// 初始化标题栏
-				titleBar : new Fixed.TitleBar(
-					"#titleBar",
-					history,
-					new HTML("title_tools_html", true)
-				)
-			});
+				Global.assign({
+					history :　history,
+					mask : new Fixed.Mask("#mask"),
+					// 初始化标题栏
+					titleBar : new Fixed.TitleBar(
+						"#titleBar",
+						history,
+						new HTML("title_tools_html", true)
+					)
+				});
 
-			// 跳转到指定页
-			history.go("project");
-		};
+				// 首先要登录才会用登录用户的数据
+				history.go("login");
+			},
+			login : function(e){
+				Global.loginUser = e.loginUser;
+			}
+		});
 	};
 	Global = new StaticClass(Global, "Bao.Global", {
 		history : undefined,
+		// 当前登录用户的数据
+		loginUser : undefined,
 		titleBar : undefined
 	});
 

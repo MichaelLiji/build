@@ -14,6 +14,9 @@ this.Scroll = (function(scrollPanel, body){
 		jQun(window).attach({
 			beforehide : function(){
 				Scroll.hidePanel();
+			},
+			settop : function(e){
+				Scroll.reposition(e.overflowPanel);
 			}
 		});
 	};

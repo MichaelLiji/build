@@ -2,17 +2,17 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title>
+    <title>暴脾气</title>
 
 	<!--设置文档类型和编码-->
 	<!--Setup document type and code language-->
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<!--设置宽度和最大、最小缩放比例-->
 	<!--Setup viewport size and largest heights/widths proportions-->
-	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"/>
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
 	<!--禁止了把数字转化为拨号链接-->
 	<!--Prohibit links of numbers from becoming phone numbers-->
-	<meta name="format-detection" content="telephone=no"/>
+	<meta name="format-detection" content="telephone=no" />
 	<!--删除默认的苹果工具栏和菜单栏-->
 	<!--Remove apple toolbar and titlebar-->
 	<meta name="apple-mobile-web-app-capable" content="yes" />
@@ -39,8 +39,8 @@
 			</script>
 		</header>
 		<div id="guidance">
-			<header id="guidance_header">
-				<script statichtml type="text/html">
+			<header class="guidance_header">
+				<script type="text/static-html">
 					<ul class="inlineBlock">
 						@for(7 ->> i){
 							<li class="projectColor_{i}"></li>
@@ -62,10 +62,10 @@
 					该你了！
 				</header>
 				<section>
-					<script statichtml type="text/html">
+					<script type="text/static-html">
 						<ul>
 							@for([
-								{ placeholder : "姓名", vtype : "userInfo", desc : "name", type : "text" },
+								{ placeholder : "姓名", vtype : "notEmpty", desc : "name", type : "text" },
 								{ placeholder : "邮箱", vtype : "email", desc : "email", type : "text" },
 								{ placeholder : "密码", vtype : "userInfo", desc : "pwd", type : "password" },
 								{ placeholder : "确认密码", vtype : "userInfo", desc : "repwd", type : "password" }
@@ -78,11 +78,57 @@
 					</script>
 					<p class="whiteFont">
 						<button class="normalRadius">登录</button>
-						<button class="normalRadius">立即注册</button>
+						<button class="normalRadius">注册账号</button>
 					</p>
 				</section>
 			</article>
-			<footer></footer>
+			<article id="createFirstProject">
+				<header>创建一个新项目</header>
+				<section>
+					<ul>
+						<li class="lightBdColor smallRadius">
+							<input placeholder="添加项目标题" />
+						</li>
+						<li class="lightBdColor smallRadius inlineBlock">
+							<span class="placeHolderFont">标注颜色</span>
+							<aside>
+								<script type="text/static-html">
+									@for(6 ->> i){
+										<button class="projectColor_{i}" colormark="{i}"></button>
+									}
+								</script>
+							</aside>
+						</li>
+						<li class="lightBdColor smallRadius">
+							<textarea placeholder="添加项目内容"></textarea>
+							<p></p>
+						</li>
+					</ul>
+				</section>
+				<footer>
+					<button class="whiteFont normalRadius">创建</button>
+				</footer>
+			</article>
+			<article id="invitation">
+				<header>邀请你的团队</header>
+				<section>
+					<ul></ul>
+					<script id="invitation_html" type="text/html">
+						@for(length ->> i){
+							<li>
+								<input class="lightBdColor smallRadius" type="text" placeholder="请输入邮箱" />
+							</li>
+						}
+					</script>
+				</section>
+				<footer>
+					<button class="whiteFont normalRadius">邀请</button>
+				</footer>
+			</article>
+			<footer id="guidance_footer">
+				<button class="themeBgColor themeBdColor" desc="prev"></button>
+				<button class="themeBgColor themeBdColor" desc="next"></button>
+			</footer>
 		</div>
 		<div id="SPP">
 			<article id="schedule">
@@ -102,7 +148,7 @@
 				<ul class="inlineBlock"></ul>
 				<script id="spp_project_html" type="text/html">
 					@for(projects ->> pro){
-						<li>
+						<li projectid="{pro.id}">
 							<figure class="lightBdColor normalRadius" status="{pro.status}">
 								<figcaption class="projectColor_{pro.color} whiteFont">
 									<span>{pro.title}</span>
@@ -159,7 +205,7 @@
 				</script>
 			</article>
 			<footer id="tab_SPP">
-				<script statichtml type="text/html">
+				<script type="text/static-html">
 					<ul class="inlineBlock">
 						@for([
 							{ tab : "schedule", text : "Schedule 日程" },
@@ -176,7 +222,7 @@
 				</script>
 			</footer>
 		</div>
-		<div class="secondary">
+		<div id="secondary">
 			<article id="addProject">
 				<header class="lightBdColor normalRadius"></header>
 				<section class="lightBdColor normalRadius" desc="title">
@@ -187,20 +233,21 @@
 					<dl class="inlineBlock">
 						<!--Project Color-->
 						<dt class="placeHolderFont">标注颜色</dt>
-						<dd></dd>
+						<dd>
+							<script type="text/static-html">
+								@for([
+									"projectColor_orange",
+									"projectColor_tan",
+									"projectColor_cyan",
+									"projectColor_blue",
+									"projectColor_henna",
+									"projectColor_purple"
+								] ->> color, idx){
+									<button class="{color}" colormark="{idx}"></button>
+								}
+							</script>
+						</dd>
 					</dl>
-					<script id="addProject_color_html" type="text/html">
-						@for([
-							"projectColor_orange",
-							"projectColor_tan",
-							"projectColor_cyan",
-							"projectColor_blue",
-							"projectColor_henna",
-							"projectColor_purple"
-						] ->> color, idx){
-							<button class="{color}" colormark="{idx}"></button>
-						}
-					</script>
 				</section>
 				<footer class="lightBdColor normalRadius">
 					<dl>
@@ -252,49 +299,6 @@
 				<footer>
 					<button class="whiteFont">登出</button>
 				</footer>
-			</article>
-			<article id="singleProject">
-				<header>
-					<ul class="singleProject_tab inlineBlock smallRadius lightBdColor">
-						<li class="lightBdColor whiteFont focused">讨论</li>
-						<li class="lightBdColor whiteFont">
-							To Do
-							<span class="whiteFont">3</span>
-						</li>
-						<li class="lightBdColor whiteFont">工作集</li>
-					</ul>
-					<dl class="singleProject_info"></dl>
-					<script id="singleProject_info_html" type="text/html">
-						<dt class="whiteFont projectColor_{color} largeRadius">{title}</dt>
-						<dd class="lightBdColor projectColor_{color} largeRadius">
-							<figure class="inlineBlock">
-								<a class="smallAvatarPanel" userid="{creator.id}" href="javascript:void(0);">
-									<img src="{creator.avatar}" />
-								</a>
-								<figcaption class="grayFont">{creator.name}</figcaption>
-							</figure>
-							<p>{desc}</p>
-							<nav class="inlineBlock">
-								<span>参与人：</span>
-								<p class="inlineBlock">
-									@for(users ->> u){
-										<a class="smallAvatarPanel" userid="{u.id}" href="javascript:void(0);">
-											<img src="{u.avatar}" title="{u.name}" />
-										</a>
-									}
-								</p>
-							</nav>
-							<aside class="lightBdColor inlineBlock">
-								@for(attachments ->> a){
-									<a href="javascript:void(0);">
-										<img />
-									</a>
-								}
-							</aside>
-						</dd>
-					</script>
-				</header>
-				<section></section>
 			</article>
 		</div>
 		<div class="deep">
@@ -435,6 +439,141 @@
 					<img src="{QRCode}" />
 				</section>
 			</script>
+			<article id="toDo">
+				<section>
+					<header class="toDo_header"></header>
+					<script id="toDo_info_html" type="text/html">
+						<dl class="largeRadius lightBdColor">
+							<dt class="projectColor_{color} normalRadius">
+								<button class="smallRadius"></button>
+								<span class="whiteFont">{title}</span>
+							</dt>
+							<dd>
+								<figure>
+									<p>{desc}</p>
+									<aside class="lightBdColor normalRadius inlineBlock">
+										@for(attachments ->> a){
+											<a attachmenttype="{a.type}" class="normalRadius lightBdColor" href="javascript:void(0);">
+												<img src="{a.src}" />
+											</a>
+										}
+									</aside>
+								</figure>
+							</dd>
+						</dl>
+					</script>
+					<figure></figure>
+				</section>
+			</article>
+			<article id="sendToDo">
+				<header class="inlineBlock"></header>
+				<script id="sendToDo_info_html" type="text/html">
+					<p class="largeAvatarPanel">
+						<img src="{avatar}" />
+					</p>
+					<aside class="normalRadius whiteFont">
+						<span>{name}</span>
+					</aside>
+				</script>
+				<section class="lightBdColor normalRadius">
+					<ul>
+						<li class="lightBdColor onlyBorderBottom" desc="title">
+							<input type="text" placeholder="To Do标题" vtype="notEmpty" autofocus />
+						</li>
+						<li desc="endDate">
+							<input type="text" placeholder="截止日期" vtype="notEmpty" readonly />
+							<input type="date" value="2013/09/1" vtype="notEmpty" />
+						</li>
+					</ul>
+				</section>
+				<section class="lightBdColor normalRadius" desc="remind">
+					<span class="placeHolderFont">完成提醒</span>
+					<button class="largeRadius">
+						<span></span>
+					</button>
+				</section>
+				<section class="lightBdColor normalRadius" desc="content">
+					<textarea placeholder="To Do内容"></textarea>
+					<aside></aside>
+				</section>
+			</article>
+		</div>
+		<div id="singleProject">
+			<header id="singleProjectHeader">
+				<ul class="inlineBlock smallRadius lightBdColor">
+					<li class="lightBdColor whiteFont" pagename="discussion">讨论</li>
+					<li class="lightBdColor whiteFont" pagename="toDoList">
+						To Do
+						<span class="whiteFont">3</span>
+					</li>
+					<li class="lightBdColor whiteFont" pagename="workStream">工作集</li>
+				</ul>
+			</header>
+			<article id="discussion">
+				<section>
+					<header>
+						<dl class="discussion_info"></dl>
+						<script id="discussion_info_html" type="text/html">
+							<dt class="whiteFont projectColor_{color} largeRadius">{title}</dt>
+							<dd class="lightBdColor projectColor_{color} largeRadius">
+								<figure class="inlineBlock">
+									<a class="smallAvatarPanel" userid="{creator.id}" href="javascript:void(0);">
+										<img src="{creator.avatar}" />
+									</a>
+									<figcaption class="grayFont">{creator.name}</figcaption>
+								</figure>
+								<p>{desc}</p>
+								<nav class="inlineBlock">
+									<span>参与人：</span>
+									<p class="inlineBlock">
+										@for(users ->> u){
+											<a class="smallAvatarPanel" userid="{u.id}" href="javascript:void(0);">
+												<img src="{u.avatar}" title="{u.name}" />
+											</a>
+										}
+									</p>
+								</nav>
+								<aside class="lightBdColor inlineBlock normalRadius">
+									@for(attachments ->> a){
+										<a attachmenttype="{a.type}" class="normalRadius lightBdColor" href="javascript:void(0);">
+											<img src="{a.src}" />
+										</a>
+									}
+								</aside>
+							</dd>
+						</script>
+					</header>
+					<figure></figure>
+				</section>
+			</article>
+			<article id="toDoList">
+				<section class="toDoList_content">
+					<dl>
+						<dt class="lightBgColor whiteFont smallRadius">未完成的To Do</dt>
+						<dd></dd>
+					</dl>
+					<dl>
+						<dt class="lightBgColor whiteFont smallRadius">完成的To Do</dt>
+						<dd></dd>
+					</dl>
+				</section>
+			</article>
+			<article id="workStream">
+				<ul></ul>
+				<script id="workStream_info_html" type="text/html">
+					@for(workStream ->> w){
+						<li>
+							<figure>
+								<p class="largeAvatarPanel">
+									<img src="{w.user.avatar}" />
+								</p>
+								<figcaption>{w.user.name}</figcaption>
+							</figure>
+							<aside></aside>
+						</li>
+					}
+				</script>
+			</article>
 		</div>
 	</div>
 	<div id="mask" action="none">
@@ -447,13 +586,14 @@
 	<script src="../../common/javascript/jQun_mobile.js" type="text/javascript"></script>
 	<script src="../../common/javascript/structure.js" type="text/javascript"></script>
 	<script src="../../common/javascript/global.js" type="text/javascript"></script>
-	<script src="../../test/callServer/index_callServer.js" type="text/javascript"></script>
+	<script src="../../common/javascript/callServer.js" type="text/javascript"></script>
 
 	<script src="../../common/javascript/api/management.js" type="text/javascript"></script>
 	<script src="../../common/javascript/api/data.js" type="text/javascript"></script>
 	<script src="../../common/javascript/api/dom.js" type="text/javascript"></script>
 
 	<script src="../../common/javascript/ui/fixed.js" type="text/javascript"></script>
+	<script src="../../common/javascript/ui/control/chat.js" type="text/javascript"></script>
 	<script src="../../common/javascript/ui/control/wait.js" type="text/javascript"></script>
 	<script src="../../common/javascript/ui/control/drag.js" type="text/javascript"></script>
 	<script src="../../common/javascript/ui/control/list.js" type="text/javascript"></script>
@@ -463,8 +603,6 @@
 	<script src="../javascript/index/secondary.js" type="text/javascript"></script>
 	<script src="../javascript/index/deep.js" type="text/javascript"></script>
 	<script src="../javascript/index/guidance.js" type="text/javascript"></script>
-
-	<script src="../../test/dummyData/generate.js" type="text/javascript"></script>
-	<script src="../../test/dummyData/index_dummyData.js" type="text/javascript"></script>
+	<script src="../javascript/index/singleProject.js" type="text/javascript"></script>
 </body>
 </html>

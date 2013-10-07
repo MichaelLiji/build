@@ -3,12 +3,7 @@
 	padding : 10px;
 }
 #addProject > * {
-	height : 45px;
-	line-height : 25px;
 	margin-top : 5px;
-	padding : 10px;
-	overflow : hidden;
-	background-color : #fff;
 }
 #addProject > *:first-child {
 	margin-top : 0;
@@ -40,28 +35,6 @@
 #addProject > section dd {
 	width : 75%;
 	text-align : center;
-}
-#addProject > section button {
-	width : 22px;
-	height : 22px;
-	border : 0 none;
-	border-radius : 22px;
-	margin-right : 10px;
-}
-#addProject > section button:last-child {
-	margin-right : 0;
-}
-#addProject > section button.selected {
-	width : 30px;
-	height : 30px;
-	padding : 3px;
-	border-radius : 30px;
-	background-clip : content-box;
-	border : 1px solid;
-	margin : -4px 6px -4px -4px;
-}
-#addProject > section button.selected:last-child {
-	margin-right : -4px;
 }
 #addProject > footer {
 	height : auto;
@@ -184,98 +157,4 @@
 	background-color : #cf312e;
 	background-clip : content-box;
 	font-size : 20px;
-}
-
-#singleProject {
-	padding : 5px 10px;
-}
-.singleProject_tab {
-	background-color : #fff;
-	margin : 0 2px;
-}
-.singleProject_tab > li {
-	width : 33.33%;
-	height : 24px;
-	padding : 2px 0;
-	line-height : 20px;
-	text-align : center;
-	border-left : 0 none;
-	border-top : 0 none;
-	border-bottom : 0 none;
-}
-.singleProject_tab > li:last-child {
-	border : 0 none;
-}
-.singleProject_tab > li.focused {
-	background-color : #f1af0f;
-}
-.singleProject_tab > li:not(.focused) {
-	color : inherit;
-}
-.singleProject_tab span {
-	width : 20px;
-	height : 20px;
-	border-radius : 20px;
-	background-color : #e26816;
-	margin-left : 5px;
-	display : inline-block;
-	vertical-align : top;
-	font-size : 16px;
-}
-.singleProject_tab span:empty {
-	display : none;
-}
-.singleProject_info {
-	margin-top : 5px;
-}
-.singleProject_info > dt {
-	height : 30px;
-	line-height : 30px;
-	font-size : 18px;
-	text-indent : 1em;
-	border-bottom-left-radius : 0;
-	border-bottom-right-radius : 0;
-}
-.singleProject_info > dd {
-	background-color : transparent;
-	border-top-left-radius : 0;
-	border-top-right-radius : 0;
-	padding : 5px 10px;
-}
-.singleProject_info figure {
-	height : 20px;
-	line-height : 20px;
-}
-.singleProject_info figcaption {
-	margin-left : 5px;
-}
-.singleProject_info dd > p {
-	margin-top : 8px;
-	height : 56px;
-	white-space : normal;
-	word-break : break-all;
-	line-height : 14px;
-	overflow : hidden;
-}
-.singleProject_info nav {
-	line-height : 20px;
-	margin-top : 15px;
-	white-space : nowrap;
-}
-.singleProject_info nav > span {
-	width : 48px;
-}
-.singleProject_info nav > p {
-	width : 100%;
-	padding-left : 48px;
-	position : relative;
-	left : -48px;
-}
-.singleProject_info nav a {
-	margin : 0 3px 3px 0;
-}
-.singleProject_info aside {
-	height : 50px;
-	margin-top : 10px;
-	display : none;
 }

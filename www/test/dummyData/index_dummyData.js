@@ -14,6 +14,24 @@ this.Common = Common = (function(){
 	Common = new StaticClass(null, "Bao.Test.DummyData.Common");
 
 	Common.properties({
+		getAttachment : function(){
+			var type = ["image", "voice", "map"][Number.random(2)];
+
+			return {
+				id : Number.id(),
+				type : type,
+				src : type === "voice" ? "javascript:void(0);" : "../../test/image/avatar/" + Number.random(16) + ".jpg"
+			};
+		},
+		getAttachments : function(){
+			var attachments = [];
+
+			jQun.forEach(Number.random(30), function(){
+				attachments.push(this.getAttachment());
+			}, this);
+
+			return attachments;
+		},
 		getUser : function(){
 			var name = String.random(5), firstLetter = name.substring(0, 1);
 
@@ -21,14 +39,16 @@ this.Common = Common = (function(){
 				id : Number.id(),
 				name : name,
 				pinyin : firstLetter.match(/[A-Za-z]/) ? firstLetter : isNaN(firstLetter - 0) ? "z" : "a", // 这里只返回拼音首字母
-				avatar : "test/image/avatar/" + Number.random(16) + ".jpg",
+				avatar : "../../test/image/avatar/" + Number.random(16) + ".jpg",
 				company : String.random(10),
 				companyAdress : String.random(30),
 				position : String.random(4),
 				phoneNum : Number.random(14000000000),
 				email : String.random(8) + "@BaoPiQi.com",
 				adress : String.random(30),
-				QRCode : "test/image/avatar/" + Number.random(16) + ".jpg"
+				isNewUser : false,
+				isLeader : false,
+				QRCode : "../../test/image/avatar/" + Number.random(16) + ".jpg"
 			};
 		},
 		getUsers : function(_len){
@@ -52,9 +72,81 @@ this.Common = Common = (function(){
 	return Common;
 }());
 
-this.SPP = (function(){
+this.SingleProject = (function(){
+	function SingleProject(){};
+	SingleProject = new StaticClass(null, "Bao.Test.DummyData.SingleProject");
+
+	SingleProject.properties({
+		getMessages : function(){
+			var msgs = [], date = new Date();
+
+			date.setDate(date.getDate() - 2);
+
+			jQun.forEach(Number.random(15), function(){
+				var loginUser = Bao.Global.loginUser, poster = Number.random(20) > 10 ? Common.getUser() : loginUser;
+
+				date = new Date(date.getTime() + Number.random(86400000 / 2));
+
+				msgs.push({
+					id : Number.id(),
+					text : String.random(),
+					poster : poster,
+					attachment : Common.getAttachment(),
+					praise : Common.getUsers(Number.random(20)),
+					time : date.getTime(),
+					type : this[Number.random(2)]
+				});
+
+			}, ["text", "voice", "image"]);
+
+			return msgs;
+		},
+		getSingleProject : function(){
+			return {
+				id : Number.id(),
+				level : Number.random(3),
+				title : String.random(),
+				color : Number.random(5),
+				users : Common.getUsers(Number.random(20)),
+				lastMessage : String.random(),
+				creator : Common.getUser(),
+				creationTime : new Date().getTime(),
+				unread : Number.random(2) > 1 ? 0 : Number.random(),
+				desc : String.random(1000),
+				attachments : Common.getAttachments()
+			};
+		}
+	})
+
+	return SingleProject;
+}());
+
+this.Deep = (function(SingleProject){
+	function Deep(){};
+	Deep = new StaticClass(null, "Bao.Test.DummyData.Deep");
+
+	Deep.properties({
+		getToDoInfo : function(){
+			return {
+				id : Number.random(100),
+				color : Number.random(6),
+				title : String.random(),
+				desc : String.random(30),
+				attachments : Common.getAttachments(),
+				messages : SingleProject.getMessages(),
+				endTime : new Date().getTime()
+			};
+		}
+	});
+
+	return Deep;
+}(
+	this.SingleProject
+));
+
+this.SPP = (function(SingleProject){
 	function SPP(){};
-	SPP = new StaticClass(null, "Bao.Test.DummyData.Test");
+	SPP = new StaticClass(null, "Bao.Test.DummyData.SPP");
 
 	SPP.properties({
 		getPartnerGroups : function(){
@@ -75,21 +167,6 @@ this.SPP = (function(){
 				letter : ["a", "b", "c"]
 			};
 		},
-		getSingleProject : function(){
-			return {
-				id : Number.id(),
-				level : Number.random(3),
-				title : String.random(),
-				color : Number.random(5),
-				users : Common.getUsers(Number.random(20)),
-				lastMessage : String.random(),
-				creator : Common.getUser(),
-				creationTime : new Date().getTime(),
-				unread : Number.random(2) > 1 ? 0 : Number.random(),
-				desc : String.random(1000),
-				attachments : []
-			};
-		},
 		getProjects : function(_len){
 			var projects = [];
 
@@ -98,7 +175,7 @@ this.SPP = (function(){
 			}
 
 			for(var i = 0;i < _len;i++){
-				projects.push(this.getSingleProject());
+				projects.push(SingleProject.getSingleProject());
 			}
 
 			return projects;
@@ -126,7 +203,9 @@ this.SPP = (function(){
 	});
 
 	return SPP;
-}());
+}(
+	this.SingleProject
+));
 
 Index.members(this);
 }.call(

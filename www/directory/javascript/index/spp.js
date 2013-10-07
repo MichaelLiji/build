@@ -224,11 +224,17 @@ this.Project = (function(){
 
 				project.load();
 			},
-			userclick : function(e){
-				var targetEl = jQun(e.target);
-
+			userclick : function(e, targetEl){
 				if(targetEl.between('figure[status="0"]', this).length > 0){
 					Global.history.go("addProject");
+					return;
+				}
+
+				var el = targetEl.between('figure[status="1"]', this);
+
+				if(el.length > 0){
+					Global.history.go("discussion").fill(el.parent().getAttribute("projectid"));
+					return;
 				}
 			}
 		});
@@ -292,7 +298,7 @@ this.Project = (function(){
 	return Project.constructor;
 }());
 
-this.Partner = (function(Navigator, UserIndexList, InputSelectionList, Validation, CallServer){
+this.Partner = (function(Navigator, UserIndexList, InputSelectionList, Validation, CallServer, createGroupEvent){
 	function SelectorList(text, _placeholder){
 		///	<summary>
 		///	选择列表。
@@ -314,9 +320,14 @@ this.Partner = (function(Navigator, UserIndexList, InputSelectionList, Validatio
 					e.stopPropagation();
 					return;
 				}
+
+				var selectorList = this;
 				
-				CallServer.open("createGroup", {}, function(){
-				
+				CallServer.open("createGroup", {
+					users : e.users,
+					name : e.inputText
+				}, function(data){
+					createGroupEvent.trigger(selectorList);
 				});
 			}
 		}, true);
@@ -340,6 +351,8 @@ this.Partner = (function(Navigator, UserIndexList, InputSelectionList, Validatio
 		userIndexList = new UserIndexList();
 
 		this.assign({
+			groupingHtml : groupingHtml,
+			navigator : navigator,
 			userIndexList : userIndexList
 		});
 	
@@ -355,7 +368,11 @@ this.Partner = (function(Navigator, UserIndexList, InputSelectionList, Validatio
 				if(el.length > 0){
 					// 如果点击的是添加分组
 					if(el.get("action", "attr") === "addGroup"){
-						new SelectorList.constructor("添加组拍档", "输入组名称");
+						new SelectorList.constructor("添加组拍档", "输入组名称").attach({
+							creategroup : function(){
+								partner.load();
+							}
+						});
 						return;
 					}
 					
@@ -364,20 +381,7 @@ this.Partner = (function(Navigator, UserIndexList, InputSelectionList, Validatio
 				}
 			},
 			beforeshow : function(){
-				// 获取分组数据
-				CallServer.open("getPartnerGroups", null, function(data){
-					var groups = data.groups, len = groups.length;
-				
-					// 添加分组区域
-					navigator.content(groupingHtml.render(data));
-					navigator.tab(Math.ceil(len / 3));
-					navigator.focusTab(0);
-
-					if(len === 0)
-						return;
-
-					partner.focus(groups[0].id);
-				});
+				partner.load();
 			}
 		});
 
@@ -433,6 +437,26 @@ this.Partner = (function(Navigator, UserIndexList, InputSelectionList, Validatio
 				partner.focus(groupId, _groupEl);
 			});
 		},
+		groupingHtml : undefined,
+		load : function(){
+			var partner = this, navigator = this.navigator;
+
+			// 获取分组数据
+			CallServer.open("getPartnerGroups", null, function(data){
+				var groups = data.groups, len = groups.length;
+				
+				// 添加分组区域
+				navigator.content(partner.groupingHtml.render(data));
+				navigator.tab(Math.ceil(len / 3));
+				navigator.focusTab(0);
+
+				if(len === 0)
+					return;
+
+				partner.focus(groups[0].id);
+			});
+		},
+		navigator : undefined,
 		userIndexList : undefined
 	});
 
@@ -442,7 +466,9 @@ this.Partner = (function(Navigator, UserIndexList, InputSelectionList, Validatio
 	Control.List.UserIndexList,
 	Control.List.InputSelectionList,
 	Bao.API.DOM.Validation,
-	Bao.CallServer
+	Bao.CallServer,
+	// createGroupEvent
+	new jQun.Event("creategroup")
 ));
 
 this.Tab = (function(focusTabEvent, blurTabEvent){

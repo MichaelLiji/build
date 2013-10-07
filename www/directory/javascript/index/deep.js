@@ -272,6 +272,188 @@ this.AboutBaoPiQi = (function(){
 	return AboutBaoPiQi.constructor;
 }());
 
+this.ToDo = (function(ChatList, OverflowPanel, Global){
+	function ToDo(selector, infoHtml){
+		var toDo = this, chatList = new ChatList(), overflowPanel = new OverflowPanel(this.find(">section")[0]);
+
+		this.assign({
+			chatList : chatList,
+			infoHtml : infoHtml,
+			overflowPanel : overflowPanel
+		});
+
+		chatList.appendTo(overflowPanel.find(">figure")[0]);
+
+		chatList.attach({
+			messageappended : function(e){
+				overflowPanel.bottom();
+			},
+			clickpraise : function(e){
+				var message = e.message, loginUser = Global.loginUser;
+
+				CallServer.open("praise", {
+					messageId : message.id,
+					userId : loginUser.id,
+					type : "toDo"
+				}, function(){
+					message.addPraise(loginUser);
+				})
+			}
+		});
+
+		this.find(">section>header").attach({
+			userclick : function(e, targetEl){
+				if(targetEl.between("dt>button").length > 0){
+					CallServer.open("toDoCompleted", { id : toDo.id }, function(data){
+						console.log(data);
+					}, true);
+					return;
+				}
+			}
+		});
+	};
+	ToDo = new NonstaticClass(ToDo, "Bao.Page.Index", PagePanel.prototype);
+
+	ToDo.override({
+		title : "To Do"
+	});
+
+	ToDo.properties({
+		chatList : undefined,
+		fill : function(id){
+			var toDo = this, chatListContent = this.chatList.chatListContent;
+		
+			CallServer.open("getToDo", { id : id }, function(data){
+				var figureEl = toDo.find(">section>figure");
+
+				toDo.overflowPanel.setTop(0);
+				chatListContent.clearAllMessages();
+				// 重置颜色
+				chatListContent.resetColor(project.color);
+
+				toDo.find(">section>header").innerHTML = toDo.infoHtml.render(data);
+
+				data.messages.forEach(function(msg){
+					this.appendMessageToGroup(msg);
+				}, chatListContent);
+			});
+
+			this.id = id;
+		},
+		id : -1,
+		infoHtml : undefined,
+		overflowPanel : undefined
+	});
+
+	return ToDo.constructor;
+}(
+	Bao.UI.Control.Chat.ChatList,
+	Bao.API.DOM.OverflowPanel,
+	Bao.Global
+));
+
+this.SendToDo = (function(Validation, Global, validationHandle){
+	function SendToDo(selector, infoHtml){
+		var sendToDo = this, titleBar = Global.titleBar,
+		
+			titleValidation = new Validation(this.find('li[desc="title"]>input'), validationHandle),
+
+			dateValidation = new Validation(this.find('li[desc="endDate"]>input[type="text"]'), validationHandle);
+
+		this.assign({
+			dateValidation : dateValidation,
+			infoHtml : infoHtml,
+			titleValidation : titleValidation
+		});
+
+		// 提交按钮绑定事件
+		this.attach({
+			beforeshow : function(e){
+				titleBar.find('button[action="sendToDoCompleted"]').onuserclick = function(){
+					if(!titleValidation.validate())
+						return;
+
+					if(!dateValidation.validate())
+						return;
+
+					CallServer.open("sendToDo", {
+						attachment : [],
+						title : titleValidation.validationEl.value,
+						date : sendToDo.endDate.getTime(),
+						remind : sendToDo.remind ? 1 : 0,
+						desc : sendToDo.find("textarea").innerHTML
+					}, function(data){
+						Global.history.go("toDo").fill(data.id);
+					});
+				};
+			},
+			userclick : function(e, targetEl){
+				if(targetEl.between('li[desc="remind"] button>span')){
+					var classList = targetEl.classList;
+
+					sendToDo.remind = !classList.contains("reminded");
+					classList.toggle("reminded");
+					return;
+				}
+			}
+		});
+
+		// 绑定日期控件事件
+		this.find('li>input[type="date"]').attach({
+			change : function(e){
+				var endDate = sendToDo = this.valueAsDate;
+
+				this.previousElementSibling.value = endDate.toLocaleDateString();
+			},
+			userclick : function(){
+				dateValidation.clearError();
+			}
+		});
+	};
+	SendToDo = new NonstaticClass(SendToDo, "Bao.Page.Index.Deep.SendToDo", PagePanel.prototype);
+
+	SendToDo.override({
+		isNoTraces : true,
+		restore : function(){
+			var dateValidation = this.dateValidation;
+
+			this.titleValidation.clearError();
+			dateValidation.clearError();
+			// 设置初始时间
+			dateValidation.validationEl.value = this.endDate.toLocaleDateString();
+		},
+		title : "发送 To Do",
+		tools : [
+			{ urlname : "javascript:void(0);", action : "sendToDoCompleted" }
+		]
+	});
+
+	SendToDo.properties({
+		dateValidation : undefined,
+		endDate : new Date(),
+		fill : function(id){
+			var sendToDo = this;
+
+			CallServer.open("getUser", { id : id }, function(data){
+				sendToDo.find(">header").innerHTML = sendToDo.infoHtml.render(data);
+			});
+		},
+		infoHtml : undefined,
+		// 完成时候是否提醒
+		remind : false,
+		titleValidation : undefined
+	});
+
+	return SendToDo.constructor;
+}(
+	Bao.API.DOM.Validation,
+	Bao.Global,
+	// validationHandle
+	function(inputEl){
+		return jQun.Validation.result(inputEl.value, inputEl.getAttribute("vtype"));
+	}
+));
+
 Deep.members(this);
 }.call(
 	{},

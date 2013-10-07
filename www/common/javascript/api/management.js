@@ -11,16 +11,28 @@ this.Loader = (function(Storage, Index, HTML){
 			return new Index.Deep.Account("#account", new HTML("account_html", true));
 		},
 		addProject : function(){
-			return new Index.Secondary.AddProject("#addProject", new HTML("addProject_color_html", true));
+			return new Index.Secondary.AddProject("#addProject");
 		},
 		businessCard : function(){
 			return new Index.Secondary.BusinessCard("#businessCard", new HTML("businessCard_html", true));
+		},
+		createFirstProject : function(){
+			this.load("guidance");
+			return new Index.Guidance.CreateFirstProject("#createFirstProject");
+		},
+		discussion : function(){
+			this.load("singleProject");
+			return new Index.SingleProject.Discussion("#discussion", new HTML("discussion_info_html", true));
 		},
 		globalSearch : function(){
 			return new Index.Deep.GlobalSearch("#globalSearch", new HTML("globalSearch_group_html", true));
 		},
 		guidance : function(){
 			return new Index.Guidance.Self("#guidance");
+		},
+		invitation : function(){
+			this.load("guidance");
+			return new Index.Guidance.Invitation("#invitation", new HTML("invitation_html", true));
 		},
 		load : function(name){
 			var pagePanel = this.pageStorage.get(name);
@@ -51,17 +63,29 @@ this.Loader = (function(Storage, Index, HTML){
 			this.load("spp");
 			return new Index.SPP.Schedule("#schedule", new HTML("spp_scheduleSign_html", true));
 		},
+		sendToDo : function(){
+			return new Index.Deep.SendToDo("#sendToDo", new HTML("sendToDo_info_html", true));
+		},
 		spp : function(){
-			var sppPanel = this.pageStorage.get("spp");
-
-			return sppPanel ? sppPanel : new Index.SPP.Self("#SPP");
+			return new Index.SPP.Self("#SPP");
 		},
 		singleProject : function(){
-			return new Index.Secondary.SingleProject("#singleProject", new HTML("singleProject_info_html", true));
+			return new Index.SingleProject.Self("#singleProject");
 		},
 		systemOption : function(){
 			return new Index.Secondary.SystemOption("#systemOption");
 		},
+		toDo : function(){
+			return new Index.Deep.ToDo("#toDo", new HTML("toDo_info_html", true));
+		},
+		toDoList : function(){
+			this.load("singleProject");
+			return new Index.SingleProject.ToDoList("#toDoList");
+		},
+		workStream : function(){
+			this.load("singleProject");
+			return new Index.SingleProject.WorkStream("#workStream", new HTML("workStream_info_html", true));
+		}
 	});
 
 	return Loader;

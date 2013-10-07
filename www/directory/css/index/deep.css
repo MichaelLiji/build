@@ -301,3 +301,137 @@
 	width : 100%;
 	height : 100%;
 }
+
+#toDo {
+	bottom : 42px;
+}
+.toDo_header {
+	padding : 10px 10px 0 10px;
+}
+.toDo_header > dl{
+	padding : 5px 10px;
+}
+.toDo_header dt {
+	height : 30px;
+	padding : 4px;
+}
+.toDo_header dt > button {
+	height : 22px;
+	width : 34px;
+	padding : 3px 9px;
+	border : 1px solid #fff;
+	background : transparent url(../../../common/image/width24.png) 0 -800px no-repeat content-box content-box;
+}
+.toDo_header dt > span {
+	margin-left : 8px;
+	font-size : 15px;
+	line-height : 22px;
+}
+.toDo_header dd {
+	margin-top : 10px;
+}
+.toDo_header dd > figure {
+	text-align : right;
+}
+.toDo_header dd p {
+	padding : 0 8px;
+	text-align : left;
+}
+.toDo_header dd aside {
+	margin-top : 20px;
+	display : inline-block;
+	padding : 5px;
+}
+.toDo_header dd aside:empty {
+	display : none;
+}
+#toDo > section {
+	padding-bottom : 10px;
+}
+#toDo > section > figure {
+	padding : 0 10px;
+}
+
+#sendToDo {
+	padding : 0 10px;
+}
+#sendToDo > header {
+	padding : 10px 0;
+	text-align : center;
+}
+#sendToDo > header > p {
+	background-color : #fff;
+}
+#sendToDo > header > aside {
+	height : 34px;
+	width : 125px;
+	border : 1px solid #f1af10;
+	padding : 3px;
+	position : relative;
+	top : 14px;
+	left : -8px;
+	z-index : -1;
+}
+#sendToDo > header span {
+	display : block;
+	background-color : #f1af10;
+	width : 100%;
+	height : 26px;
+	line-height : 26px;
+	font-size : 15px;
+}
+#sendToDo > section {
+	margin-bottom : 5px;
+	overflow : hidden;
+	font-size : 14px;
+}
+#sendToDo > section input, #sendToDo > section textarea, #sendToDo > section > span {
+	display : block;
+	height : 42px;
+	width : 100%;
+	padding : 10px 15px;
+	border : 0 none;
+}
+#sendToDo > section input[type="date"] {
+	margin-top : -42px;
+	opacity : 0;
+}
+#sendToDo > section > span {
+	background-color : #fff;
+}
+#sendToDo > section[desc="remind"] {
+	position : relative;
+}
+#sendToDo > section > button {
+	width : 58px;
+	height : 24px;
+	background-color : #d29500;
+	position : absolute;
+	top : 9px;
+	right : 5px;
+	border : 1px solid transparent;
+}
+#sendToDo button > span {
+	float : right;
+	height : 22px;
+	width : 22px;
+	border-radius : 22px;
+	background-color : #fff;
+	opacity : 0.7;
+}
+#sendToDo button > span.reminded {
+	float : left;
+	opacity : 1;
+}
+#sendToDo > section textarea {
+	min-height : 140px;
+	max-height : 140px;
+}
+#titleBar button[action="sendToDoCompleted"] {
+	background-color : #f1af10;
+	background : #f1af10 url(../../../common/image/width24.png) 7px -118px no-repeat;
+}
+
+#workStream li > figure {
+	
+}

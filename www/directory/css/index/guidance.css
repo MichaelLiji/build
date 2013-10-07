@@ -4,14 +4,17 @@
 	top : 0;
 }
 #guidance > article {
-	top : 5px;	
+	top : 5px;
+	height : 100%;
 }
 
-#guidance_header {
-	display : block;
-	bottom : auto;
+.guidance_header {
+	display : block !important;
+	bottom : auto !important;
+	position : relative !important;
+	z-index : 2;
 }
-#guidance_header li {
+.guidance_header li {
 	width : 14.285%;
 	height : 5px;
 }
@@ -68,4 +71,96 @@
 #login > section button:last-child {
 	float : right;
 	background-color : #39bead;
+}
+
+
+#createFirstProject, #invitation {
+	padding : 15px 10px;
+}
+#createFirstProject > header, #invitation > header {
+	text-align : center;
+	margin-bottom : 10px;
+}
+#createFirstProject > section, #invitation > section {
+	margin-bottom : 20px;
+}
+#createFirstProject > section li {
+	margin-bottom : 5px;
+}
+#createFirstProject section li:last-child {
+	height : 125px;
+}
+#createFirstProject > section li:nth-child(2) {
+	position : relative;
+}
+#createFirstProject > section input, #createFirstProject > section textarea {
+	background-color : transparent;
+	border : 0 none;
+	min-height : 100%;
+	max-height : 100%;
+	min-width : 100%;
+	max-width : 100%;
+}
+#createFirstProject > section span {
+	font-size : 14px;
+	width : 56px;
+}
+#createFirstProject > section aside {
+	position : absolute;
+	left : 56px;
+	right : 0;
+	text-align : center;
+}
+#createFirstProject > footer, #invitation > footer {
+	text-align : center;
+}
+#createFirstProject > footer > button, #invitation > footer > button {
+	width : 100px;
+	height : 28px;
+	border : 0 none;
+	background-color : #c2c2c2;
+}
+
+#invitation > section li {
+	height : 35px;
+	margin-bottom : 10px;
+	padding : 0 20px 0 40px;
+	background : url(../../../common/image/width24.png) 10px -496px no-repeat;
+}
+#invitation > section li:last-child {
+	margin-bottom : 0;
+}
+#invitation > section input {
+	height : 100%;
+	width : 100%;
+	padding : 10px;
+}
+#invitation > section input:focus {
+	border : 1px solid #6f6966;
+}
+
+#guidance_footer {
+	position : fixed !important;
+	left : 20px;
+	right : 20px;
+	width : auto !important;
+	top : auto !important;
+	bottom : 50px !important;
+	display : block !important;
+}
+#guidance_footer > button {
+	height : 38px;
+	width : 38px;
+	border-radius : 38px;
+	padding : 2px 0;
+	border-width : 7px;
+	background-image : url(../../../common/image/width24.png);
+	background-position : 0 -550px;
+	background-repeat : no-repeat;
+	background-origin : content-box;
+	
+}
+#guidance_footer > button[desc="next"] {
+	float : right;
+	-webkit-transform : rotate(180deg);
 }

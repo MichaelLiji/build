@@ -107,15 +107,20 @@ this.EventCollection = (function(Timer, IntervalTimer, isMobile, childGestureCon
 		userclick : new Event("userclick", function(){
 			var userClick = this, abs = Math.abs;
 
-			windowEl.attach({
-				fastgesture : function(e){
-					// 如果任何一方向上的偏移量大于10，就不算click
-					if(abs(e.gestureOffsetY) > 10 || abs(e.gestureOffsetX > 10))
-						return;
+			windowEl.attach(isMobile ? {
+					click : function(e){
+						userClick.trigger(e.target);
+					}
+				} : {
+					fastgesture : function(e){
+						// 如果任何一方向上的偏移量大于10，就不算click
+						if(abs(e.gestureOffsetY) > 10 || abs(e.gestureOffsetX > 10))
+							return;
 
-					userClick.trigger(e.target);
+						userClick.trigger(e.target);
+					}
 				}
-			});
+			);
 
 			this.attachTo("*");
 		}),
@@ -220,7 +225,7 @@ this.PagePanel = (function(Panel, beforeShowEvent, beforeHideEvent){
 	})
 ));
 
-this.OverflowPanel = (function(Panel, IntervalTimer, Drag, leaveborder){
+this.OverflowPanel = (function(Panel, IntervalTimer, setTopEvent, leaveborder){
 	function OverflowPanel(selector, _disableScrollBar){
 		///	<summary>
 		///	溢出区域。
@@ -290,13 +295,26 @@ this.OverflowPanel = (function(Panel, IntervalTimer, Drag, leaveborder){
 	OverflowPanel = new NonstaticClass(OverflowPanel, "Bao.API.DOM.OverflowPanel", Panel.prototype);
 
 	OverflowPanel.properties({
+		bottom : function(){
+			var top = this.parent().height() - this.height();
+
+			if(top > 0){
+				top = 0;
+			}
+
+			this.setTop(top);
+		},
 		getTop : function(){
 			return this.panelStyle.top.toString().split("px").join("") - 0 || 0;
 		},
 		panelStyle : undefined,
 		setTop : function(top){
 			this.panelStyle.top = Math.round(top) + "px";
-			Drag.Scroll.reposition(this);
+
+			setTopEvent.setEventAttrs({
+				overflowPanel : this
+			});
+			setTopEvent.trigger(this[0]);
 		}
 	});
 
@@ -304,7 +322,8 @@ this.OverflowPanel = (function(Panel, IntervalTimer, Drag, leaveborder){
 }(
 	this.Panel,
 	Management.IntervalTimer,
-	Bao.UI.Control.Drag,
+	// setTopEvent
+	new Event("settop"),
 	// leaveborder
 	function(overflowPanel, parentHeight, top, fn){
 		// top等于0，说明处于恰好状态，就可以return了
@@ -372,14 +391,19 @@ this.Validation = (function(ValidationBase){
 			this.validationEl.classList.remove("validationError");
 		},
 		handler : undefined,
+		showError : function(){
+			this.validationEl.classList.add("validationError");
+		},
 		validate : function(){
 			///	<summary>
 			///	进行验证。
 			///	</summary>
-			if(this.handler(this.validationEl, ValidationBase))
+			if(this.handler(this.validationEl, ValidationBase)){
+				this.clearError();
 				return true;
+			}
 
-			this.validationEl.classList.add("validationError");
+			this.showError();
 			return false;
 		},
 		validationEl : undefined

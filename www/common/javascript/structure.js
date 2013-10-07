@@ -23,11 +23,19 @@ this.Bao = (function(Bao){
 		CallServer : null, // callServer.js
 		Global : null, // global.js
 		Page : new Namespace().members({
-			Index : new Namespace().members({ // ../../directoy/javascript/index\
+			Index : new Namespace().members({ // ../../directoy/javascript/index
 				Deep : new Namespace({ // ../../directoy/javascript/index/deep.js
 					AboutBaoPiQi : null,
 					Account : null,
-					QRCode : null
+					QRCode : null,
+					ToDo : null
+				}),
+				Guidance : new Namespace({ // ../../directory/javascript/index/guidance.js
+					CreateFirstProject : null,
+					Footer : null,
+					Invitation : null,
+					Login : null,
+					LoginInfoManagement : null
 				}),
 				SPP : new Namespace({ // ../../directoy/javascript/index/home.js
 					Partner : null,
@@ -36,14 +44,17 @@ this.Bao = (function(Bao){
 					Self : null,
 					Tab : null
 				}),
-				Guidance : new Namespace({ // ../../directory/javascript/index/guidance.js
-					Login : null
-				}),
 				Secondary : new Namespace({ // ../../directoy/javascript/index/secondary.js
 					AddProject : null,
 					BusinessCard : null,
 					SingleProject : null,
 					SystemOption : null
+				}),
+				SingleProject : new Namespace({ // ../../directoy/javascript/index/singleProject.js
+					Discussion : null,
+					Header : null,
+					Self : null,
+					ToDoList : null
 				})
 			})
 		}),
@@ -61,6 +72,16 @@ this.Bao = (function(Bao){
 		}),
 		UI : new Namespace().members({
 			Control : new Namespace().members({ // ui/control
+				Chat : new Namespace().members({ // ui/control/chat.js
+					Attachment : null,
+					ChatInput : null,
+					ChatList : null,
+					ChatListContent : null,
+					ImageBox : null,
+					Message : null,
+					MessageGroup : null,
+					MessageList : null
+				}),
 				Drag : new Namespace().members({ // ui/control/drag.js
 					Navigator : null,
 					Scroll : null

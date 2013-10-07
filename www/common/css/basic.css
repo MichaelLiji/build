@@ -27,7 +27,7 @@ button, input, textarea {
 }
 
 textarea, input {
-	-webkit-user-select : auto;
+	-webkit-user-select : text;
 }
 textarea[readonly], input[readonly] {
 	-webkit-user-select : none;

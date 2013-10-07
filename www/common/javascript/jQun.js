@@ -1,9 +1,9 @@
 /*
  *  类库名称：jQun
  *  中文释义：骥群(聚集在一起的千里马)
- *  文档状态：1.0.5.6
- *  本次修改：增加StaticHTML类，用于静态模板。
- *  开发浏览器信息：firefox 20.0 、 chrome 26.0
+ *  文档状态：1.0.5.9
+ *  本次修改：ElementList增加removeAttribute方法
+ *  开发浏览器信息：firefox 20.0+ 、 chrome 26.0+
  */
 
 (function(Object, Array, Function){
@@ -89,21 +89,15 @@ jQun = (function(argRegx, argListRegx, every, toNative){
 				return obj;
 			},
 			every : every,
-			except : function(args, properties){
+			except : function(obj, properties){
 				///	<summary>
-				///	返回一个不包含所有指定属性名称的合并对象。
+				///	返回一个不包含所有指定属性名称的对象。
 				///	</summary>
-				///	<param name="args" type="object">用于合并的对象集合。</param>
+				///	<param name="obj" type="object">需要排除属性的对象。</param>
 				///	<param name="properties" type="array">需要排除的属性名称数组。</param>
-				var result = {};
+				var result = set({}, obj);
 
-				forEach(toArray(arguments, 0, -1), function(obj){
-					for(var name in obj){
-						result[name] = obj[name];
-					}
-				});
-
-				forEach(arguments[arguments.length - 1], function(name){
+				forEach(properties, function(name){
 					delete result[name];
 				});
 				return result;
@@ -1469,13 +1463,21 @@ this.NodeList = (function(AttributeCollection, toArray){
 			///	<param name="_capture" type="boolean">侦听器是否运行于捕获阶段。</param>
 			///	<param name="_priority" type="number">优先级，数字越大，优先级越高。</param>
 			///	<param name="_useWeakReference" type="boolean">是否是属于强引用。</param>
-			var otherArgs = toArray(arguments, 1);
+			var nodeList = this, otherArgs = toArray(arguments, 1);
+			
+			forEach(events, function(fn, type){
+				var eventArgs = [
+						type,
+						fn.length === 2 ? function(e){
+							fn.call(this, e, nodeList.createList(e.target));
+						} : fn
+					].concat(otherArgs);
 
-			this.forEach(function(node){
-				forEach(events, function(fn, type){
-					node.addEventListener.apply(node, [type, fn].concat(otherArgs));
+				nodeList.forEach(function(node){
+					node.addEventListener.apply(node, eventArgs);
 				});
 			});
+
 			return this;
 		},
 		detach : function(events){
@@ -1517,7 +1519,13 @@ this.NodeList = (function(AttributeCollection, toArray){
 			///	<param name="parentNode" type="node">指定的父节点。</param>
 			///	<param name="_idx" type="number">指定节点的索引值。</param>
 			if(_idx !== undefined){
-				return this.insertBefore(parentNode.childNodes[_idx]);
+				var childNodes = parentNode.childNodes;
+
+				if(childNodes.length === 0){
+					return this.appendTo(parentNode);
+				}
+
+				return this.insertBefore(childNodes[_idx]);
 			}
 
 			this.forEach(function(node){
@@ -1671,12 +1679,26 @@ this.ElementList = (function(NodeList, ChildrenCollection, ClassListCollection, 
 			///	<param name="name" type="string">属性名。</param>
 			///	<param name="_type" type="string">需要获取的属性种类。</param>
 			if(_type === "css")
-				return getComputedStyle(this[0])[name];
+				return this.getCSSPropertyValue(name);
 
 			if(_type === "attr")
-				return emptyAttrCollection.get.call({ sources : this }, name);
+				return this.getAttribute(name);
 
 			return this[0][name];
+		},
+		getAttribute : function(name){
+			///	<summary>
+			///	获取集合中第一个元素的特性属性。
+			///	</summary>
+			///	<param name="name" type="string">属性名。</param>
+			return emptyAttrCollection.get.call({ sources : this }, name);
+		},
+		getCSSPropertyValue : function(name){
+			///	<summary>
+			///	获取集合中第一个元素的css属性。
+			///	</summary>
+			///	<param name="name" type="string">属性名。</param>
+			return window.getComputedStyle(this[0])[name];
 		},
 		find : function(_selector){
 			///	<summary>
@@ -1710,6 +1732,14 @@ this.ElementList = (function(NodeList, ChildrenCollection, ClassListCollection, 
 			});
 			return list;
 		},
+		removeAttribute : function(name){
+			///	<summary>
+			///	根据指定名称，移除集合中每一个元素的特性属性。
+			///	</summary>
+			///	<param name="name" type="string">属性名。</param>
+			emptyAttrCollection.remove.call({ sources : this }, name);
+			return this;
+		},
 		selector : "",
 		set : function(name, value, _type){
 			///	<summary>
@@ -1719,19 +1749,32 @@ this.ElementList = (function(NodeList, ChildrenCollection, ClassListCollection, 
 			///	<param name="value" type="*">属性值。</param>
 			///	<param name="_type" type="string">需要设置的属性种类。</param>
 			if(_type){
-				if(_type === "css"){
-					this.forEach(function(element){
-						element.style[name] = value;
-					});
-					return this;
-				}
-
-				emptyAttrCollection.set.call({ sources : this }, name, value);
+				this[_type === "css" ? "setCSSPropertyValue" : "setAttribute"](name, value);
 				return this;
 			}
 
 			this.forEach(function(element){
 				element[name] = value;
+			});
+			return this;
+		},
+		setAttribute : function(name, value){
+			///	<summary>
+			///	设置集合中每一个元素的特性属性。
+			///	</summary>
+			///	<param name="name" type="string">属性名。</param>
+			///	<param name="value" type="string">属性值。</param>
+			emptyAttrCollection.set.call({ sources : this }, name, value);
+			return this;
+		},
+		setCSSPropertyValue : function(name, value){
+			///	<summary>
+			///	设置集合中每一个元素的css属性。
+			///	</summary>
+			///	<param name="name" type="string">属性名。</param>
+			///	<param name="value" type="string">属性值。</param>
+			this.forEach(function(element){
+				element.style[name] = value;
 			});
 			return this;
 		},
@@ -1790,7 +1833,7 @@ this.ElementList = (function(NodeList, ChildrenCollection, ClassListCollection, 
 	this.ClassListCollection,
 	window,
 	// selectorRegx
-	/([\#\.])([^\s\:\#\.\,\+\~\[\>]+)/g
+	/([\#\.])([^\s\:\#\.\,\+\~\[\>\(\)]+)/g
 ));
 
 this.HTMLElementList = (function(ElementList, CSSPropertyCollection, addProperty){
@@ -2130,15 +2173,12 @@ this.StaticHTML = (function(HTML, HTMLElementList){
 		docEl.attach({
 			DOMContentLoaded : function(){
 				new HTMLElementList(document.scripts).attributes.forEach(function(attr, i, attrs){
-					if(!attr.statichtml)
-						return;
-					
 					var type = attr.type;
 
 					if(!type)
 						return;
 
-					if(type.value !== "text/html")
+					if(type.value !== "text/static-html")
 						return;
 
 					new HTML(
