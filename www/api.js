@@ -2630,14 +2630,14 @@ function onDeviceReady() {
                                                 //                SOCKET  : SERVER.SOCKET
                                                 SOCKET: SERVER.SOCKET.init(),
                                                 API: SERVER.API,
-                                                SESSION: SERVER.SESSION,
-                                                DB: SERVER.DB._init_db(),
+//                                                SESSION: SERVER.SESSION,
+//                                                DB: SERVER.DB._init_db(),
                                                 // if it is needed to RECREATE DB AND STORAGE 
                                                 // uncomment lines below
                                                 // than comment again after refresh
 
-//                                                SESSION: SERVER.SESSION._init_storage(1),
-//                                                DB: SERVER.DB._init_db(1),
+                                                SESSION: SERVER.SESSION._init_storage(1),
+                                                DB: SERVER.DB._init_db(1),
                                                 PHONE: SERVER.PHONE
 
                                             };
