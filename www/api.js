@@ -68,7 +68,7 @@ function onDeviceReady() {
     }
 
     function server_start() {
-        var a = new window.Event("applicationload");
+//        var a = new window.Event("applicationload");
 
         App_model = function(SERVER) {
             /* Private */
@@ -1159,7 +1159,7 @@ function onDeviceReady() {
             // Models 
 
 
-            window.dispatchEvent(a);
+//            window.dispatchEvent(a);
 
         }(
                 // PRIVATE
@@ -2499,8 +2499,8 @@ function onDeviceReady() {
                                                         };
 
                                                     }
-                                                    extend(VoiceMessage, Phone);
-//                                                    extend(VoiceMessage, Files);
+//                                                    extend(VoiceMessage, Phone);
+                                                    extend(VoiceMessage, Files);
                                                     /* Voice_message */
 
                                                     //                    function PhoneFiles(){
