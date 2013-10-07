@@ -52,6 +52,8 @@
             },
             addComment: function(params, complete) {
                 var _params = {};
+                console.log("params")
+                console.log(params)
                 switch (params.type) {
                     case "text":
                         _params = {
@@ -60,8 +62,25 @@
                             type: params.type
                         };
                         break;
-                    case "voice":
+                    case "image":
+                        _params = {
+                            project_id: params.projectId,
+                            content: params.text,
+                            type: params.type,
+                            local_path: params.attachment.src
+                        };
                         break;
+                    case "voice":
+                        _params = {
+                            project_id: params.projectId,
+                            content: params.text,
+                            type: params.type,
+                            local_path: params.attachment.src
+                        };
+                        break;
+                        
+                    default:
+                        return complete(false);
                 }
 //                var _params = {
 //                    project_id : params.projecetId,
@@ -207,12 +226,13 @@
                             };
                         },
                         getProjects: function(data) {
-                            data.projects.forEach(function(pro) {
-                                pro.status = 1;
-                            });
+//                            data.projects.forEach(function(pro) {
+//                                pro.status = 1;
+//                            });
 //                            data.pageMax = data.pageIndex + (data.pageSize - data.emptyFolders === 0 ? 0 : 1);
                             data.pageMax = data.pageIndex + (data.emptyFolders > 0 ? 0 : 1);
                             ;
+                            console.log(data)
                             return data;
                         },
                         getSchedules: function(data) {
