@@ -109,8 +109,12 @@ function onDeviceReady() {
                             callback(contacts);
                         });
                     },
-                    invite_via_email: function() {
-                        //  request to server
+                    invite_via_email: function(email, callback) {
+                        //  we need just "to" here
+                        var data = {};
+                        data.to = email;
+                        data.from = SESSION.get("user_email");
+                        callback ? SOCKET.request("email", data, callback) : SOCKET.request("email", data);
                     },
                     invite_via_sms: function() {
                         //  request to server
@@ -1213,9 +1217,11 @@ function onDeviceReady() {
                                                             body: data,
                                                             connection_code: connection_code
                                                         });
-                                                        var sockets_route = (ROUTE('sockets').match(/\/$/) ? ROUTE('sockets').substring(0, ROUTE('sockets').length - 1) : ROUTE('sockets'));
-                                                        this.socket.on(url + "_result" + connection_code, callback);
-                                                        io.sockets[sockets_route].open === false ? callback(false) : this.socket.on(url + data.connection_code, callback);
+                                                        if(callback){
+                                                            var sockets_route = (ROUTE('sockets').match(/\/$/) ? ROUTE('sockets').substring(0, ROUTE('sockets').length - 1) : ROUTE('sockets'));
+                                                            this.socket.on(url + "_result" + connection_code, callback);
+                                                            io.sockets[sockets_route].open === false ? callback(false) : this.socket.on(url + data.connection_code, callback);
+                                                        }
                                                     }
 
                                                 },

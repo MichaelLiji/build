@@ -18,6 +18,7 @@
 	* 二维码
 	* MY PARTNERS添加成员页面
 	* 语音
+	* MY PROJECTS 加载有bug。
 
 ★★★★
 	* img元素未加载完成前先隐藏
