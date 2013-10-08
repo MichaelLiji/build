@@ -429,18 +429,21 @@ this.UserManagementList = (function(UserList, UserSelectionList, OverflowPanel, 
 		uMLClassList = userManagementList.classList,
 
 		this.attach({
-			userclick : function(e){
-				var targetEl = jQun(e.target), userEl = targetEl.between(".userList>figure>p", this);
-				
-				// 如果点击的是人物头像
-				if(userEl.length > 0){
-					// 如果不处于删除状态,就return
-					if(!uMLClassList.contains("readyToDel"))
-						return;
+			clickavatar : function(e){
+				// 如果不处于删除状态,就return
+				if(!uMLClassList.contains("readyToDel"))
+					return;
 						
-					// 删除用户，此用户元素被删除，那么clickavatar也就不会冒泡了(因为元素被删除，没有父元素可以冒泡)
-					userList.delUser(userEl.get("userid", "attr"));
-				}
+				// 删除用户，此用户元素被删除
+				userList.delUser(e.userId);
+				uMLClassList.remove("readyToDel");
+				e.stopPropagation();
+			}
+		}, true);
+
+		this.attach({
+			userclick : function(e, targetEl){
+				var userEl = targetEl.between(".userList>figure>p", this);
 
 				// 不管怎么样，只要点击的不是删除按钮，就要取消删除状态
 				uMLClassList.remove("readyToDel");

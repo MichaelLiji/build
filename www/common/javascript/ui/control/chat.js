@@ -436,7 +436,7 @@ this.ChatInput = (function(messageCompletedEvent, reader){
 		var chatInput = this, imagePath = "",
 		
 			inputClassList = chatInput.classList;
-
+		
 		// 点击事件
 		this.attach({
 			userclick : function(e, targetEl){

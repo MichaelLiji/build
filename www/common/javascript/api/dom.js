@@ -118,8 +118,10 @@ this.EventCollection = (function(Timer, IntervalTimer, isMobile, childGestureCon
 							return;
 
 						userClick.trigger(e.target);
+						e.stopPropagation();
 					}
-				}
+				},
+				true
 			);
 
 			this.attachTo("*");
@@ -234,9 +236,7 @@ this.OverflowPanel = (function(Panel, IntervalTimer, setTopEvent, leaveborder){
 		///	<param name="_disableScrollBar" type="boolean">是否显示滚动条。</param>
 		var overflowPanel = this,
 		
-			isLeaveborder = false,
-		
-			panelStyle = this.style,
+			isLeaveborder = false, panelStyle = this.style,
 			
 			timer = new IntervalTimer(40);
 
@@ -249,6 +249,7 @@ this.OverflowPanel = (function(Panel, IntervalTimer, setTopEvent, leaveborder){
 
 		this.attach({
 			touchstart : function(){
+				tm = 0;
 				timer.stop();
 			},
 			continuousgesture : function(e){

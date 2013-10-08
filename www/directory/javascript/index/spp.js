@@ -216,7 +216,7 @@ this.Project = (function(){
 
 		this.attach({
 			beforeshow : function(){
-				project.load();
+				project.load(true);
 			},
 			leaveborder : function(e){
 				if(e.direction !== "bottom")
@@ -279,15 +279,21 @@ this.Project = (function(){
 			this.add({ projects : data });
 		},
 		html : undefined,
-		load : function(){
+		load : function(_isRefresh){
 			///	<summary>
 			///	去服务器取数据，并加载。
 			///	</summary>
+			/// <param name="_isRefresh" type="boolean">该操作是否为刷新</param>
 			var batchLoad = this.batchLoad;
 
-			if(batchLoad.isEqual("pageIndex", "pageMax")){
-				this.addEmptyFolders(10, true);
-				return;
+			if(!_isRefresh){
+				if(batchLoad.isEqual("pageIndex", "pageMax")){
+					this.addEmptyFolders(10, true);
+					return;
+				}
+			}
+			else {
+				this.find(">ul").innerHTML = "";
 			}
 
 			batchLoad.callServer();

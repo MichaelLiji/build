@@ -9,10 +9,15 @@
 	* 优化CallServer,上传和下载的判断：new UploadUrl() 或 new DownloadUrl();
 	* 附件
 	* singleProject加载2次。
-	* 创建项目后，没有在MY PROJECTS页面显示，原因 spp.js 288行
+	- 创建项目后，没有在MY PROJECTS页面显示，原因 spp.js 288行
 	* 聊天输入时，滚动条有bug
 	- 添加组，不能选择用户    list.js
 	- 添加组之后，没有显示该组 spp.js
+	- 删除选择人
+	* MY PROJECTS添加监听
+	* 二维码
+	* MY PARTNERS添加成员页面
+	* 语音
 
 ★★★★
 	* img元素未加载完成前先隐藏

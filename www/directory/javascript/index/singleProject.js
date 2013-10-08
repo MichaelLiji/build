@@ -253,6 +253,10 @@ this.Self = (function(Header){
 				header.focus(e.currentPanel.id);
 			},
 			focustab : function(e){
+				// 初始化页面的时候，不需要加载数据
+				if(id === undefined)
+					return;
+
 				Global.history.go(e.pageName).fill(id);
 			},
 			loadproject : function(e){

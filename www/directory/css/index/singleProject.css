@@ -1,13 +1,15 @@
 ﻿#singleProject > * {
 	padding : 0 10px;
 	top : 36px;
-	overflow : hidden;
 }
 
 #singleProjectHeader {
 	display : block;
-	position : static;
-	margin-top : 5px;
+	position : relative;
+	background-color : #f7f7f7;
+	z-index : 2;
+	top : 0;
+	padding : 5px 0;
 }
 #singleProjectHeader > ul {
 	background-color : #fff;
