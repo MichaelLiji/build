@@ -114,6 +114,12 @@ this.History = (function(List, Loader, redirectEvent){
 			return idx < this.length && idx > -1 ? this[idx].self : undefined;
 		},
 		go : function(name, _isBack){
+            try{
+                
+            
+             
+
+
 			///	<summary>
 			///	跳转到指定名称的页面。
 			///	</summary>
@@ -156,6 +162,10 @@ this.History = (function(List, Loader, redirectEvent){
 				self : name,
 				opener : _isBack ? (old ? old.name : null) : this.getNameByIndex(lastIdx)
 			});
+                        
+                         } catch(e) {
+                             console.log(e)
+                }
 			return panel;
 		},
 		homePage : "project"
