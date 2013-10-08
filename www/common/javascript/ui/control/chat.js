@@ -458,6 +458,9 @@ this.ChatInput = (function(messageCompletedEvent, reader){
 			recordcomplete : function(e){
 				messageCompletedEvent.setEventAttrs({
 					message : {
+						attachment : {
+							src : e.src
+						},
 						text : "",
 						time : new Date().getTime(),
 						type : "voice"

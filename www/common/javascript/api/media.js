@@ -18,11 +18,19 @@ this.Voice = (function(Panel, VoiceMessage, recordCompleteEvent){
 		},
 		recordStart : function(target){
 			if(!VoiceMessage){
+				recordCompleteEvent.setEventAttrs({
+					src : ""
+				});
 				recordCompleteEvent.trigger(target);
 				return;
 			}
 
-			voiceMessage.record_start(function(){
+			var Voice = this;
+
+			VoiceMessage.record_start(function(src){
+				recordCompleteEvent.setEventAttrs({
+					src : src
+				});
 				recordCompleteEvent.trigger(target);
 			});
 		},
@@ -30,19 +38,19 @@ this.Voice = (function(Panel, VoiceMessage, recordCompleteEvent){
 			if(!VoiceMessage)
 				return;
 
-			voiceMessage.record_stop();
+			VoiceMessage.record_stop();
 		},
 		save : function(){
 			if(!VoiceMessage)
 				return;
 
-			voiceMessage.save();
+			VoiceMessage.save();
 		},
 		stop : function(){
 			if(!VoiceMessage)
 				return;
 
-			voiceMessage.stop();
+			VoiceMessage.stop();
 		}
 	});
 
