@@ -1,10 +1,18 @@
-﻿(function(NonstaticClass, StaticClass, TouchEvent, isMobile){
+﻿(function(NonstaticClass, StaticClass, Event, TouchEvent, isMobile){
 // 如果是移动设备，则不需要虚拟这些方法及事件
 if(isMobile){
 	return;
 }
 
-TouchEvent = (function(List, Event, window, attrs){
+(function(appLoadEvent){
+	jQun(window).onload = function(){
+		appLoadEvent.trigger(this);
+	};
+}(
+	new Event("appload")
+));
+
+TouchEvent = (function(List, window, attrs){
 	function Touch(){}
 	Touch = new StaticClass(null, "Touch");
 
@@ -58,7 +66,6 @@ TouchEvent = (function(List, Event, window, attrs){
 	return TouchEvent.constructor;
 }(
 	jQun.List,
-	jQun.Event,
 	window,
 	// attrs
 	["clientX", "clientY", "pageX", "pageY", "screenX", "screenY"]
@@ -81,6 +88,7 @@ TouchEvent = (function(List, Event, window, attrs){
 }(
 	jQun.NonstaticClass,
 	jQun.StaticClass,
+	jQun.Event,
 	undefined,
 	jQun.Browser.isMobile
 ));

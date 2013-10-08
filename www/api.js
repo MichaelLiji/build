@@ -12,7 +12,22 @@
 //   - othervise data which needed to be synced is triggerred to sync table and will be synced when connection to server will be esteblished
 //
 //local DB automaticaly created but to fix something or to reload we can use Models.TEST.INIT() or other methods there -- also see last lines of this file
-BROWSER_TEST_VERSION = true;
+//BROWSER_TEST_VERSION = true;
+BROWSER_TEST_VERSION = function check_dev() {
+    var ua = navigator.userAgent.toLowerCase();
+    if (ua.match(/(iphone|ipod|ipad)/i)) {
+        device = "ios";
+    } else if (ua.match(/android/i)) {
+        device = "android";
+    } else if (ua.match(/blackberry/i)) {
+        device = "blackberry";
+    } else if (ua.match(/windows phone os 7.5/i)) {
+        device = "windows";
+    } else {
+        device = "desktop";
+    }
+    return device === "desktop" ? true : false;
+}();
 
 BROWSER_TEST_VERSION ? onDeviceReady() : document.addEventListener("deviceready", onDeviceReady, false);
 
@@ -45,8 +60,11 @@ function onDeviceReady() {
 
     var inited_fs = null;
 
-    if (!BROWSER_TEST_VERSION) {
+    if (BROWSER_TEST_VERSION) {
+        server_start();
 
+    } else {
+//        alert("BROWSER_TEST_VERSION WITHOUT FS");
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
             fs.root.getDirectory(CONFIG.root_dir, {create: true, exclusive: false}, function(dir) {
 
@@ -61,14 +79,12 @@ function onDeviceReady() {
             console.log(err1);
             console.log(err2);
         });
-
-    } else {
-//        alert("BROWSER_TEST_VERSION WITHOUT FS");
-        server_start();
     }
 
     function server_start() {
 //        var a = new window.Event("applicationload");
+        var a = document.createEvent("HTMLEvents");
+        a.initEvent("appload", true, true);
 
         App_model = function(SERVER) {
             /* Private */
@@ -309,7 +325,7 @@ function onDeviceReady() {
                                 } else {
                                     console.log(result);
                                     callback({
-                                        status : -1,
+                                        status: -1,
                                         error: {
                                             type: "email",
                                             idx: 1,
@@ -317,7 +333,7 @@ function onDeviceReady() {
                                         }
                                     });
                                 }
-                            }else{
+                            } else {
                                 alert("no internet");
                             }
 //                            } else {
@@ -388,7 +404,6 @@ function onDeviceReady() {
                     }
 
                 },
-                
                 VoiceMessage: {
                     _last_play_id: null,
                     _last_play_path: null,
@@ -537,10 +552,12 @@ function onDeviceReady() {
 //                                } else {
 //                                    callback();
 //                                }
-                                if(counter_callbacks === 0)make_callback();
-                                function make_callback(){
+                                if (counter_callbacks === 0)
+                                    make_callback();
+                                function make_callback() {
                                     ++counter;
-                                    if(counter === counter_callbacks)API._sync(['xiao_projects', 'xiao_project_partners', 'xiao_project_attachments'], callback);
+                                    if (counter === counter_callbacks)
+                                        API._sync(['xiao_projects', 'xiao_project_partners', 'xiao_project_attachments'], callback);
                                 }
                             });
                         }
@@ -725,8 +742,9 @@ function onDeviceReady() {
 
                                                 DB.query(function(partners) {
                                                     var status = -1;
-                                                    partners.forEach(function(pp){
-                                                        if(pp.uid == pr.uid) status = 1;
+                                                    partners.forEach(function(pp) {
+                                                        if (pp.uid == pr.uid)
+                                                            status = 1;
                                                     });
                                                     DB.select("COUNT(pc.read) as unread");
                                                     DB.from("xiao_project_comments AS pc");
@@ -1155,6 +1173,7 @@ function onDeviceReady() {
 
 
 //            window.dispatchEvent(a);
+            document.dispatchEvent(a);
 
         }(
                 // PRIVATE
@@ -1217,7 +1236,7 @@ function onDeviceReady() {
                                                             body: data,
                                                             connection_code: connection_code
                                                         });
-                                                        if(callback){
+                                                        if (callback) {
                                                             var sockets_route = (ROUTE('sockets').match(/\/$/) ? ROUTE('sockets').substring(0, ROUTE('sockets').length - 1) : ROUTE('sockets'));
                                                             this.socket.on(url + "_result" + connection_code, callback);
                                                             io.sockets[sockets_route].open === false ? callback(false) : this.socket.on(url + data.connection_code, callback);
@@ -1748,7 +1767,7 @@ function onDeviceReady() {
                                                                     company_id INTEGER NOT NULL DEFAULT ' + SERVER.SESSION.get("company_id") + ',\n\
                                                                     UNIQUE(id))'
                                                                         );
-                                                                            
+
                                                                 tx.executeSql('CREATE TABLE IF NOT EXISTS xiao_project_attachments (\n\
                                                                     server_id VARCHAR(255) NULL DEFAULT NULL,\n\
                                                                     id VARCHAR(255) NOT NULL,\n\
@@ -2337,7 +2356,7 @@ function onDeviceReady() {
                                                     }
                                                     ;
                                                     /* PARENT */
-                                                    
+
 
                                                     function Files() {
                                                         Files.superclass.constructor.call(this);
@@ -2430,7 +2449,7 @@ function onDeviceReady() {
                                                         };
                                                     }
                                                     extend(Files, Phone);
-                                                    
+
                                                     /* Voice_message */
                                                     function VoiceMessage() {
                                                         VoiceMessage.superclass.constructor.call(this);

@@ -7,7 +7,7 @@ this.Global = (function(Fixed, Management, HTML){
 		var Global = this;
 
 		jQun(window).attach({
-			load : function(){
+			appload : function(){
 				//jQun("body").set("zoom", window.screen.width / 640, "css");
 			
 				// 初始化历史记录
