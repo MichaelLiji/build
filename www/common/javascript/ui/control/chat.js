@@ -472,13 +472,14 @@ this.ChatInput = (function(messageCompletedEvent, reader){
 		// 选择文件事件
 		this.find(">aside input").attach({
 			change : function(){
+                                console.log(file);
 				var file = this.files[0];
 
 				if(!file){
 					return;
 				}
-
-				if(!file.type.match(/^image\//)){
+//				if(!file.type.match(/^image\//)){
+                                if(!file.name.match(/\.(png|jpg|jpeg|bmp|gif)$/)){
 					alert("请选择图像文件！");
 					this.value = "";
 					return;

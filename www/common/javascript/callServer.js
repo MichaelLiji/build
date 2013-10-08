@@ -67,7 +67,7 @@
                             project_id: params.projectId,
                             content: params.text,
                             type: params.type,
-                            local_path: params.attachment.src
+                            local_path: params.attachment.path
                         };
                         break;
                     case "voice":
@@ -75,7 +75,7 @@
                             project_id: params.projectId,
                             content: params.text,
                             type: params.type,
-                            local_path: params.attachment.src
+                            local_path: params.attachment.path
                         };
                         break;
                         
