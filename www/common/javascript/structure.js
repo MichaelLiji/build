@@ -18,6 +18,9 @@ this.Bao = (function(Bao){
 				IntervalTimer : null,
 				Loader : null,
 				Timer : null
+			}),
+			Media : new Namespace().members({ // api/media.js
+				Voice : null
 			})
 		}),
 		CallServer : null, // callServer.js

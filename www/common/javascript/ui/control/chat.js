@@ -1,4 +1,4 @@
-﻿(function(Chat, NonstaticClass, Panel, HTML, Global, set){
+﻿(function(Chat, NonstaticClass, Panel, HTML, Global, Voice, set){
 this.Attachment = (function(){
 	function Attachment(id, _src){
 		///	<summary>
@@ -90,13 +90,15 @@ this.Message = (function(Attachment, ImageBox, clickDoEvent, clickPraiseEvent, f
 		// 点击信息内容区域
 		this.find(">figure>figcaption").attach({
 			userclick : function(e, targetEl){
+				// 查看图片
 				if(targetEl.between(">img", this).length > 0){
 					new ImageBox(targetEl.src)[0];
 					return;
 				}
 
+				// 播放语音
 				if(targetEl.between(">a>button", this).length > 0){
-					alert("voice");
+					Voice.play(targetEl.parent().getAttribute("voiceid"));
 					return;
 				}
 			}
@@ -443,12 +445,6 @@ this.ChatInput = (function(messageCompletedEvent, reader){
 				if(targetEl.between(">button", this).length > 0){
 					// 移除或添加voice
 					inputClassList.toggle("voice");
-
-					// 如果有voice类，说明是语音输入状态
-					if(inputClassList.contains("voice")){
-						
-						return;
-					}
 					return;
 				}
 			}
@@ -590,5 +586,6 @@ Chat.members(this);
 	Bao.API.DOM.Panel,
 	jQun.HTML,
 	Bao.Global,
+	Bao.API.Media.Voice,
 	jQun.set
 ));

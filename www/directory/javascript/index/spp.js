@@ -293,6 +293,7 @@ this.Project = (function(){
 				}
 			}
 			else {
+				batchLoad.restoreParams();
 				this.find(">ul").innerHTML = "";
 			}
 

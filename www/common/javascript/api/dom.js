@@ -126,6 +126,7 @@ this.EventCollection = (function(Timer, IntervalTimer, isMobile, childGestureCon
 
 			this.attachTo("*");
 		}),
+		// 用户手势事件
 		usergesture : new UserGesture.constructor("usergesture").attachTo("*")
 	});
 

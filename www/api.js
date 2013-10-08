@@ -297,44 +297,48 @@ function onDeviceReady() {
                                     SESSION.set("user_pwd", result.user.pwd);
                                     if (result.user.isNewUser == 1)
                                         API.update("xiao_users", {isNewUser: 0}, 'id="' + result.user.id + '"');
-                                    callback({
-                                        status: 0,
-                                        user: result.user
-                                    });
+                                    console.log(result);
+                                    callback(result);
                                 } else if (result.error) {
-                                    console.log(result.error.message);
-                                    callback({
-                                        status: -1
-                                    });
+                                    console.log(result);
+                                    callback(result);
                                 } else {
-                                    console.log(result.error.message);
+                                    console.log(result);
                                     callback({
-                                        status: -1
+                                        status : -1,
+                                        error: {
+                                            type: "email",
+                                            idx: 1,
+                                            desc: "data is not correct"
+                                        }
                                     });
                                 }
-                            } else {
-                                console.log(data)
-                                //offline like this for now in development
-                                if (SESSION.get("user_id") && SESSION.get("user_pwd") && SESSION.get("user_name") && SESSION.get("user_email")) {
-                                    if (SESSION.get("user_pwd") == md5(data.pwd) && SESSION.get("user_email") == data.email) {
-                                        Models.User.read(function(offline_user) {
-
-                                            callback({user: offline_user, status: 0});
-                                        });
-//                                        callback({
-//                                            status: 0
-//                                        });
-                                    } else {
-                                        callback({
-                                            status: -1
-                                        });
-                                    }
-                                } else {
-                                    callback({
-                                        status: -1
-                                    });
-                                }
+                            }else{
+                                alert("no internet");
                             }
+//                            } else {
+//                                console.log(data)
+//                                //offline like this for now in development
+//                                if (SESSION.get("user_id") && SESSION.get("user_pwd") && SESSION.get("user_name") && SESSION.get("user_email")) {
+//                                    if (SESSION.get("user_pwd") == md5(data.pwd) && SESSION.get("user_email") == data.email) {
+//                                        Models.User.read(function(offline_user) {
+//
+//                                            callback({user: offline_user, status: 0});
+//                                        });
+////                                        callback({
+////                                            status: 0
+////                                        });
+//                                    } else {
+//                                        callback({
+//                                            status: -1
+//                                        });
+//                                    }
+//                                } else {
+//                                    callback({
+//                                        status: -1
+//                                    });
+//                                }
+//                            }
                         });
                     },
                     create: function(data, callback) {
@@ -690,6 +694,7 @@ function onDeviceReady() {
                                 }
                             });
                         } else {
+                            console.log(params)
                             // get ALL projects page
                             if ("pageIndex" in params && "pageSize" in params) {
                                 var result = [];
@@ -715,7 +720,7 @@ function onDeviceReady() {
                                                 DB.where('p.id ="' + pr.id + '"');
 
                                                 DB.query(function(partners) {
-                                                    var status = 0;
+                                                    var status = -1;
                                                     partners.forEach(function(pp){
                                                         if(pp.uid == pr.uid) status = 1;
                                                     });

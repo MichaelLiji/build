@@ -158,6 +158,8 @@ this.Login = (function(OverflowPanel, LoginInfoManagement, loginEvent){
 			///	</summary>
 			/// <param name="email" type="string">用户邮箱</param>
 			/// <param name="pwd" type="string">用户密码</param>
+			var loginInfoManagement = this.loginInfoManagement;
+
 			CallServer.open("login", {
 				email : email,
 				pwd : pwd

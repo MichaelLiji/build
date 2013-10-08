@@ -1,5 +1,5 @@
 ﻿(function(Data, NonstaticClass, StaticClass){
-this.BatchLoad = (function(CallServer){
+this.BatchLoad = (function(CallServer, forEach){
 	function BatchLoad(name, _complete){
 		///	<summary>
 		///	分页加载。
@@ -20,7 +20,7 @@ this.BatchLoad = (function(CallServer){
 			///	<summary>
 			///	访问服务器取数据。
 			///	</summary>
-			var p = {},	params = this.params, forEach = jQun.forEach;
+			var p = {},	params = this.params;
 
 			// 初始化ajax参数
 			forEach(params, function(param, name){
@@ -74,6 +74,14 @@ this.BatchLoad = (function(CallServer){
 		},
 		name : "",
 		params : undefined,
+		restoreParams : function(){
+			///	<summary>
+			///	恢复所有参数初始值。
+			///	</summary>
+			forEach(this.params, function(p){
+				p.value = p.def;
+			});
+		},
 		setParam : function(name, value, _handler){
 			///	<summary>
 			///	设置参数。
@@ -83,14 +91,16 @@ this.BatchLoad = (function(CallServer){
 			/// <param name="_handler" type="*">参数的处理逻辑</param>
 			this.params[name] = {
 				value : value,
-				handler : _handler
+				handler : _handler,
+				def : value
 			};
 		}
 	});
 
 	return BatchLoad.constructor;
 }(
-	Bao.CallServer
+	Bao.CallServer,
+	jQun.forEach
 ));
 
 Data.members(this);

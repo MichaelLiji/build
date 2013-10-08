@@ -231,7 +231,6 @@
 //                            });
 //                            data.pageMax = data.pageIndex + (data.pageSize - data.emptyFolders === 0 ? 0 : 1);
                             data.pageMax = data.pageIndex + (data.emptyFolders > 0 ? 0 : 1);
-                            ;
                             console.log(data)
                             return data;
                         },
