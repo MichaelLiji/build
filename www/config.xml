@@ -33,8 +33,8 @@
     <!--<preference name="permissions"                value="none"/>-->
 
     <!-- Customize your app and platform with the preference element. -->
-    <preference name="fullscreen" value="true" />
-    <!--<preference name="auto-hide-splash-screen"    value="false" />-->       
+    <preference name="fullscreen" value="false" />
+    <preference name="auto-hide-splash-screen"    value="true" />       
     <!--<preference name="show-splash-screen-spinner" value="false" />--> 
 <!--    
     <preference name="phonegap-version"           value="2.9.0" />           all: current version of PhoneGap 
