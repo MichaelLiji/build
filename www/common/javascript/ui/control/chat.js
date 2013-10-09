@@ -429,7 +429,7 @@ this.ChatListContent = (function(MessageGroup){
 	this.MessageGroup
 ));
 
-this.ChatInput = (function(messageCompletedEvent, reader){
+this.ChatInput = (function(Global, messageCompletedEvent, reader){
 	function ChatInput(selector){
 		///	<summary>
 		///	聊天输入。
@@ -543,6 +543,8 @@ this.ChatInput = (function(messageCompletedEvent, reader){
 			if(this.isRecording)
 				return;
 
+			Global.mask.fillBody("", true);
+			Global.mask.show("voiceRecording");
 			Voice.recordStart(this[0]);
 			this.isRecording = true;
 		},
@@ -550,6 +552,7 @@ this.ChatInput = (function(messageCompletedEvent, reader){
 			if(!this.isRecording)
 				return;
 
+			Global.mask.hide();
 			Voice.recordStop();
 			this.isRecording = false;
 		}
@@ -557,6 +560,7 @@ this.ChatInput = (function(messageCompletedEvent, reader){
 
 	return ChatInput.constructor;
 }(
+	Bao.Global,
 	// messageCompletedEvent
 	new jQun.Event("messagecompleted"),
 	// reader

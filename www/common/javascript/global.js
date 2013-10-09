@@ -11,7 +11,6 @@ this.Global = (function(Fixed, Management, HTML){
 				//jQun("body").set("zoom", window.screen.width / 640, "css");
 			
 				// 初始化历史记录
-                                
 				var history = new Management.History();
 
 				Global.assign({
@@ -24,7 +23,7 @@ this.Global = (function(Fixed, Management, HTML){
 						new HTML("title_tools_html", true)
 					)
 				});
-                                
+
 				// 首先要登录才会用登录用户的数据
 				history.go("login");
 			},

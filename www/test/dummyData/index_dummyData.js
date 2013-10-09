@@ -136,6 +136,15 @@ this.Deep = (function(SingleProject){
 				messages : SingleProject.getMessages(),
 				endTime : new Date().getTime()
 			};
+		},
+		getToDoInfoList : function(){
+			var toDoInfoList = [];
+
+			jQun.forEach(Number.random(10), function(){
+				toDoInfoList.push(this());
+			}, this.getToDoInfo);
+
+			return toDoInfoList;
 		}
 	});
 
@@ -144,7 +153,7 @@ this.Deep = (function(SingleProject){
 	this.SingleProject
 ));
 
-this.SPP = (function(SingleProject){
+this.SPP = (function(SingleProject, Deep){
 	function SPP(){};
 	SPP = new StaticClass(null, "Bao.Test.DummyData.SPP");
 
@@ -194,7 +203,7 @@ this.SPP = (function(SingleProject){
 			for(var j = endDate.getTime();beginDate.getTime() < j;){
 				schedule.push({
 					time : beginDate.setDate(beginDate.getDate() + 1),
-					projects : this.getProjects(Number.random(5))
+					toDos : Deep.getToDoInfoList()
 				});
 			}
 
@@ -204,7 +213,8 @@ this.SPP = (function(SingleProject){
 
 	return SPP;
 }(
-	this.SingleProject
+	this.SingleProject,
+	this.Deep
 ));
 
 Index.members(this);

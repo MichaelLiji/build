@@ -8,13 +8,13 @@
 #schedule .calendar {
 	z-index : 2;
 }
-#schedule .calendar_month aside[projectslength] {
+#schedule .calendar_month aside[todoslength] {
 	display : inline-block;
 	-webkit-column-width : 5px;
 	-webkit-column-gap : 0;
 	height : 40px;
 }
-#schedule .calendar_month aside[projectslength="0"], .schedule_list > li[projectslength="0"] {
+#schedule .calendar_month aside[todoslength="0"], .schedule_list > li[todoslength="0"] {
 	display : none;
 }
 #schedule > section > nav {

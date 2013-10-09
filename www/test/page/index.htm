@@ -138,8 +138,8 @@
 						<ol class="schedule_list"></ol>
 					</nav>
 					<script id="spp_scheduleSign_html" type="text/html">
-						@for(projects ->> pro){
-							<span class="projectColor_{pro.color}" projectid="{pro.id}"></span>
+						@for(toDos ->> t){
+							<span class="projectColor_{t.color}" todoid="{t.id}"></span>
 						}
 					</script>
 				</section>

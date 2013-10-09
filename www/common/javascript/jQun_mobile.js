@@ -5,7 +5,7 @@ if(isMobile){
 }
 
 (function(appLoadEvent){
-	jQun(window).onload = function(){
+	window.onload = function(){
 		appLoadEvent.trigger(this);
 	};
 }(

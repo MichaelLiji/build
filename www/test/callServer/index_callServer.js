@@ -39,7 +39,7 @@ this.CallServer = (function(CallServer, Wait, open, allHandlers){
 		["getPartnerGroups",	"url",										"", true],
 		["getPartners",			new Text("url?groupId={groupId}"),			"", true],
 		["getProjects",			"url",										"", true],
-		["getSchedules",		new Text("url?last={last}&next={next}"),	"", true],
+		["getSchedules",		new Text("url?last={last}&next={next}"),	""],
 		["getSingleProject",	new Text("url?id={id}"),					"", true],
 		["getUser",				new Text("url?id={id}"),					"", true],
 		["globalSearch",		new Text("url?search={search}"),			"", true],
@@ -110,7 +110,7 @@ this.CallServer = (function(CallServer, Wait, open, allHandlers){
 		},
 		getProjects : function(data){
 			data = {
-				projects : Index.SPP.getProjects(3),
+				projects : Index.SPP.getProjects(15),
 				pageIndex : 1,
 				pageMax : 1,
 				pageSize : 15,
@@ -134,8 +134,8 @@ this.CallServer = (function(CallServer, Wait, open, allHandlers){
 					date : localDate.getDate()
 				});
 
-				d.projects.forEach(function(pro){
-					pro.key = pro.id;
+				d.toDos.forEach(function(toDo){
+					toDo.key = toDo.id;
 				});
 			});
 

@@ -63,23 +63,21 @@ this.Schedule = (function(Calendar, ProjectAnchorList, groupingHtml){
 		batchLoad = new BatchLoad("getSchedules", function(data){
 			lastData = {};
 
-			data.schedules.forEach(function(date){
-				var asideEl = calendar.find('li[datestatus][time="' + date.time + '"] aside');
+			data.schedules.forEach(function(dt){
+				var asideEl = calendar.find('li[datestatus][time="' + dt.time + '"] aside');
 
-				lastData[date.time] = date;
+				lastData[dt.time] = dt;
 
 				if(asideEl.length === 0)
 					return;
 					
 				var asideAttr = asideEl.attributes;
 
-				if(asideAttr.get("projectsLength") != null)
+				if(asideAttr.get("todoslength") != null)
 					return;
 				
-				var projects = date.projects;
-
-				asideEl.innerHTML = signHtml.render(date);
-				asideAttr.set("projectsLength", projects.length);
+				asideEl.innerHTML = signHtml.render(dt);
+				asideAttr.set("todoslength", dt.toDos.length);
 			});
 		});
 
@@ -93,6 +91,7 @@ this.Schedule = (function(Calendar, ProjectAnchorList, groupingHtml){
 				contentEl.parent().classList.add("calendarStretched");
 			}
 		});
+
 		calendar.attach({
 			focusmonth : function(){
 				batchLoad.callServer();
@@ -145,7 +144,7 @@ this.Schedule = (function(Calendar, ProjectAnchorList, groupingHtml){
 
 				for(var i = 0;i < 10;i++){
 					if(lastData[date.getTime()]){
-					new Grouping.constructor(lastData[date.getTime()]).appendTo(contentUl);
+						new Grouping.constructor(lastData[date.getTime()]).appendTo(contentUl);
 					}
 					date.setDate(date.getDate() + 1);
 				}
@@ -175,7 +174,7 @@ this.Schedule = (function(Calendar, ProjectAnchorList, groupingHtml){
 	Control.Time.Calendar,
 	Control.List.ProjectAnchorList,
 	new jQun.HTML([
-		'<li time="{dateData.time}" projectslength="{dateData.projects.length}">',
+		'<li time="{dateData.time}" todoslength="{dateData.toDos.length}">',
 			'<dt class="whiteFont">',
 				'<span class="lightBgColor smallRadius">{dateData.localeDateString}</span>',
 			'</dt>',
