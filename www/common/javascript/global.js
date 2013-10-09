@@ -12,9 +12,10 @@ this.Global = (function(Fixed, Management, HTML, Browser){
 				var history = new Management.History();
 
 				//jQun("body").set("zoom", window.screen.width / 640, "css");
-
+//                                console.log(Browser)
 				// iphone ios7标题栏css兼容
-				if(Browser.isMobile && Browser.agent === "iPhone" && Browser.version === "7.0"){
+//				if(Browser.isMobile && Browser.agent === "iPhone" && Browser.version === "7.0"){
+                                if(window.navigator.userAgent.match(/iPhone OS 7/i)){
 					jQun(".main").setCSSPropertyValue("top", "20px");
 				}
 				Global.assign({
