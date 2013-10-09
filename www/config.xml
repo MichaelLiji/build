@@ -34,8 +34,8 @@
 
     <!-- Customize your app and platform with the preference element. -->
     <preference name="fullscreen" value="true" />
-    <preference name="auto-hide-splash-screen"    value="false" />       
-    <preference name="show-splash-screen-spinner" value="false" /> 
+    <!--<preference name="auto-hide-splash-screen"    value="false" />-->       
+    <!--<preference name="show-splash-screen-spinner" value="false" />--> 
 <!--    
     <preference name="phonegap-version"           value="2.9.0" />           all: current version of PhoneGap 
     <preference name="orientation"                value="default" />         all: default means both landscape and portrait are enabled 

@@ -16,7 +16,6 @@ this.Global = (function(Fixed, Management, HTML, Browser){
 				// iphone ios7标题栏css兼容
 				if(Browser.isMobile && Browser.agent === "IPhone" && Browser.version === "7.0"){
 					jQun(".main").setCSSPropertyValue("top", "20px");
-                                        navigator.splashscreen.hide();
 				}
 				Global.assign({
 					history :　history,
