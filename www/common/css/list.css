@@ -233,7 +233,7 @@
 	padding-left : 18px;
 	line-height : 18px;
 	text-indent : 5px;
-	background : url(../../common/image/width24.png) 0 -200px no-repeat;
+	background : url(../../../common/image/width24.png) 0 -200px no-repeat;
 }
 .userSelectionList > header > button {
 	float : right;
@@ -278,7 +278,7 @@
 	border : 12px solid #f1af0f;
 	border-radius : 48px;
 	margin-top : -15px;
-	background : #f1af0f url(../../common/image/width24.png) 3px -247px no-repeat;
+	background : #f1af0f url(../../../common/image/width24.png) 3px -247px no-repeat;
 }
 
 .inputSelectionList > header > input {

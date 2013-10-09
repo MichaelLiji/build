@@ -5,21 +5,12 @@
 	* 转义任何可输入的文本
 	* 聊天区域，当图像加载完成时候，高度会有所改变，所以要重新确认可视区域。
 	* 优化SingleProject的项目id问题，记录一次，分配到所有子panel，要逻辑清晰，类与类之间不要太多纠葛。
-	* 优化CallServer,对某些包含性的访问，例如project : { users : [] }，就要把project和user都存起来。
-	* 优化CallServer,上传和下载的判断：new UploadUrl() 或 new DownloadUrl();
-	- 附件
-	- singleProject加载2次。
-	- 创建项目后，没有在MY PROJECTS页面显示，原因 spp.js 288行
-	- 聊天输入时，滚动条有bug
-	- 添加组，不能选择用户    list.js
-	- 添加组之后，没有显示该组 spp.js
-	- 删除选择人
 	* MY PROJECTS添加监听
 	* 二维码
 	* MY PARTNERS添加成员页面
-	- 语音
 	* MY PROJECTS status = 2的处理逻辑及表现。
 	* 输入文字的时候高度问题
+	* 创建project,不能选择用户
 
 ★★★★
 	* img元素未加载完成前先隐藏
@@ -30,7 +21,8 @@
 
 ★★★
 	* 考虑是否所有的页面都要滚动
-
+	* 优化CallServer,对某些包含性的访问，例如project : { users : [] }，就要把project和user都存起来。
+	* 优化CallServer,上传和下载的判断：new UploadUrl() 或 new DownloadUrl();
 
 
 ★★

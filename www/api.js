@@ -142,10 +142,10 @@ function onDeviceReady() {
                         callback(contacts);
                     });
                 },
-                invite_via_email: function(email, callback) {
+                invite_via_email: function(emails, callback) {
                     //  we need just "to" here
                     var data = {};
-                    data.to = email;
+                    data.to = emails;
                     data.from = SESSION.get("user_email");
                     callback ? SOCKET.request("email", data, callback) : SOCKET.request("email", data);
                 },
@@ -333,8 +333,8 @@ function onDeviceReady() {
                                 SESSION.set("user_name", result.user.name);
                                 SESSION.set("user_email", result.user.email);
                                 SESSION.set("user_pwd", result.user.pwd);
-                                if (result.user.isNewUser == 1)
-                                    API.update("xiao_users", {isNewUser: 0}, 'id="' + result.user.id + '"');
+                                console.log(result)
+                                if (result.user.isNewUser == 1)API.update("xiao_users", {isNewUser: 0}, 'id="' + result.user.id + '"');
                                 console.log(result);
                                 callback(result);
                             } else if (result.error) {
@@ -2030,8 +2030,8 @@ function onDeviceReady() {
 
                                                     _check_local_DB_and_fs: function(table_name, callback) {
                                                         var result = {},
-                                                                sql = 'SELECT * FROM sync as s INNER JOIN ' + table_name + ' as t ON s.row_id = t.id WHERE s.table_name ="' + table_name + '"',
-                                                                sql_del = 'SELECT * FROM sync_delete WHERE table_name ="' + table_name + '"';
+                                                            sql = 'SELECT * FROM sync as s INNER JOIN ' + table_name + ' as t ON s.row_id = t.id WHERE s.table_name ="' + table_name + '"',
+                                                            sql_del = 'SELECT * FROM sync_delete WHERE table_name ="' + table_name + '"';
                                                         SERVER.DB._executeSQL(sql, function(data) {
                                                             if (table_name == "xiao_project_comments" || table_name == "xiao_todo_comments" || table_name == "xiao_project_attachments") {
                                                                 data.length > 0 ? data.forEach(function(el, i) {
@@ -2151,64 +2151,6 @@ function onDeviceReady() {
                                                             }
                                                         });
                                                     },
-                                                    /*         _sync_chat  : function(table, callback){
-                                                     console.log("_sync_chat");
-                                                     // this method is used to send new data to server
-                                                     // and to pull new data from server_db to local_db
-                                                     //                            SERVER.DB.select('pc.id, pc.content, pc.type, pc.local_path, pc.project_id, pc.user_id, pc.update_time, pc.company_id');
-                                                     var info = {
-                                                     table_name  :   table,
-                                                     last_sync   :   SERVER.SESSION._get_sync_time(table),
-                                                     user_data   :   SERVER.SESSION.local_data()
-                                                     }, _this = this,
-                                                     //                            SERVER.DB.select();
-                                                     //                            SERVER.DB.from("sync as s");
-                                                     //                            SERVER.DB.join(table+" as pc", "pc.id = s.row_id");
-                                                     //                            SERVER.DB.where('s.table_name = "'+table+'"');
-                                                     //                            SERVER.DB.query(function(data){
-                                                     sql = 'SELECT * FROM sync as s INNER JOIN '+table+' as pc ON s.row_id = pc.id WHERE s.table_name ="'+table+'"';
-                                                     SERVER.DB._executeSQL(sql, function(data){
-                                                     console.log("inside sync_chat callback");
-                                                     data.length > 0 ? data.forEach(function(el, i){
-                                                     // if audio we need to proceed uload 
-                                                     if(el.type == "audio"){
-                                                     SERVER.PHONE.VoiceMessage.upload(el.local_path, "audio", function(server_path){
-                                                     data[i].server_path = server_path;
-                                                     delete data[i].local_path;
-                                                     //                                            el.server_path = server_path;
-                                                     //                                            delete el.local_path;
-                                                     if(i == (data.length-1)){
-                                                     SERVER.SOCKET.sync_chat({messages:data, info: info}, function(server){
-                                                     SERVER.DB.insert_batch_on_duplicate_update(table, server.responce, function(){
-                                                     _this._sync_clear(table,  server.info.time);
-                                                     return (callback ? callback() : true);
-                                                     });
-                                                     }); 
-                                                     }
-                                                     });
-                                                     }else if(el.type == "text"){
-                                                     if(i == (data.length-1)){
-                                                     SERVER.SOCKET.sync_chat({messages:data, info: info}, function(server){
-                                                     SERVER.DB.insert_batch_on_duplicate_update(table, server.responce, function(){
-                                                     _this._sync_clear(table,  server.info.time);
-                                                     return (callback ? callback() : true);
-                                                     });
-                                                     }); 
-                                                     }
-                                                     }
-                                                     // filter removing local_path from array
-                                                     
-                                                     }) : SERVER.SOCKET.sync_chat({messages:data, info: info}, function(server){
-                                                     console.log("empty sync chat callback");
-                                                     console.log(server);
-                                                     SERVER.DB.insert_batch_on_duplicate_update(table, server.responce, function(){
-                                                     _this._sync_clear(table,  server.info.time);
-                                                     return (callback ? callback() : true);
-                                                     });
-                                                     });
-                                                     });
-                                                     //                            this._clear_tables_to_sync(table);
-                                                     }, */
 
                                                     _sync_clear: function(table, time) {
                                                         SERVER.DB._executeSQL('DELETE FROM sync WHERE table_name = "' + table + '"');
@@ -2223,57 +2165,6 @@ function onDeviceReady() {
 //                                                        SERVER.SESSION._update_sync_time(table, time);
                                                     }
 
-                                                    /*             _request : function(url, params, callback){
-                                                     
-                                                     $.post(url, params, function(data){
-                                                     if(data){
-                                                     console.log("server");
-                                                     callback(data);
-                                                     }else{
-                                                     console.log("NO server");
-                                                     callback([]);
-                                                     }
-                                                     //                            callback(data);
-                                                     }).fail(function() { console.log("NO SERVER"); callback(false); });
-                                                     /*
-                                                     var self = this;
-                                                     var data = new FormData();
-                                                     data.append('user', 'person');
-                                                     
-                                                     var XHR = new window.XMLHttpRequest(),
-                                                     data = JSON.stringify(params);
-                                                     //                        console.log(data)
-                                                     XHR.overrideMimeType = 'application/json;charset=UTF-8';
-                                                     XHR.open("POST", url, true);
-                                                     XHR.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                                                     XHR.onreadystatechange = function () {
-                                                     var serverAnswer;
-                                                     if(4 === XHR.readyState) {
-                                                     try {
-                                                     serverAnswer = JSON.parse(XHR.responseText);
-                                                     } catch(e) {
-                                                     serverAnswer = XHR.responseText;
-                                                     }
-                                                     //                                self.log('Server answered: ');
-                                                     //                                self.log(serverAnswer);
-                                                     //I want only json/object as response
-                                                     if(XHR.status == 200 && serverAnswer instanceof Object) {
-                                                     console.log(serverAnswer);
-                                                     callback(serverAnswer);
-                                                     } else {
-                                                     serverAnswer = {
-                                                     result : 'ERROR',
-                                                     status : XHR.status,
-                                                     message : XHR.statusText
-                                                     };
-                                                     console.log(serverAnswer);
-                                                     callBack(serverAnswer);
-                                                     }
-                                                     }
-                                                     };
-                                                     
-                                                     XHR.send(data);
-                                                     */
                                                 },
                                                 // API
                                                 // API

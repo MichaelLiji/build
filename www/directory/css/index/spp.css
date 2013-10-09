@@ -33,6 +33,9 @@
 .schedule_list {
 	min-height : 100%;
 }
+.schedule_list:empty {
+	display : none;
+}
 .schedule_list dt.whiteFont {
 	height : 20px;
 	padding : 3px 0;

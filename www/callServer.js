@@ -34,6 +34,10 @@
                         });
 
                     },
+                    invitation : function(params, complete){
+                        console.log(params);
+                        Mdls.Contacts.invite_via_email(params, complete)
+                    },
                     getPartnerGroups: function(_params, complete) {
                         Mdls.Partner_Groups.read(complete);
                     },

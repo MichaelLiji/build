@@ -134,9 +134,17 @@ this.BusinessCard = (function(Global, LoadingBar, clickAvatarEvent){
 			userInfoHtml : userInfoHtml
 		});
 
-		this.onclickavatar = function(e){
-			e.stopPropagation();
-		};
+		this.attach({
+			clickavatar : function(e){
+				e.stopPropagation();
+			},
+			userclick : function(e, targetEl){
+				if(targetEl.between(">footer", this).length > 0){
+					Global.history.go("sendToDo").fill(1);
+					return;
+				}
+			}
+		});
 	};
 	BusinessCard = new NonstaticClass(BusinessCard, "Bao.Page.Index.Secondary.BusinessCard", PagePanel.prototype);
 

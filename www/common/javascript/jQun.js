@@ -1,9 +1,9 @@
 /*
  *  类库名称：jQun
  *  中文释义：骥群(聚集在一起的千里马)
- *  文档状态：1.0.5.9
- *  本次修改：ElementList增加removeAttribute方法
- *  开发浏览器信息：firefox 20.0+ 、 chrome 26.0+
+ *  文档状态：1.0.6.0
+ *  本次修改：修复jQun.Browser的iphone版本匹配错误，增加字段：marjorVersion，用于显示主要版本信息。
+ *  开发浏览器信息：firefox 20.0+ 、 chrome 26.0+、基于webkit的手机浏览器
  */
 
 (function(Object, Array, Function){
@@ -490,6 +490,7 @@ this.Browser = (function(){
 	Browser = new StaticClass(Browser, "jQun.Browser", {
 		agent : "unkown",
 		isMobile : false,
+		majorVersion : "0",
 		version : "0"
 	}, { enumerable : true });
 
