@@ -44,6 +44,11 @@ BROWSER_TEST_VERSION ? onDeviceReady() : document.addEventListener("deviceready"
 
 
 function onDeviceReady() {
+//    if (parseFloat(window.device.version) >= 7.0) {
+//          document.body.style.marginTop = "20px";
+//          // OR do whatever layout you need here, to expand a navigation bar etc
+//    }
+//    navigator.splashscreen.hide();
     // APPLICATION CONFIGS
     // APPLICATION CONFIGS
     // APPLICATION CONFIGS
@@ -754,7 +759,7 @@ function onDeviceReady() {
                                             DB.where('p.id ="' + pr.id + '"');
 
                                             DB.query(function(partners) {
-                                                var status = -1;
+                                                var status = 2;
                                                 partners.forEach(function(pp) {
                                                     if (pp.uid == pr.uid)
                                                         status = 1;
