@@ -14,7 +14,7 @@ this.Global = (function(Fixed, Management, HTML, Browser){
 				//jQun("body").set("zoom", window.screen.width / 640, "css");
 
 				// iphone ios7标题栏css兼容
-				if(Browser.isMobile && Browser.agent === "IPhone" && Browser.version === "7.0"){
+				if(Browser.isMobile && Browser.agent === "iPhone" && Browser.version === "7.0"){
 					jQun(".main").setCSSPropertyValue("top", "20px");
 				}
 				Global.assign({

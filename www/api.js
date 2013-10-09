@@ -12,7 +12,7 @@
 //   - othervise data which needed to be synced is triggerred to sync table and will be synced when connection to server will be esteblished
 //
 //local DB automaticaly created but to fix something or to reload we can use Models.TEST.INIT() or other methods there -- also see last lines of this file
-
+//BROWSER_TEST_VERSION = true;
 BROWSER_TEST_VERSION = function check_dev() {
     var ua = navigator.userAgent.toLowerCase();
     if (ua.match(/(iphone|ipod|ipad)/i)) {
@@ -30,7 +30,16 @@ BROWSER_TEST_VERSION = function check_dev() {
 }();
 
 Models = {};
-
+//Models.UsersCounter = {
+//    read: function(callback) {
+//        callback({count: 100000, validationImage: "src"});
+////                        SOCKET.request("counter", {}, function(result) {
+////                            
+////                        });
+//    }
+//
+//};
+//console.log(Models)
 BROWSER_TEST_VERSION ? onDeviceReady() : document.addEventListener("deviceready", onDeviceReady, false);
 
 
@@ -72,6 +81,7 @@ function onDeviceReady() {
         server_start();
 
     } else {
+//        alert("BROWSER_TEST_VERSION WITHOUT FS");
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
             fs.root.getDirectory(CONFIG.root_dir, {create: true, exclusive: false}, function(dir) {
 
@@ -89,21 +99,26 @@ function onDeviceReady() {
     }
 
     function server_start() {
+//        var a = new window.Event("applicationload");
+//        alert("adsadasdasdas")
         var a = document.createEvent("HTMLEvents");
         a.initEvent("appload", true, true);
 
         App_model = function(SERVER) {
             /* Private */
+            console.log(SERVER)
             var API = SERVER.API,
-                DB  = SERVER.DB,
-                SESSION = SERVER.SESSION,
-                PHONE   = SERVER.PHONE,
-                SOCKET  = SERVER.SOCKET;
+                    DB = SERVER.DB,
+                    SESSION = SERVER.SESSION,
+                    PHONE = SERVER.PHONE,
+                    SOCKET = SERVER.SOCKET;
             /* Private */
 
             // Models
             // Models
             // Models
+//            return Models = {
+//            Models = {
             Models.Contacts = {
                 // we do not save contacts to any DB (local or remote) as they are already stored in the phone
                 // so we simply query them from phone
@@ -138,17 +153,16 @@ function onDeviceReady() {
                     //  request to server
                 }
             };
-
-            Models.UsersCounter = {
-                read: function(callback) {
-                    callback({count: 100000, validationImage: "src"});
+                Models.UsersCounter = {
+                    read: function(callback) {
+                        callback({count: 100000, validationImage: "src"});
 //                        SOCKET.request("counter", {}, function(result) {
 //                            
 //                        });
-                }
+                    }
 
-            };
-
+                };
+            console.log(Models)
             Models.Partner = {
                 read: function(id, callback) { // if id is specified we get one partner else all partners
                     if (typeof(id) === "function") {// no id
@@ -187,7 +201,6 @@ function onDeviceReady() {
                 }
 
             };
-
             Models.Partner_Groups = {
                 read: function(callback) {  // get all groups NAMES
                     DB.select("g.id, g.name");
@@ -242,7 +255,6 @@ function onDeviceReady() {
                 }
 
             };
-
             Models.User = {
                 update: function(data, callback) {
 
@@ -410,7 +422,6 @@ function onDeviceReady() {
                 }
 
             };
-
             Models.VoiceMessage = {
                 _last_play_id: null,
                 _last_play_path: null,
@@ -500,7 +511,6 @@ function onDeviceReady() {
                 }
 
             };
-            
             Models.Project = {
                 create: function(data, callback) {
                     // data is following:
@@ -836,7 +846,6 @@ function onDeviceReady() {
                 }
 
             };
-            
             Models.ProjectChat = {
                 _inited_chats: [],
                 chat_init: function(project_id, callback) {
@@ -957,7 +966,6 @@ function onDeviceReady() {
                 }
 
             };
-            
             Models.Todo = {
                 create: function(todo, callback) {
 //                        var todo = {
@@ -1041,7 +1049,6 @@ function onDeviceReady() {
                 }
 
             };
-            
             Models.TodoChat = {
                 chat_init: function(project_id, callback) {
 
@@ -1163,7 +1170,6 @@ function onDeviceReady() {
                 }
 
             };
-            
             Models.Calendar = {
                 read: function(day, callback) {
                     var logged_user = SESSION.get("user_id");
@@ -1178,12 +1184,14 @@ function onDeviceReady() {
                 }
 
             };
+//            };
             // Models
             // Models
             // Models 
 
 
-            document.dispatchEvent(a); // start frontend
+//            window.dispatchEvent(a);
+            document.dispatchEvent(a);
 
         }(
                 // PRIVATE
