@@ -1,7 +1,5 @@
 ﻿(function(Time, NonstaticClass, Panel, HTML, Event){
-var DateTable;
-
-DateTable = (function(OverflowPanel, Date, tablePanelHtml, dateTableHtml, focusDateEvent, focusMonthEvent){
+this.DateTable = (function(OverflowPanel, Date, tablePanelHtml, dateTableHtml, focusDateEvent, focusMonthEvent){
 	function DateTable(){
 		///	<summary>
 		///	日期表格。
@@ -338,7 +336,7 @@ this.Calendar = (function(DateTable, calendarHtml, stretchEvent, shrinkEvent){
 
 	return Calendar.constructor;
 }(
-	DateTable,
+	this.DateTable,
 	// calendarHtml
 	new HTML([
 		'<div class="calendar lightBdColor smallRadius">',

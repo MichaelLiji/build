@@ -208,7 +208,7 @@ this.ToDoList = (function(ProjectPanel, AnchorList, formatKey){
 	}
 ));
 
-this.WorkStream = (function(ProjectPanel, ProjectAnchorList){
+this.WorkStream = (function(ProjectPanel, LevelAnchorList){
 	function WorkStream(selector, infoHtml){
 		var workStream = this, ulEl = workStream.find(">ul");
 
@@ -223,7 +223,7 @@ this.WorkStream = (function(ProjectPanel, ProjectAnchorList){
 					asideEls = ulEl.find("aside");
 
 					data.forEach(function(dt, i){
-						new ProjectAnchorList(dt.toDoList).appendTo(asideEls[i]);
+						new LevelAnchorList(dt.toDoList).appendTo(asideEls[i]);
 					});
 				});
 			}
@@ -236,7 +236,7 @@ this.WorkStream = (function(ProjectPanel, ProjectAnchorList){
 	return WorkStream.constructor;
 }(
 	this.ProjectPanel,
-	Bao.UI.Control.List.ProjectAnchorList
+	Bao.UI.Control.List.LevelAnchorList
 ));
 
 

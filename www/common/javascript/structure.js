@@ -92,14 +92,15 @@ this.Bao = (function(Bao){
 				List : new Namespace().members({ // ui/control/list.js
 					AnchorList : null,
 					ChatList : null,
-					ProjectAnchorList : null,
+					LevelAnchorList : null,
 					UserAnchorList : null,
 					UserIndexList : null,
 					UserList : null,
 					UserSelectionList : null
 				}),
 				Time : new Namespace().members({ // ui/control/time.js
-					Calendar : null
+					Calendar : null,
+					DateTable : null
 				}),
 				Wait : new Namespace().members({ // ui/control/wait.js
 					LoadingBar : null

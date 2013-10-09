@@ -461,9 +461,9 @@ this.Browser = (function(){
 		[
 			new RegExp("(Android)" + mobileVersionString),
 			new RegExp("(Windows Phone)" + mobileVersionString),
-			new RegExp("(iPhone)" + mobileVersionString),
 			new RegExp("(iPad)" + mobileVersionString),
 			new RegExp("(iPod)" + mobileVersionString),
+			/(iPhone)\sOS\s([\d_]+).*\s(Mobile)/,
 			/(MSIE) ([\d\.]+)/,
 			/(Firefox)\/([\d\.]+)/,
 			/(Opera).([\d\.]+)/,
@@ -475,12 +475,13 @@ this.Browser = (function(){
 			if(!info)
 				return true;
 
-			var agent = info[1];
+			var agent = info[1], version = info[2];
 
 			this.assign({
 				agent : agent === "AppleWebkit" ? "Safari" : agent,
 				isMobile : info[3] === "Mobile",
-				version : info[2]
+				version : version,
+				majorVersion : version.split(/\D+/)[0]
 			});
 
 			return false;

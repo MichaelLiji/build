@@ -39,7 +39,7 @@ this.CallServer = (function(CallServer, Wait, open, allHandlers){
 		["getPartnerGroups",	"url",										"", true],
 		["getPartners",			new Text("url?groupId={groupId}"),			"", true],
 		["getProjects",			"url",										"", true],
-		["getSchedules",		new Text("url?last={last}&next={next}"),	""],
+		["getSchedules",		new Text("url?last={last}&next={next}"),	"", true],
 		["getSingleProject",	new Text("url?id={id}"),					"", true],
 		["getUser",				new Text("url?id={id}"),					"", true],
 		["globalSearch",		new Text("url?search={search}"),			"", true],

@@ -92,14 +92,14 @@ this.UserAnchorList = (function(AnchorList, forEach, avatarHtml){
 	].join(""))
 ));
 
-this.ProjectAnchorList = (function(AnchorList, levelHtml){
-	function ProjectAnchorList(listData){
+this.LevelAnchorList = (function(AnchorList, levelHtml){
+	function LevelAnchorList(listData){
 		///	<summary>
-		///	项目连接列表。
+		///	具有等级标识的连接列表。
 		///	</summary>
 		var anchorList = this;
 
-		this.classList.add("projectAnchorList");
+		this.classList.add("levelAnchorList");
 		this.set("descriptstatus", "show", "attr");
 
 		listData.forEach(function(project){
@@ -111,9 +111,9 @@ this.ProjectAnchorList = (function(AnchorList, levelHtml){
 			descEl.innerHTML = levelHtml.render(project);
 		});
 	};
-	ProjectAnchorList = new NonstaticClass(ProjectAnchorList, "Bao.UI.Control.List.ProjectAnchorList", AnchorList.prototype);
+	LevelAnchorList = new NonstaticClass(LevelAnchorList, "Bao.UI.Control.List.LevelAnchorList", AnchorList.prototype);
 
-	return ProjectAnchorList.constructor;
+	return LevelAnchorList.constructor;
 }(
 	this.AnchorList,
 	// levelHtml

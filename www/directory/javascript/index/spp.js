@@ -1,11 +1,11 @@
 ﻿(function(SPP, NonstaticClass, Panel, PagePanel, OverflowPanel, Control, LoadingBar, BatchLoad, Global){
-this.Schedule = (function(Calendar, ProjectAnchorList, groupingHtml){
+this.Schedule = (function(Calendar, LevelAnchorList, groupingHtml){
 	function Grouping(data){
 		this.combine(groupingHtml.create({
 			dateData : data
 		}));
 
-		new ProjectAnchorList(data.projects).appendTo(this.find("dd")[0]);
+		new LevelAnchorList(data.toDos).appendTo(this.find("dd")[0]);
 	};
 	Grouping = new NonstaticClass(Grouping, null, Panel.prototype);
 
@@ -20,6 +20,7 @@ this.Schedule = (function(Calendar, ProjectAnchorList, groupingHtml){
 		// 初始化日程信息的滚动效果
 		this.attach({
 			continuousgesture : function(e){
+				return;
 				var date = new Date(dateTable.getFocused().get("time", "attr") - 0),
 				
 					top = scheduleContent.get("top", "css").split("px").join("") - 0 || 0;
@@ -172,7 +173,7 @@ this.Schedule = (function(Calendar, ProjectAnchorList, groupingHtml){
 	return Schedule.constructor;
 }(
 	Control.Time.Calendar,
-	Control.List.ProjectAnchorList,
+	Control.List.LevelAnchorList,
 	new jQun.HTML([
 		'<li time="{dateData.time}" todoslength="{dateData.toDos.length}">',
 			'<dt class="whiteFont">',

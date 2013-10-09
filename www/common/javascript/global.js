@@ -1,4 +1,4 @@
-(function(Bao, StaticClass){
+﻿(function(Bao, StaticClass){
 this.Global = (function(Fixed, Management, HTML, Browser){
 	function Global(){
 		///	<summary>
@@ -12,12 +12,12 @@ this.Global = (function(Fixed, Management, HTML, Browser){
 				var history = new Management.History();
 
 				//jQun("body").set("zoom", window.screen.width / 640, "css");
-//                                console.log(Browser)
+
 				// iphone ios7标题栏css兼容
-//				if(Browser.isMobile && Browser.agent === "iPhone" && Browser.version === "7.0"){
-                                if(window.navigator.userAgent.match(/iPhone OS 7/i)){
+				if(Browser.isMobile && Browser.agent === "iPhone" && Browser.version[0] === "7"){
 					jQun(".main").setCSSPropertyValue("top", "20px");
 				}
+
 				Global.assign({
 					history :　history,
 					mask : new Fixed.Mask("#mask"),

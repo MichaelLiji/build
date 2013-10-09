@@ -81,16 +81,12 @@ with(window.index_dataStructure){ // from ../dataStructure/index_dataStructure.j
 		/*
 			{
 				params : {
-					last : 111111111, // number : time ticks
-					next : 111111111 // number : time ticks
+					time : 123456 // number : time ticks
 				},
 				return [
-					projects : [
-						DS_project,
-						// ...,
-						DS_project
-					],
-					time : 111111, // number : time ticks
+					DS_schedule,
+					// ..
+					DS_schedule
 				]
 			}
 		*/
