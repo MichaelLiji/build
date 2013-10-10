@@ -17,6 +17,7 @@ this.Voice = (function(Panel, VoiceMessage, recordCompleteEvent){
 			VoiceMessage.play(id);
 		},
 		recordStart : function(target){
+            alert("rst")
 			if(!VoiceMessage){
 				recordCompleteEvent.setEventAttrs({
 					src : ""
@@ -28,6 +29,10 @@ this.Voice = (function(Panel, VoiceMessage, recordCompleteEvent){
 			var Voice = this;
 
 			VoiceMessage.record_start(function(src){
+                            alert("hello")
+                            alert(src)
+                                console.log("src")
+                                console.log(src)
 				recordCompleteEvent.setEventAttrs({
 					src : src
 				});

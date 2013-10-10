@@ -65,6 +65,13 @@
                         };
                         break;
                     case "voice":
+                        console.log(params)
+                        _params = {
+                            project_id: params.projectId,
+                            content: params.text,
+                            type: params.type,
+                            local_path: params.attachment.src
+                        };
                         break;
                 }
 //                var _params = {
