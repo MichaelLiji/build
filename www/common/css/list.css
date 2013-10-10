@@ -17,7 +17,6 @@
 	position : absolute;
 }
 .anchorList aside {
-	min-width : 245px;
 	height : 100%;
 	right : 7px;
 	left : 0;
@@ -32,6 +31,8 @@
 }
 .anchorList aside dd {
 	height : 16px;
+	text-overflow : ellipsis;
+	overflow : hidden;
 }
 .anchorList[descriptstatus="hide"] aside dd {
 	display : none;

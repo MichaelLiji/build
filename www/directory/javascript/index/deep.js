@@ -288,6 +288,22 @@ this.ToDo = (function(ChatList, OverflowPanel, Global){
 			messageappended : function(e){
 				overflowPanel.bottom();
 			},
+			messagecompleted : function(e){
+				var message = e.message;
+
+				CallServer.open(
+					"addCommentForToDo",
+					{
+						projectId : projecetId,
+						attachment : message.attachment,
+						text : message.text,
+						type : message.type
+					},
+					function(){
+				
+					}
+				);
+			},
 			clickpraise : function(e){
 				var message = e.message, loginUser = Global.loginUser;
 

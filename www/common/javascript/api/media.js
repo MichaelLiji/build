@@ -1,70 +1,67 @@
 ﻿(function(Media, NonstaticClass, StaticClass){
-this.Voice = (function(Panel, VoiceMessage, recordCompleteEvent){
+this.Voice = (function(Panel, Models){
 	function Voice(){};
 	Voice = new StaticClass(Voice, "Bao.API.Media");
 
 	Voice.properties({
+		isRecording : false,
 		pause : function(){
-			if(!VoiceMessage)
+			if(!Models.VoiceMessage)
 				return;
 
-			VoiceMessage.pause();
+			Models.VoiceMessage.pause();
 		},
 		play : function(id){
-			if(!VoiceMessage)
+			if(!Models.VoiceMessage)
 				return;
 
-			VoiceMessage.play(id);
+			Models.VoiceMessage.play(id);
 		},
-		recordStart : function(target){
-            alert("rst")
-			if(!VoiceMessage){
-				recordCompleteEvent.setEventAttrs({
-					src : ""
-				});
-				recordCompleteEvent.trigger(target);
+		recordStart : function(){
+			if(this.isRecording)
 				return;
-			}
+
+			this.isRecording = true;
+
+			if(!Models.VoiceMessage)
+				return;
 
 			var Voice = this;
 
-			VoiceMessage.record_start(function(src){
-                            alert("hello")
-                            alert(src)
-                                console.log("src")
-                                console.log(src)
-				recordCompleteEvent.setEventAttrs({
-					src : src
-				});
-				recordCompleteEvent.trigger(target);
+			Models.VoiceMessage.record_start(function(src){
+				Voice.src = src;
 			});
 		},
-		recordStop : function(){
-			if(!VoiceMessage)
+		recordStop : function(target){
+			if(!this.isRecording)
 				return;
 
-			VoiceMessage.record_stop();
+			if(Models.VoiceMessage){
+				Models.VoiceMessage.record_stop();
+			}
+
+			this.isRecording = false;
+			return this.src;
 		},
 		save : function(){
-			if(!VoiceMessage)
+			if(!Models.VoiceMessage)
 				return;
 
-			VoiceMessage.save();
+			Models.VoiceMessage.save();
 		},
+		src : "",
 		stop : function(){
-			if(!VoiceMessage)
+			if(!Models.VoiceMessage)
 				return;
 
-			VoiceMessage.stop();
+			Models.VoiceMessage.stop();
 		}
 	});
 
 	return Voice;
 }(
 	Bao.API.DOM.Panel,
-	(window.Models || {}).VoiceMessage,
-	// recordCompleteEvent
-	new jQun.Event("recordcomplete")
+	window.Models || {}
 ));
 
 Media.members(this);

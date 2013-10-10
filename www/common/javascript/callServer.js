@@ -29,7 +29,12 @@
                 Mdls.Partner_Groups.read(complete);
             },
             getPartners: function(params, complete) {
-                Mdls.Partner_Groups.get_group_users(params.groupId, complete);
+                console.log(params)
+                if(params.groupId == "-1"){
+                    Mdls.Partner.read(complete);    
+                }else{
+                    Mdls.Partner_Groups.get_group_users(params.groupId, complete);    
+                }
             },
             // getSchedules : function(){ },
             getSingleProject: function(params, complete) {
@@ -91,7 +96,11 @@
                 Mdls.User.login(params, complete);
             },
             getProjects: function(params, complete) {
-                Mdls.Project.read(params, complete);
+                Mdls.Project.read(params, function(data){
+                    console.log("getProjects data")
+                    console.log(data);
+                    complete(data)
+                });
             },
             myInformation: function(_params, complete) {
                 // Mdls.User.read(function(data){
@@ -219,12 +228,11 @@
                             };
                         },
                         getProjects: function(data) {
-                            data.projects.forEach(function(pro) {
-                                pro.status = 1;
-                            });
+//                            data.projects.forEach(function(pro) {
+//                                pro.status = 1;
+//                            });
 //                            data.pageMax = data.pageIndex + (data.pageSize - data.emptyFolders === 0 ? 0 : 1);
                             data.pageMax = data.pageIndex + (data.emptyFolders > 0 ? 0 : 1);
-                            ;
                             return data;
                         },
                         getSchedules: function(data) {

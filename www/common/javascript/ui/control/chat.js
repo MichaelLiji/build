@@ -448,33 +448,24 @@ this.ChatInput = (function(Global, messageCompletedEvent, reader){
 					return;
 				}
 			},
-			touchstart : function(){
-				// 如果有voice类，说明是语音输入状态
-				if(inputClassList.contains("voice")){
-					chatInput.recordStart();
-					return;
-				}
-			},
-			recordcomplete : function(e){
-				messageCompletedEvent.setEventAttrs({
-					message : {
-						attachment : {
-							src : e.src
-						},
-						text : "",
-						time : new Date().getTime(),
-						type : "voice"
+			touchstart : function(e, targetEl){
+				if(targetEl.between(">p>button", this).length > 0){
+					// 如果有voice类，说明是语音输入状态
+					if(inputClassList.contains("voice")){
+						chatInput.recordStart();
+						return;
 					}
-				});
-				messageCompletedEvent.trigger(chatInput[0]);
+				}
 			}
 		});
 
 		jQun(window).attach({
 			touchend : function(){
+//                            alert("touchend")
 				chatInput.recordStop();
 			},
 			touchcancel : function(){
+//                            alert("touchcancel")
 				chatInput.recordStop();
 			}
 		});
@@ -538,23 +529,31 @@ this.ChatInput = (function(Global, messageCompletedEvent, reader){
 	ChatInput = new NonstaticClass(ChatInput, "Bao.UI.Control.Chat.ChatInput", Panel.prototype);
 
 	ChatInput.properties({
-		isRecording : false,
 		recordStart : function(){
-			if(this.isRecording)
+			if(Voice.isRecording)
 				return;
 
 			Global.mask.fillBody("", true);
 			Global.mask.show("voiceRecording");
-			Voice.recordStart(this[0]);
-			this.isRecording = true;
+			Voice.recordStart();
 		},
 		recordStop : function(){
-			if(!this.isRecording)
+			if(!Voice.isRecording)
 				return;
 
 			Global.mask.hide();
-			Voice.recordStop();
-			this.isRecording = false;
+
+			messageCompletedEvent.setEventAttrs({
+				message : {
+					attachment : {
+						src : Voice.recordStop()
+					},
+					text : "",
+					time : new Date().getTime(),
+					type : "voice"
+				}
+			});
+			messageCompletedEvent.trigger(this[0]);
 		}
 	});
 

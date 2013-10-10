@@ -41,7 +41,7 @@ this.EventCollection = (function(Timer, IntervalTimer, isMobile, childGestureCon
 				var touch = e.touches[0], pageX = touch.pageX, pageY = touch.pageY;
 
 				userGesture.setEventAttrs("continuous", pageX - lastX, pageY - lastY);
-				userGesture.trigger(target);
+				userGesture.trigger(e.target);
 
 				lastX = pageX;
 				lastY = pageY;

@@ -113,6 +113,7 @@ this.SingleProject = (function(){
 				creationTime : new Date().getTime(),
 				unread : Number.random(2) > 1 ? 0 : Number.random(),
 				desc : String.random(1000),
+				status : Number.random(3) > 2 ? 1 : 2,
 				attachments : Common.getAttachments()
 			};
 		}

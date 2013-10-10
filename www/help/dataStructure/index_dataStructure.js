@@ -57,6 +57,7 @@ with(this){
 		creator : DS_user,
 		creationTime : new Date().getTime(), // number : the milliseconds since 1970/01/01
 		lastMessage : "12345", // string
+		status : 1, // number : 1 or 2(1 ->> the project which user is join, 2 ->> the project which user is not join)
 		unread : 66, // number : the max is 99
 		desc : "abc" // string : description of the project
 	};

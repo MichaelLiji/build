@@ -3,6 +3,10 @@ this.ProjectPanel = (function(PagePanel, loadProjectEvent){
 	function ProjectPanel(selector){};
 	ProjectPanel = new NonstaticClass(ProjectPanel, "Bao.Page.Index.SingleProject.ProjectPanel", PagePanel.prototype);
 
+	ProjectPanel.override({
+		tools : [{ urlname : "javascript:void(0);", action : "projectDetails" }]
+	});
+
 	ProjectPanel.properties({
 		fill : function(id){
 			var pagePanel = this;

@@ -20,13 +20,11 @@ this.Schedule = (function(Calendar, LevelAnchorList, groupingHtml){
 		// 初始化日程信息的滚动效果
 		this.attach({
 			continuousgesture : function(e){
-				
 				var date = new Date(dateTable.getFocused().get("time", "attr") - 0),
 				
 					top = scheduleContent.get("top", "css").split("px").join("") - 0 || 0;
 
 				if(top < 0){
-					//return;
 					if(scheduleContent.height() + top <= scheduleContent.parent().height()){
 						date.setDate(date.getDate() + 1);
 					}
@@ -138,7 +136,12 @@ this.Schedule = (function(Calendar, LevelAnchorList, groupingHtml){
 					t = d.setDate(d.getDate() - 2);
 
 					if(jQun(scheduleItemEls[scheduleItemEls.length - 1]).get("time", "attr") == t){
-						var el = new Grouping.constructor(lastData[time]);
+						var dt = lastData[time];
+
+						if(!dt)
+							return;
+
+						var el = new Grouping.constructor(dt);
 
 						el.appendTo(contentUl, 0);
 						scheduleItemEls.splice(0, 1);
@@ -155,6 +158,8 @@ this.Schedule = (function(Calendar, LevelAnchorList, groupingHtml){
 					}
 					date.setDate(date.getDate() + 1);
 				}
+
+				contentEl.setCSSPropertyValue("top", 0);
 			}
 		});
 		calendar.dateTable.focus(new Date());

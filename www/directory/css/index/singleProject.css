@@ -123,3 +123,27 @@
 .toDoList_content > dl > dd {
 	margin-top : 5px;
 }
+
+#workStream > ul > li {
+	margin-top : 5px;
+}
+#workStream li > figure {
+	width : 62px;
+	height : 80px;
+}
+#workStream li figcaption {
+	line-height : 18px;
+	text-align : center;
+}
+#workStream li > aside {
+	margin-top : -80px;
+	padding-left : 70px;
+}
+#workStream .anchorList > ul {
+	background-color : #fff;
+}
+
+#titleBar button[action="projectDetails"] {
+	border : 8px solid #f1af0f;
+	background : url(../../../common/image/width12.png) no-repeat 0 -180px content-box content-box;
+}
