@@ -91,10 +91,14 @@ this.Discussion = (function(ProjectPanel, ChatList){
 
 		chatList.attach({
 			messageappended : function(e){
-				overflowPanel.bottom();
-			},
-			messagecompleted : function(e){
 				var message = e.message;
+
+				overflowPanel.bottom();
+
+				if(!message.isSending)
+					return;
+
+				var type = message.type;
 
 				CallServer.open(
 					"addComment",
@@ -102,10 +106,13 @@ this.Discussion = (function(ProjectPanel, ChatList){
 						projectId : projecetId,
 						attachment : message.attachment,
 						text : message.text,
-						type : message.type
+						type : type
 					},
-					function(){
-				
+					function(data){
+						if(type !== "voice")
+							return;
+
+
 					}
 				);
 			},

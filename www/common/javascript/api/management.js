@@ -56,6 +56,9 @@ this.Loader = (function(Storage, Index, HTML){
 			this.load("spp");
 			return new Index.SPP.Project("#project", new HTML("spp_project_html", true));
 		},
+		projectManagement : function(){
+			return new Index.Deep.ProjectManagement("#projectManagement");
+		},
 		qrCode : function(){
 			return new Index.Deep.QRCode("#QRCode", new HTML("QRCode_html", true));
 		},

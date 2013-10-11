@@ -99,7 +99,7 @@
                 Mdls.Project.read(params, function(data){
                     console.log("getProjects data")
                     console.log(data);
-                    complete(data)
+                    complete(data);
                 });
             },
             myInformation: function(_params, complete) {
@@ -228,12 +228,11 @@
                             };
                         },
                         getProjects: function(data) {
-                            data.projects.forEach(function(pro) {
-                                pro.status = 1;
-                            });
+//                            data.projects.forEach(function(pro) {
+//                                pro.status = 1;
+//                            });
 //                            data.pageMax = data.pageIndex + (data.pageSize - data.emptyFolders === 0 ? 0 : 1);
                             data.pageMax = data.pageIndex + (data.emptyFolders > 0 ? 0 : 1);
-                            ;
                             return data;
                         },
                         getSchedules: function(data) {

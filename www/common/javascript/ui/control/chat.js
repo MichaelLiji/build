@@ -1,21 +1,27 @@
 ﻿(function(Chat, NonstaticClass, Panel, HTML, Global, Voice, set){
 this.Attachment = (function(){
-	function Attachment(id, _src){
+	function Attachment(type, id, _src, _base64){
 		///	<summary>
 		///	附件。
 		///	</summary>
+		/// <param name="type" type="string">附件类型</param>
 		/// <param name="id" type="string">附件id</param>
 		/// <param name="_src" type="string">附件src</param>
+		/// <param name="_base64" type="string">附件的64位字符串编码(目前仅用于图片)</param>
 		this.assign({
+			base64 : _base64 || (type === "image" ? _src : ""),
 			id : id,
-			src : _src
+			src : _src,
+			type : type
 		});
 	};
 	Attachment = new NonstaticClass(Attachment, "Bao.UI.Control.Chat.Attachment");
 
 	Attachment.properties({
+		base64 : "",
 		id : -1,
-		src : "javascript:void(0);"
+		src : "javascript:void(0);",
+		type : "image"
 	});
 
 	return Attachment.constructor;
@@ -71,9 +77,10 @@ this.Message = (function(Attachment, ImageBox, clickDoEvent, clickPraiseEvent, f
 		var message = this, attachment = msg.attachment;
 
 		this.assign({
-			attachment : attachment ? new Attachment(attachment.id, attachment.src) : undefined,
+			attachment : attachment ? new Attachment(msg.type, attachment.id, attachment.src, attachment.base64) : undefined,
 			color : msg.color,
 			id : msg.id,
+			isSending : msg.isSending,
 			poster : msg.poster,
 			text : msg.text,
 			time : msg.time,
@@ -98,7 +105,7 @@ this.Message = (function(Attachment, ImageBox, clickDoEvent, clickPraiseEvent, f
 
 				// 播放语音
 				if(targetEl.between(">a>button", this).length > 0){
-					Voice.play(targetEl.parent().getAttribute("voiceid"));
+					Voice.play(message.attachment.id);
 					return;
 				}
 			}
@@ -175,6 +182,8 @@ this.Message = (function(Attachment, ImageBox, clickDoEvent, clickPraiseEvent, f
 			/// <param name="id" type="number">称赞用户的id</param>
 			return this.find('.chatList_praise>p>a[userid="' + id + '"]').length > 0;
 		},
+		// 该信息是否处于正在发送状态
+		isSending : false,
 		// 发送人
 		poster : undefined,
 		removePraise : function(id){
@@ -194,6 +203,16 @@ this.Message = (function(Attachment, ImageBox, clickDoEvent, clickPraiseEvent, f
 				return;
 			
 			this.removeAttribute("praisedbyself");
+		},
+		sendCompleted : function(messageId, _attachmentId){
+			this.isSending = false;
+
+			this.id = messageId;
+
+			if(_attachmentId === undefined)
+				return;
+
+			this.attachment.id = _attachmentId;
 		},
 		// 信息文本
 		text : "",
@@ -223,10 +242,10 @@ this.Message = (function(Attachment, ImageBox, clickDoEvent, clickPraiseEvent, f
 			'<figure>',
 				'<figcaption>',
 					'<span>{text}</span>',
-					'<a voiceid="{attachment.id}">',
+					'<a>',
 						'<button></button>',
 					'</a>',
-					'<img src="{?~ attachment.src}" />',
+					'<img src="{?~ attachment.base64}" />',
 				'</figcaption>',
 				'<nav class="whiteFont inlineBlock">',
 					'<button>do</button>',
@@ -335,6 +354,8 @@ this.MessageGroup = (function(MessageList, messageAppendedEvent, singleNumRegx, 
 			var msg = this.messageList.push(message);
 
 			msg.appendTo(this.find(">dd>ol")[0]);
+
+			messageAppendedEvent.setEventAttrs({ message : msg });
 			messageAppendedEvent.trigger(this[0]);
 			return msg;
 		},
@@ -461,11 +482,9 @@ this.ChatInput = (function(Global, messageCompletedEvent, reader){
 
 		jQun(window).attach({
 			touchend : function(){
-//                            alert("touchend")
 				chatInput.recordStop();
 			},
 			touchcancel : function(){
-//                            alert("touchcancel")
 				chatInput.recordStop();
 			}
 		});
@@ -474,14 +493,7 @@ this.ChatInput = (function(Global, messageCompletedEvent, reader){
 		this.find(">p>input").attach({
 			keyup : function(e){
 				if(e.keyCode === 13){
-					messageCompletedEvent.setEventAttrs({
-						message : {
-							text : this.value,
-							time : new Date().getTime(),
-							type : "text"
-						}
-					});
-					messageCompletedEvent.trigger(chatInput[0]);
+					chatInput.messageCompleted("text", this.value);
 					
 					this.value = "";
 					return;
@@ -512,23 +524,31 @@ this.ChatInput = (function(Global, messageCompletedEvent, reader){
 
 		// 选择文件
 		reader.onload = function(e){
-			messageCompletedEvent.setEventAttrs({
-				message : {
-					attachment : {
-						base64 : this.result,
-						src : imagePath
-					},
-					text : "",
-					time : new Date().getTime(),
-					type : "image"
+			chatInput.messageCompleted(
+				"image", 
+				"",
+				{
+					base64 : this.result,
+					src : imagePath
 				}
-			});
-			messageCompletedEvent.trigger(chatInput[0]);
+			);
 		};
 	};
 	ChatInput = new NonstaticClass(ChatInput, "Bao.UI.Control.Chat.ChatInput", Panel.prototype);
 
 	ChatInput.properties({
+		messageCompleted : function(type, _text, _attachment){
+			// 当用户输入完成，提交的时候触发
+			messageCompletedEvent.setEventAttrs({
+				message : {
+					attachment : _attachment,
+					text : _text,
+					time : new Date().getTime(),
+					type : type
+				}
+			});
+			messageCompletedEvent.trigger(this[0]);
+		},
 		recordStart : function(){
 			if(Voice.isRecording)
 				return;
@@ -542,18 +562,7 @@ this.ChatInput = (function(Global, messageCompletedEvent, reader){
 				return;
 
 			Global.mask.hide();
-
-			messageCompletedEvent.setEventAttrs({
-				message : {
-					attachment : {
-						src : Voice.recordStop()
-					},
-					text : "",
-					time : new Date().getTime(),
-					type : "voice"
-				}
-			});
-			messageCompletedEvent.trigger(this[0]);
+			this.messageCompleted("voice", "", { src : Voice.recordStop() });
 		}
 	});
 
@@ -590,12 +599,9 @@ this.ChatList = (function(ChatInput, ChatListContent, listPanelHtml){
 
 				set(message, {
 					isPraisedBySelf : false,
+					isSending : true,
 					poster : poster
 				});
-
-				if(message.type === "image"){
-					message.attachment = { src : message.attachment.base64 };
-				}
 
 				chatListContent.appendMessageToGroup(message);
 			}

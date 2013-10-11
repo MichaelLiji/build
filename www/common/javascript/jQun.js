@@ -492,7 +492,7 @@ this.Browser = (function(){
 		isMobile : false,
 		majorVersion : "0",
 		version : "0"
-	}, { enumerable : true });
+	});
 
 	return Browser;
 }());
@@ -837,7 +837,7 @@ this.RequestConnection = (function(Text, Cache, JSON, toUpperCase, getEncodedPar
 		isPost : false,
 		name : "",
 		url : ""
-	}, { enumerable : true });
+	});
 
 	RequestConnection.properties({
 		open : function(name, params, complete, responseType, isTesting){
@@ -954,7 +954,7 @@ this.RequestHeader = (function(){
 	RequestHeader.properties({
 		name : "Content-type",
 		value : "application/x-www-form-urlencoded"
-	}, { enumerable : true });
+	});
 
 	RequestHeader.properties({
 		addTo : function(request){
@@ -1036,7 +1036,7 @@ this.Ajax = (function(Storage, RequestHeader, RequestConnection){
 	};
 	Ajax = new StaticClass(Ajax, "jQun.Ajax", {
 		enabled : false
-	}, { enumerable : true });
+	});
 
 	Ajax.properties({
 		RequestHeader : RequestHeader,

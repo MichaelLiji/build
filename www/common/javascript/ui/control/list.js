@@ -288,7 +288,7 @@ this.UserSelectionList = (function(UserIndexList, CallServer, Global, selectUser
 		///	<summary>
 		///	用户选择列表。
 		///	</summary>
-		/// <param name="mask" type="Bao.UI.Fixed.Mask">遮罩</param>
+		/// <param name="text" type="string">选择信息的文本</param>
 		var userSelectionList = this, mask = Global.mask,
 		
 			userIndexList = new UserIndexList();

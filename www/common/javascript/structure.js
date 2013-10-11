@@ -30,6 +30,7 @@ this.Bao = (function(Bao){
 				Deep : new Namespace({ // ../../directoy/javascript/index/deep.js
 					AboutBaoPiQi : null,
 					Account : null,
+					ProjectManagement : null,
 					QRCode : null,
 					ToDo : null
 				}),
@@ -78,7 +79,6 @@ this.Bao = (function(Bao){
 				Chat : new Namespace().members({ // ui/control/chat.js
 					Attachment : null,
 					ChatInput : null,
-					ChatList : null,
 					ChatListContent : null,
 					ImageBox : null,
 					Message : null,

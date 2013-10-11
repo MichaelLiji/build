@@ -116,11 +116,11 @@ this.CallServer = (function(CallServer, Wait, open, allHandlers){
 				pageSize : 15,
 				emptyFolders : 3
 			};
-
+			/*
 			data.projects.forEach(function(pro){
 				pro.status = 1;
 			});
-
+			*/
 			return data;
 		},
 		getSchedules : function(data){

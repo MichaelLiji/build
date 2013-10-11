@@ -113,7 +113,7 @@ this.SingleProject = (function(){
 				creationTime : new Date().getTime(),
 				unread : Number.random(2) > 1 ? 0 : Number.random(),
 				desc : String.random(1000),
-				status : Number.random(3) > 2 ? 1 : 2,
+				status : Number.random(4) > 2 ? 1 : 2,
 				attachments : Common.getAttachments()
 			};
 		}
@@ -185,7 +185,14 @@ this.SPP = (function(SingleProject, Deep){
 			}
 
 			for(var i = 0;i < _len;i++){
-				projects.push(SingleProject.getSingleProject());
+				var project = SingleProject.getSingleProject();
+
+				if(project.status === 2){
+					projects.push(project);
+				}
+				else {
+					projects.splice(0, 0, project);
+				}
 			}
 
 			return projects;

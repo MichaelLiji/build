@@ -745,10 +745,9 @@ function onDeviceReady() {
                             }
                         });
                     } else {
-                        console.log(params)
                         // get ALL projects page
                         if ("pageIndex" in params && "pageSize" in params) {
-                            var result = [];
+                            var result = [], logged_user = SESSION.get("user_id");
                             API._sync(["xiao_projects", "xiao_project_partners", "xiao_users", "xiao_project_comments", "xiao_companies"], function() {
                                 DB.select("p.id, p.level, p.title, p.color, p.creator_id, p.creationTime, p.descr, u.id as uid, u.name, u.pinyin, u.avatar, u.company_id, u.position, u.phoneNum, u.email, u.adress, u.isNewUser, u.QRCode, c.title as company, c.companyAdress, c.creator_id as company_creator_id");
 //                                    DB.from("xiao_project_partners AS pp");
@@ -773,8 +772,9 @@ function onDeviceReady() {
                                             DB.query(function(partners) {
                                                 var status = 2;
                                                 partners.forEach(function(pp) {
-                                                    if (pp.uid == pr.uid)
+                                                    if (pp.uid == logged_user){
                                                         status = 1;
+                                                    }
                                                 });
                                                 DB.select("COUNT(pc.read) as unread");
                                                 DB.from("xiao_project_comments AS pc");
@@ -812,6 +812,7 @@ function onDeviceReady() {
                                                     });
                                                     if (result.length == projects.length) {
 //                                                            console.log(result)
+                                                        result.sort(function(a, b){return a.status-b.status});
                                                         callback({
                                                             projects: result,
                                                             pageIndex: params.pageIndex,
@@ -825,6 +826,7 @@ function onDeviceReady() {
                                             });
                                             API._clear_tables_to_sync();
                                         });
+                                        
                                     } else {
                                         callback({
                                             projects: [],

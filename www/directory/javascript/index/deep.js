@@ -286,21 +286,28 @@ this.ToDo = (function(ChatList, OverflowPanel, Global){
 
 		chatList.attach({
 			messageappended : function(e){
-				overflowPanel.bottom();
-			},
-			messagecompleted : function(e){
 				var message = e.message;
+
+				overflowPanel.bottom();
+
+				if(!message.isSending)
+					return;
+
+				var type = message.type;
 
 				CallServer.open(
 					"addCommentForToDo",
 					{
-						projectId : projecetId,
+						toDoId : toDo.id,
 						attachment : message.attachment,
 						text : message.text,
-						type : message.type
+						type : type
 					},
-					function(){
-				
+					function(data){
+						if(type !== "voice")
+							return;
+
+
 					}
 				);
 			},
@@ -468,6 +475,48 @@ this.SendToDo = (function(Validation, Global, validationHandle){
 	function(inputEl){
 		return jQun.Validation.result(inputEl.value, inputEl.getAttribute("vtype"));
 	}
+));
+
+this.ProjectManagement = (function(UserManagementList, AnchorList, anchorListData){
+	function ProjectManagement(selector){
+		var anchorList = new AnchorList(anchorListData);
+
+		new UserManagementList("选择成员").appendTo(this.find(">header")[0]);
+		anchorList.appendTo(this.find(">section")[0]);
+		window.as = anchorList;
+		anchorList.attach({
+			clickanchor : function(e){
+				e.stopPropagation();
+				console.log(e);
+			}
+		}, true);
+	};
+	ProjectManagement = new NonstaticClass(ProjectManagement, "Bao.Page.Index.Deep.ProjectManagement", PagePanel.prototype);
+
+	ProjectManagement.override({
+		title : "项目管理",
+		tools : [{ urlname : "javascript:void(0);", action : "projectManagement_done" }]
+	});
+
+	ProjectManagement.properties({
+		fill : function(id){
+			CallServer.open("getSingleProject", { id : id }, function(data){
+				console.log(data);
+			});
+		},
+		id : -1
+	});
+
+	return ProjectManagement.constructor;
+}(
+	Bao.UI.Control.List.UserManagementList,
+	Bao.UI.Control.List.AnchorList,
+	// anchorListData
+	[
+		{ title : "发送 To Do", key : "sendToDo" } //,
+		// { title : "搜索记录", key : "" },
+		// { title : "项目二维码", key : "qrCode" }
+	]
 ));
 
 Deep.members(this);
