@@ -60,6 +60,7 @@
                 }
             },
             addComment: function(params, complete) {
+                console.log(params)
                 var _params = {};
                 switch (params.type) {
                     case "text":
@@ -78,6 +79,8 @@
                             local_path: params.attachment.src
                         };
                         break;
+                    default:
+                        return;
                 }
 //                var _params = {
 //                    project_id : params.projecetId,
@@ -99,7 +102,7 @@
                 Mdls.Project.read(params, function(data){
                     console.log("getProjects data")
                     console.log(data);
-                    complete(data)
+                    complete(data);
                 });
             },
             myInformation: function(_params, complete) {
