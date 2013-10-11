@@ -155,13 +155,13 @@ function onDeviceReady() {
 
             Models.UsersCounter = {
                 read: function(callback) {
-                    SOCKET.request("counter", {}, function(result) {
-                        if (result) {
-                            callback(result);
-                        } else {
+//                    SOCKET.request("counter", {}, function(result) {
+//                        if (result) {
+//                            callback(result);
+//                        } else {
                             callback({count: 100000, validationImage: "src"});
-                        }
-                    });
+//                        }
+//                    });
                 }
 
             };
