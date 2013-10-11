@@ -907,7 +907,7 @@ function onDeviceReady() {
                                 });
                             });
                         }
-                        console.log(mess_result)
+                        console.log(mess_result);
                         callback(mess_result);
 //                            make_callback({messages: mess_result, unread: unread});
                     });
@@ -1245,17 +1245,17 @@ function onDeviceReady() {
                                                         todo: []
                                                     },
                                                     updatechat: function(connect_data, callback) { // in data we specify id and type
-                                                        console.log(connect_data)
-                                                        console.log(typeof(connect_data.id))
-                                                        console.log(this._inited_chats[connect_data['type']].lastIndexOf(connect_data.id))
+//                                                        console.log(connect_data)
+//                                                        console.log(typeof(connect_data.id))
+//                                                        console.log(this._inited_chats[connect_data['type']].lastIndexOf(connect_data.id))
                                                         if (connect_data.id && this._inited_chats[connect_data['type']].lastIndexOf(connect_data.id) === -1) {
                                                             console.log("update chat INITED");
                                                             this._inited_chats[connect_data['type']].push(connect_data.id);
-                                                            console.log(this._inited_chats)
+//                                                            console.log(this._inited_chats)
                                                             this.socket.emit('addroom', connect_data);
                                                             this.socket.on("updatechat", function(data) { // data just contain message that we need to sync DB
-                                                                console.log("updatechat data");
-                                                                console.log(data);
+//                                                                console.log("updatechat data");
+//                                                                console.log(data);
 //                                                            SERVER.DB.batch_insert_with_id("xiao_project_comments", data, function() {
                                                                 SERVER.DB.batch_insert_or_ignore_with_id("xiao_project_comments", data, function() {
                                                                     callback(data);
@@ -1264,8 +1264,8 @@ function onDeviceReady() {
                                                         }
                                                     },
                                                     request: function(url, data, callback) {
-                                                        console.log(url)
-                                                        console.log(data)
+//                                                        console.log(url)
+//                                                        console.log(data)
                                                         var connection_code = this.connection_code();
                                                         this.socket.emit(url, {
                                                             body: data,
@@ -1335,13 +1335,13 @@ function onDeviceReady() {
                                                             });
                                                         },
                                                         _executeSQL: function(sql, callback) {
-                                                            console.log(sql);
+//                                                            console.log(sql);
                                                             function querySuccess(tx, results) {
                                                                 var len = results.rows.length, db_result = [];
                                                                 for (var i = 0; i < len; i++) {
                                                                     db_result[i] = results.rows.item(i);
                                                                 }
-                                                                console.log(db_result);
+//                                                                console.log(db_result);
 //                                                                if (db_result.length == 0 && !(sql.match(/sync/)))
 //                                                                    console.log(sql);
 

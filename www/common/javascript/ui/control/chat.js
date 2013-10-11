@@ -483,10 +483,10 @@ this.ChatInput = (function(Global, messageCompletedEvent, reader){
 		jQun(window).attach({
 			touchend : function(){
 				chatInput.recordStop();
-			},
-			touchcancel : function(){
-				chatInput.recordStop();
-			}
+			}//,
+//			touchcancel : function(){
+//				chatInput.recordStop();
+//			}
 		});
 
 		// 文本框事件
