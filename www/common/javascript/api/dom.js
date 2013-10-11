@@ -107,11 +107,15 @@ this.EventCollection = (function(Timer, IntervalTimer, isMobile, childGestureCon
 		userclick : new Event("userclick", function(){
 			var userClick = this, abs = Math.abs;
 
-			windowEl.attach(isMobile ? {
-					click : function(e){
-						userClick.trigger(e.target);
-					}
-				} : {
+			windowEl.attach(
+				/* MY PROJECTS页面，iPhone不兼容，用原生态的click居然不能点击..........
+					isMobile ? {
+						click : function(e){
+							userClick.trigger(e.target);
+						}
+					} :
+				*/
+				{
 					fastgesture : function(e){
 						// 如果任何一方向上的偏移量大于10，就不算click
 						if(abs(e.gestureOffsetY) > 10 || abs(e.gestureOffsetX > 10))

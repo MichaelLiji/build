@@ -99,7 +99,7 @@
                 Mdls.Project.read(params, function(data){
                     console.log("getProjects data")
                     console.log(data);
-                    complete(data);
+                    complete(data)
                 });
             },
             myInformation: function(_params, complete) {

@@ -21,7 +21,7 @@ this.AnchorList = (function(Global, anchorListHtml, clickAnchorEvent){
 				clickAnchorEvent.setEventAttrs({
 					anchor : anchorEl.get("key", "attr")
 				});
-				clickAnchorEvent.trigger(this);
+				clickAnchorEvent.trigger(anchorEl[0]);
 			},
 			clickanchor : function(e){
 				Global.history.go(e.anchor);

@@ -1,8 +1,8 @@
 /*
  *  类库名称：jQun
  *  中文释义：骥群(聚集在一起的千里马)
- *  文档状态：1.0.6.0
- *  本次修改：修复jQun.Browser的iphone版本匹配错误，增加字段：marjorVersion，用于显示主要版本信息。
+ *  文档状态：1.0.6.1
+ *  本次修改：ElementList类，增加focus和blur方法
  *  开发浏览器信息：firefox 20.0+ 、 chrome 26.0+、基于webkit的手机浏览器
  */
 
@@ -1653,6 +1653,16 @@ this.ElementList = (function(NodeList, ChildrenCollection, ClassListCollection, 
 
 			return list;
 		},
+		blur : function(){
+			///	<summary>
+			///	让聚焦元素的失去焦点。
+			///	</summary>
+			this.forEach(function(element){
+				element.blur();
+			});
+
+			return this;
+		},
 		del : function(name, _type){
 			///	<summary>
 			///	将指定属性从集合的所有元素中删除。
@@ -1672,6 +1682,34 @@ this.ElementList = (function(NodeList, ChildrenCollection, ClassListCollection, 
 			this.forEach(function(element){
 				delete element[name];
 			});
+			return this;
+		},
+		find : function(_selector){
+			///	<summary>
+			///	通过选择器查找子孙元素。
+			///	</summary>
+			///	<param name="_selector" type="string">选择器。</param>
+			var source = ElementList.constructor.source, list = this.createList();
+
+			this.forEach(function(htmlElement){
+				source.call(list, _selector, htmlElement);
+			});
+
+			if(this.length < 2)
+				return list;
+
+			return list.distinct();
+		},
+		focus : function(){
+			///	<summary>
+			///	聚焦元素。
+			///	</summary>
+			var length = this.length;
+
+			if(length > 0){
+				this[length - 1].focus();
+			}
+
 			return this;
 		},
 		get : function(name, _type){
@@ -1701,22 +1739,6 @@ this.ElementList = (function(NodeList, ChildrenCollection, ClassListCollection, 
 			///	</summary>
 			///	<param name="name" type="string">属性名。</param>
 			return window.getComputedStyle(this[0])[name];
-		},
-		find : function(_selector){
-			///	<summary>
-			///	通过选择器查找子孙元素。
-			///	</summary>
-			///	<param name="_selector" type="string">选择器。</param>
-			var source = ElementList.constructor.source, list = this.createList();
-
-			this.forEach(function(htmlElement){
-				source.call(list, _selector, htmlElement);
-			});
-
-			if(this.length < 2)
-				return list;
-
-			return list.distinct();
 		},
 		parent : function(){
 			///	<summary>
