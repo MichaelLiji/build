@@ -88,7 +88,7 @@
 #businessCard dl[desc="userinfo"] li {
 	height : 18px;
 	line-height : 18px;
-	background : url(../../../common/image/width12.png) 1px -115px no-repeat;
+	background : url(/common/image/width12.png) 1px -115px no-repeat;
 	padding-left : 15px;
 	text-overflow : ellipsis;
 	overflow : hidden;

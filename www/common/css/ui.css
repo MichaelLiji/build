@@ -1,10 +1,16 @@
-﻿.main {
+/*﻿
+.main * {
+	background-color : transparent !important;
+}*/
+
+.main {
 	position : fixed;
 	top : 0;
 	bottom : 0;
 	left : 0;
 	right : 0;
 	overflow : hidden;
+	/*background-image : -webkit-linear-gradient(top, #fff, #000);*/
 }
 .main > div {
 	position : absolute;
@@ -34,7 +40,7 @@
 	width : 24px;
 	height : 28px;
 	padding : 7px 0;
-	background : url(../../../common/image/width12.png) no-repeat 8px -105px content-box content-box;
+	background : url(/common/image/width12.png) no-repeat 8px -105px content-box content-box;
 }
 #titleBar > p {
 	text-indent : 5px;
@@ -56,7 +62,7 @@
 }
 #titleBar button[action~="submit"] {
 	background-color : #ffc000;
-	background : #ffc000 url(../../../common/image/width24.png) no-repeat 7px -118px;
+	background : #ffc000 url(/common/image/width24.png) no-repeat 7px -118px;
 }
 
 #mask {
@@ -203,7 +209,7 @@
 	border : 0 none;
 }
 [attachmenttype="voice"] {
-	background : url(../../../common/image/width24.png) 0 -575px no-repeat content-box content-box;
+	background : url(/common/image/width24.png) 0 -575px no-repeat content-box content-box;
 	padding : 4px;
 }
 [attachmenttype="voice"] > img {

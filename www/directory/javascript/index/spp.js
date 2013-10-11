@@ -218,7 +218,8 @@ this.Project = (function(){
 		
 		this.assign({
 			html : html,
-			batchLoad : batchLoad
+			batchLoad : batchLoad,
+			overflowPanel : new OverflowPanel(this.find(">ul"))
 		});
 
 		batchLoad.setParam("pageIndex", 0, 1);
@@ -249,8 +250,6 @@ this.Project = (function(){
 				}
 			}
 		});
-
-		new OverflowPanel(this.find(">ul"));
 	};
 	Project = new NonstaticClass(Project, null, PagePanel.prototype);
 
@@ -289,6 +288,7 @@ this.Project = (function(){
 
 			this.add({ projects : data });
 		},
+		batchLoad : undefined,
 		html : undefined,
 		load : function(_isRefresh){
 			///	<summary>
@@ -306,11 +306,12 @@ this.Project = (function(){
 			else {
 				batchLoad.restoreParams();
 				this.find(">ul").innerHTML = "";
+				this.overflowPanel.setTop(0);
 			}
 
 			batchLoad.callServer();
 		},
-		batchLoad : undefined
+		overflowPanel : undefined
 	});
 
 	return Project.constructor;

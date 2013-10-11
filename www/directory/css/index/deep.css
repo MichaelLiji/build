@@ -27,7 +27,7 @@
 .globalSearch_header > nav > button{
 	width : 100%;
 	padding : 7px 0;
-	background : transparent url(../../../common/image/width12.png) no-repeat 9px -105px content-box content-box;
+	background : transparent url(/common/image/width12.png) no-repeat 9px -105px content-box content-box;
 }
 .globalSearch_header > aside {
 	position : absolute;
@@ -47,7 +47,7 @@
 	width : 34px;
 	right : 0;
 	padding : 6px 9px;
-	background : transparent url(../../../common/image/width24.png) 0 -475px no-repeat content-box content-box;
+	background : transparent url(/common/image/width24.png) 0 -475px no-repeat content-box content-box;
 }
 .globalSearch_content dl > dt {
 	height : 15px;
@@ -182,7 +182,7 @@
 #titleBar button[action="editAccount"] {
 	border : 1px solid #39a85a;
 	border-width : 6px 5px;
-	background : #39a85a url(../../../common/image/width24.png) 1px -425px no-repeat;
+	background : #39a85a url(/common/image/width24.png) 1px -425px no-repeat;
 	background-clip : content-box;
 }
 #titleBar button[action="submit account"] {
@@ -320,7 +320,7 @@
 	width : 34px;
 	padding : 3px 9px;
 	border : 1px solid #fff;
-	background : transparent url(../../../common/image/width24.png) 0 -800px no-repeat content-box content-box;
+	background : transparent url(/common/image/width24.png) 0 -800px no-repeat content-box content-box;
 }
 .toDo_header dt > span {
 	margin-left : 8px;
@@ -429,7 +429,7 @@
 }
 #titleBar button[action="sendToDoCompleted"] {
 	background-color : #f1af10;
-	background : #f1af10 url(../../../common/image/width24.png) 7px -118px no-repeat;
+	background : #f1af10 url(/common/image/width24.png) 7px -118px no-repeat;
 }
 
 #workStream li > figure {

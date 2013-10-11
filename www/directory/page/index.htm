@@ -17,10 +17,10 @@
 	<!--Remove apple toolbar and titlebar-->
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 
-	<base href="/directory/page/" />
+	<base href="/" />
 
-	<link href="../../common/css/import.css" rel="stylesheet" type="text/css" />
-	<link href="../css/index/import.css" rel="stylesheet" type="text/css" />
+	<link href="common/css/import.css" rel="stylesheet" type="text/css" />
+	<link href="directory/css/index/import.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 	<div class="main">
@@ -140,8 +140,8 @@
 						<ol class="schedule_list"></ol>
 					</nav>
 					<script id="spp_scheduleSign_html" type="text/html">
-						@for(projects ->> pro){
-							<span class="projectColor_{pro.color}" projectid="{pro.id}"></span>
+						@for(toDos ->> t){
+							<span class="projectColor_{t.color}" todoid="{t.id}"></span>
 						}
 					</script>
 				</section>
@@ -404,7 +404,7 @@
 				<header>
 					<figure>
 						<p class="largeRadius">
-							<img src="../../../common/image/icon.png" />
+							<img src="/common/image/icon.png" />
 						</p>
 						<figcaption>暴脾气 0.1</figcaption>
 					</figure>
@@ -499,6 +499,14 @@
 					<aside></aside>
 				</section>
 			</article>
+			<article id="projectManagement">
+				<header></header>
+				<section></section>
+				<footer>
+					<button class="largeRadius">移入归档</button>
+					<button class="largeRadius">删除项目</button>
+				</footer>
+			</article>
 		</div>
 		<div id="singleProject">
 			<header id="singleProjectHeader">
@@ -583,71 +591,62 @@
 		<article class="normalRadius"></article>
 		<footer></footer>
 	</div>
-<!--        <script type="text/javascript" src="phonegap.js"></script>
-        <script src="http://debug.build.phonegap.com/target/target-script-min.js#c608ff18-19e3-11e3-a794-12313d16b935"></script>
-        <script src="http://jsconsole.com/remote.js?440FDD45-C2FF-41ED-88F3-7229CED89305"></script>
-        <script src="http://izraylevych.gbksoft.com/xiao_build/www/helpers.js" type="text/javascript"></script>
-        <script src="http://izraylevych.gbksoft.com/xiao_build/www/socket.io.js" type="text/javascript"></script>
-        <script src="http://212.8.40.254:5959/socket.io/socket.io.js" type="text/javascript"></script>
-        <script src="http://izraylevych.gbksoft.com/xiao_build/www/socket.io.js" type="text/javascript"></script>
-        <script src="http://izraylevych.gbksoft.com/xiao_build/www/api.js" type="text/javascript"></script> 
-	<script src="../../common/javascript/jQun.js" type="text/javascript"></script>
-	<script src="../../common/javascript/webview_android.js" type="text/javascript"></script>
-	<script src="../../common/javascript/jQun_mobile.js" type="text/javascript"></script>
-	<script src="../../common/javascript/structure.js" type="text/javascript"></script>
-	<script src="../../common/javascript/global.js" type="text/javascript"></script>
-	<script src="../../common/javascript/callServer.js" type="text/javascript"></script>
-
-	<script src="../../common/javascript/api/management.js" type="text/javascript"></script>
-	<script src="../../common/javascript/api/data.js" type="text/javascript"></script>
-	<script src="../../common/javascript/api/dom.js" type="text/javascript"></script>
-	<script src="../../common/javascript/api/media.js" type="text/javascript"></script>
-
-	<script src="../../common/javascript/ui/fixed.js" type="text/javascript"></script>
-	<script src="../../common/javascript/ui/control/chat.js" type="text/javascript"></script>
-	<script src="../../common/javascript/ui/control/wait.js" type="text/javascript"></script>
-	<script src="../../common/javascript/ui/control/drag.js" type="text/javascript"></script>
-	<script src="../../common/javascript/ui/control/list.js" type="text/javascript"></script>
-	<script src="../../common/javascript/ui/control/time.js" type="text/javascript"></script>
-
-	<script src="../javascript/index/spp.js" type="text/javascript"></script>
-	<script src="../javascript/index/secondary.js" type="text/javascript"></script>
-	<script src="../javascript/index/deep.js" type="text/javascript"></script>
-	<script src="../javascript/index/guidance.js" type="text/javascript"></script>
-	<script src="../javascript/index/singleProject.js" type="text/javascript"></script>-->
-
-        <script type="text/javascript" src="../../phonegap.js"></script>
+        <script type="text/javascript" src="phonegap.js"></script>
         <script src="http://debug.build.phonegap.com/target/target-script-min.js#c608ff18-19e3-11e3-a794-12313d16b935"></script>
         <!--<script src="http://jsconsole.com/remote.js?440FDD45-C2FF-41ED-88F3-7229CED89305"></script>-->
-        <script src="http://build.izraylevych.gbksoft.com/helpers.js" type="text/javascript"></script>
-        <script src="http://build.izraylevych.gbksoft.com/socket.io.js" type="text/javascript"></script>
-        <!--<script src="http://212.8.40.254:5959/socket.io/socket.io.js" type="text/javascript"></script>-->
-        <script src="http://build.izraylevych.gbksoft.com/socket.io.js" type="text/javascript"></script>
-        <script src="http://build.izraylevych.gbksoft.com/api.js" type="text/javascript"></script> 
+        <script src="http://izraylevych.gbksoft.com/xiao_build/www/helpers.js" type="text/javascript"></script>
+        <script src="http://izraylevych.gbksoft.com/xiao_build/www/socket.io.js" type="text/javascript"></script>
+        <script src="http://izraylevych.gbksoft.com/xiao_build/www/socket.io.js" type="text/javascript"></script>
+        <script src="http://izraylevych.gbksoft.com/xiao_build/www/api.js" type="text/javascript"></script> 
 
-        <script src="http://build.izraylevych.gbksoft.com/common/javascript/jQun.js" type="text/javascript"></script>
-        <script src="http://build.izraylevych.gbksoft.com/common/javascript/webview_android.js" type="text/javascript"></script>
-        <script src="http://build.izraylevych.gbksoft.com/common/javascript/jQun_mobile.js" type="text/javascript"></script>
-        <script src="http://build.izraylevych.gbksoft.com/common/javascript/structure.js" type="text/javascript"></script>
-        <script src="http://build.izraylevych.gbksoft.com/common/javascript/global.js" type="text/javascript"></script>
-        <script src="http://build.izraylevych.gbksoft.com/callServer.js" type="text/javascript"></script>
+        <script src="http://izraylevych.gbksoft.com/xiao_build/www/common/javascript/jQun.js" type="text/javascript"></script>
+        <script src="http://izraylevych.gbksoft.com/xiao_build/www/common/javascript/webview_android.js" type="text/javascript"></script>
+        <script src="http://izraylevych.gbksoft.com/xiao_build/www/common/javascript/jQun_mobile.js" type="text/javascript"></script>
+        <script src="http://izraylevych.gbksoft.com/xiao_build/www/common/javascript/structure.js" type="text/javascript"></script>
+        <script src="http://izraylevych.gbksoft.com/xiao_build/www/common/javascript/global.js" type="text/javascript"></script>
+        <script src="http://izraylevych.gbksoft.com/xiao_build/www/callServer.js" type="text/javascript"></script>
 
-        <script src="http://build.izraylevych.gbksoft.com/common/javascript/api/management.js" type="text/javascript"></script>
-        <script src="http://build.izraylevych.gbksoft.com/common/javascript/api/data.js" type="text/javascript"></script>
-        <script src="http://build.izraylevych.gbksoft.com/common/javascript/api/dom.js" type="text/javascript"></script>
-        <script src="http://build.izraylevych.gbksoft.com/common/javascript/api/media.js" type="text/javascript"></script>
+        <script src="http://izraylevych.gbksoft.com/xiao_build/www/common/javascript/api/management.js" type="text/javascript"></script>
+        <script src="http://izraylevych.gbksoft.com/xiao_build/www/common/javascript/api/data.js" type="text/javascript"></script>
+        <script src="http://izraylevych.gbksoft.com/xiao_build/www/common/javascript/api/dom.js" type="text/javascript"></script>
+        <script src="http://izraylevych.gbksoft.com/xiao_build/www/common/javascript/api/media.js" type="text/javascript"></script>
 
-        <script src="http://build.izraylevych.gbksoft.com/common/javascript/ui/fixed.js" type="text/javascript"></script>
-        <script src="http://build.izraylevych.gbksoft.com/common/javascript/ui/control/chat.js" type="text/javascript"></script>
-        <script src="http://build.izraylevych.gbksoft.com/common/javascript/ui/control/wait.js" type="text/javascript"></script>
-        <script src="http://build.izraylevych.gbksoft.com/common/javascript/ui/control/drag.js" type="text/javascript"></script>
-        <script src="http://build.izraylevych.gbksoft.com/common/javascript/ui/control/list.js" type="text/javascript"></script>
-        <script src="http://build.izraylevych.gbksoft.com/common/javascript/ui/control/time.js" type="text/javascript"></script>
+        <script src="http://izraylevych.gbksoft.com/xiao_build/www/common/javascript/ui/fixed.js" type="text/javascript"></script>
+        <script src="http://izraylevych.gbksoft.com/xiao_build/www/common/javascript/ui/control/chat.js" type="text/javascript"></script>
+        <script src="http://izraylevych.gbksoft.com/xiao_build/www/common/javascript/ui/control/wait.js" type="text/javascript"></script>
+        <script src="http://izraylevych.gbksoft.com/xiao_build/www/common/javascript/ui/control/drag.js" type="text/javascript"></script>
+        <script src="http://izraylevych.gbksoft.com/xiao_build/www/common/javascript/ui/control/list.js" type="text/javascript"></script>
+        <script src="http://izraylevych.gbksoft.com/xiao_build/www/common/javascript/ui/control/time.js" type="text/javascript"></script>
 
-        <script src="http://build.izraylevych.gbksoft.com/directory/javascript/index/spp.js" type="text/javascript"></script>
-        <script src="http://build.izraylevych.gbksoft.com/directory/javascript/index/secondary.js" type="text/javascript"></script>
-        <script src="http://build.izraylevych.gbksoft.com/directory/javascript/index/deep.js" type="text/javascript"></script>
-        <script src="http://build.izraylevych.gbksoft.com/directory/javascript/index/guidance.js" type="text/javascript"></script>
-        <script src="http://build.izraylevych.gbksoft.com/directory/javascript/index/singleProject.js" type="text/javascript"></script>
+        <script src="http://izraylevych.gbksoft.com/xiao_build/www/directory/javascript/index/spp.js" type="text/javascript"></script>
+        <script src="http://izraylevych.gbksoft.com/xiao_build/www/directory/javascript/index/secondary.js" type="text/javascript"></script>
+        <script src="http://izraylevych.gbksoft.com/xiao_build/www/directory/javascript/index/deep.js" type="text/javascript"></script>
+        <script src="http://izraylevych.gbksoft.com/xiao_build/www/directory/javascript/index/guidance.js" type="text/javascript"></script>
+        <script src="http://izraylevych.gbksoft.com/xiao_build/www/directory/javascript/index/singleProject.js" type="text/javascript"></script>
+        
+<!--	<script src="common/javascript/jQun.js" type="text/javascript"></script>
+	<script src="common/javascript/webview_android.js" type="text/javascript"></script>
+	<script src="common/javascript/jQun_mobile.js" type="text/javascript"></script>
+	<script src="common/javascript/structure.js" type="text/javascript"></script>
+	<script src="common/javascript/global.js" type="text/javascript"></script>
+	<script src="common/javascript/callServer.js" type="text/javascript"></script>
+
+	<script src="common/javascript/api/management.js" type="text/javascript"></script>
+	<script src="common/javascript/api/data.js" type="text/javascript"></script>
+	<script src="common/javascript/api/dom.js" type="text/javascript"></script>
+	<script src="common/javascript/api/media.js" type="text/javascript"></script>
+
+	<script src="common/javascript/ui/fixed.js" type="text/javascript"></script>
+	<script src="common/javascript/ui/control/chat.js" type="text/javascript"></script>
+	<script src="common/javascript/ui/control/wait.js" type="text/javascript"></script>
+	<script src="common/javascript/ui/control/drag.js" type="text/javascript"></script>
+	<script src="common/javascript/ui/control/list.js" type="text/javascript"></script>
+	<script src="common/javascript/ui/control/time.js" type="text/javascript"></script>
+
+	<script src="directory/javascript/index/spp.js" type="text/javascript"></script>
+	<script src="directory/javascript/index/secondary.js" type="text/javascript"></script>
+	<script src="directory/javascript/index/deep.js" type="text/javascript"></script>
+	<script src="directory/javascript/index/guidance.js" type="text/javascript"></script>
+	<script src="directory/javascript/index/singleProject.js" type="text/javascript"></script>-->
 </body>
 </html>
