@@ -753,16 +753,142 @@ function onDeviceReady() {
                             var result = [], logged_user = SESSION.get("user_id");
                             API._sync(["xiao_projects", "xiao_project_partners", "xiao_users", "xiao_project_comments", "xiao_companies"], function() {
                                 DB.select("p.id, p.level, p.title, p.color, p.creator_id, p.creationTime, p.descr, u.id as uid, u.name, u.pinyin, u.avatar, u.company_id, u.position, u.phoneNum, u.email, u.adress, u.isNewUser, u.QRCode, c.title as company, c.companyAdress, c.creator_id as company_creator_id");
-//                                    DB.from("xiao_project_partners AS pp");
-                                DB.from("xiao_projects AS p");
-//                                    DB.join("xiao_projects AS p", "pp.project_id = p.id");
+                                DB.from("xiao_project_partners AS pp");
+//                                DB.from("xiao_projects AS p");
+                                DB.join("xiao_projects AS p", "pp.project_id = p.id");
                                 DB.join("xiao_users AS u", "u.id = p.creator_id");
                                 DB.join("xiao_companies AS c", "u.company_id = c.id");
-//                                    DB.where('pp.user_id = "' + SESSION.get("user_id") + '"');
+                                DB.where('pp.user_id = "' + SESSION.get("user_id") + '"');
                                 DB.limit(params.pageSize, (params.pageIndex - 1) * params.pageSize);
 
                                 DB.query(function(projects) {
-                                    if (projects.length > 0) {
+                                    console.log("projects")
+                                    console.log(projects)
+                                    projects.forEach(function(pp) {
+                                        pp.status = 1;
+                                    });
+                                    if (params.pageSize - projects.length > 0) {
+                                        console.log("aassa")
+                                        DB.select("p.id, p.level, p.title, p.color, p.creator_id, p.creationTime, p.descr, u.id as uid, u.name, u.pinyin, u.avatar, u.company_id, u.position, u.phoneNum, u.email, u.adress, u.isNewUser, u.QRCode, c.title as company, c.companyAdress, c.creator_id as company_creator_id");
+        //                                    DB.from("xiao_project_partners AS pp");
+                                        DB.from("xiao_projects AS p");
+        //                                    DB.join("xiao_projects AS p", "pp.project_id = p.id");
+                                        DB.join("xiao_users AS u", "u.id = p.creator_id");
+                                        DB.join("xiao_companies AS c", "u.company_id = c.id");
+        //                                    DB.where('pp.user_id = "' + SESSION.get("user_id") + '"');
+                                        DB.limit(params.pageSize - projects.length, (params.pageIndex - 1) * params.pageSize);
+                                        DB.query(function(projects_others) {
+                                            console.log(projects_others)
+                                            projects_others.forEach(function(pp) {
+                                                pp.status = 2;
+                                            });
+                                            projects.concat(projects_others); // add not status 2 project to the end
+                                            if(projects.length > 0){
+                                                
+                                                projects.forEach(function(pr) {
+
+                                                    DB.select("u.id as uid, u.name, u.pinyin, u.avatar, u.company_id, u.position, u.phoneNum, u.email, u.adress, u.isNewUser, u.QRCode, c.title as company, c.companyAdress, c.creator_id as company_creator_id, pp.isLeader");
+                                                    DB.from("xiao_projects AS p");
+                                                    DB.join("xiao_project_partners AS pp", "pp.project_id = p.id");
+                                                    DB.join("xiao_users AS u", "u.id = p.creator_id");
+                                                    DB.join("xiao_companies AS c", "u.company_id = c.id");
+                                                    DB.where('p.id ="' + pr.id + '"');
+
+                                                    DB.query(function(partners) {
+//                                                        var status = 2;
+//                                                        partners.forEach(function(pp) {
+//                                                            if (pp.uid == logged_user) {
+//                                                                status = 1;
+//                                                            }
+//                                                        });
+                                                        DB.select("COUNT(pc.read) as unread");
+                                                        DB.from("xiao_project_comments AS pc");
+                                                        DB.where('pc.project_id ="' + pr.id + '"');
+                                                        DB.where('pc.read ="0"');
+                                                        DB.group_by('pc.read');
+
+                                                        DB.col(function(unread) {
+                                                            result.push({
+                                                                status: pr.status,
+                                                                id: pr.id,
+                                                                level: pr.level,
+                                                                title: pr.title,
+                                                                color: pr.color,
+                                                                creationTime: pr.creationTime,
+                                                                unread: unread,
+                                                                descr: pr.descr,
+                                                                lastMessage: "12345",
+                                                                creator: {
+                                                                    id: pr.uid,
+                                                                    name: pr.name,
+                                                                    pinyin: pr.pinyin,
+                                                                    avatar: pr.avatar,
+                                                                    company: pr.company,
+                                                                    companyAdress: pr.companyAdress,
+                                                                    position: pr.position,
+                                                                    phoneNum: pr.phoneNum,
+                                                                    email: pr.email,
+                                                                    adress: pr.adress,
+                                                                    isNewUser: pr.isNewUser,
+                                                                    isLeader: "1",
+                                                                    QRCode: pr.QRCode
+                                                                },
+                                                                users: partners
+                                                            });
+                                                            if (result.length == projects.length) {
+        //                                                            console.log(result)
+//                                                                result.sort(function(a, b) {
+//                                                                    return a.status - b.status
+//                                                                });
+                                                                if (params.pageSize - projects.length === 0) {
+                                                                    DB.select("create_projects");
+                                                                    DB.from("xiao_users");
+                                                                    DB.where('id="' + SESSION.get('user_id') + '"');
+                                                                    DB.col(function(createProjects) {
+                                                                        callback({
+                                                                            projects: result,
+                                                                            pageIndex: params.pageIndex,
+                                                                            pageSize: params.pageSize,
+                                                                            createProjects: createProjects,
+                                                                            emptyFolders: params.pageSize - projects.length
+                                                                        });
+                                                                    });
+
+                                                                } else {
+                                                                    callback({
+                                                                        projects: result,
+                                                                        pageIndex: params.pageIndex,
+                                                                        pageSize: params.pageSize,
+                                                                        emptyFolders: params.pageSize - projects.length
+                                                                    });
+                                                                }
+                                                            }
+                                                        });
+
+                                                        API._clear_tables_to_sync();
+                                                    });
+                                                    API._clear_tables_to_sync();
+                                                });
+                                            
+                                            }else{
+                                                DB.select("create_projects");
+                                                DB.from("xiao_users");
+                                                DB.where('id="' + SESSION.get('user_id') + '"');
+                                                DB.col(function(createProjects) {
+                                                    callback({
+                                                        projects: [],
+                                                        pageIndex: params.pageIndex,
+                                                        pageSize: params.pageSize,
+                                                        createProjects: createProjects,
+                                                        emptyFolders: params.pageSize - projects.length
+                                                    });
+                                                });
+                                            }
+
+                                        });
+
+                                    } else {
+                                        
                                         projects.forEach(function(pr) {
 
                                             DB.select("u.id as uid, u.name, u.pinyin, u.avatar, u.company_id, u.position, u.phoneNum, u.email, u.adress, u.isNewUser, u.QRCode, c.title as company, c.companyAdress, c.creator_id as company_creator_id, pp.isLeader");
@@ -773,12 +899,12 @@ function onDeviceReady() {
                                             DB.where('p.id ="' + pr.id + '"');
 
                                             DB.query(function(partners) {
-                                                var status = 2;
-                                                partners.forEach(function(pp) {
-                                                    if (pp.uid == logged_user) {
-                                                        status = 1;
-                                                    }
-                                                });
+//                                                var status = 2;
+//                                                partners.forEach(function(pp) {
+//                                                    if (pp.uid == logged_user) {
+//                                                        status = 1;
+//                                                    }
+//                                                });
                                                 DB.select("COUNT(pc.read) as unread");
                                                 DB.from("xiao_project_comments AS pc");
                                                 DB.where('pc.project_id ="' + pr.id + '"');
@@ -787,7 +913,7 @@ function onDeviceReady() {
 
                                                 DB.col(function(unread) {
                                                     result.push({
-                                                        status: status,
+                                                        status: pr.status,
                                                         id: pr.id,
                                                         level: pr.level,
                                                         title: pr.title,
@@ -815,9 +941,9 @@ function onDeviceReady() {
                                                     });
                                                     if (result.length == projects.length) {
 //                                                            console.log(result)
-                                                        result.sort(function(a, b) {
-                                                            return a.status - b.status
-                                                        });
+//                                                        result.sort(function(a, b) {
+//                                                            return a.status - b.status
+//                                                        });
                                                         if (params.pageSize - projects.length === 0) {
                                                             DB.select("create_projects");
                                                             DB.from("xiao_users");
@@ -847,20 +973,19 @@ function onDeviceReady() {
                                             });
                                             API._clear_tables_to_sync();
                                         });
-
-                                    } else {
-                                        DB.select("create_projects");
-                                        DB.from("xiao_users");
-                                        DB.where('id="' + SESSION.get('user_id') + '"');
-                                        DB.col(function(createProjects) {
-                                            callback({
-                                                projects: [],
-                                                pageIndex: params.pageIndex,
-                                                pageSize: params.pageSize,
-                                                createProjects: createProjects,
-                                                emptyFolders: params.pageSize - projects.length
-                                            });
-                                        });
+                                        
+//                                        DB.select("create_projects");
+//                                        DB.from("xiao_users");
+//                                        DB.where('id="' + SESSION.get('user_id') + '"');
+//                                        DB.col(function(createProjects) {
+//                                            callback({
+//                                                projects: [],
+//                                                pageIndex: params.pageIndex,
+//                                                pageSize: params.pageSize,
+//                                                createProjects: createProjects,
+//                                                emptyFolders: params.pageSize - projects.length
+//                                            });
+//                                        });
                                     }
                                 });
                                 API._clear_tables_to_sync();
