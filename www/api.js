@@ -1495,7 +1495,7 @@ function onDeviceReady() {
                                                                 }
 //                                                                console.log(db_result);
 //                                                                if (db_result.length == 0 && !(sql.match(/sync/)))
-//                                                                    console.log(sql);
+                                                                    console.log(sql);
 
                                                                 return (callback ? callback(db_result) : true);
                                                             }
