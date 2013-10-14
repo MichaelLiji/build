@@ -595,6 +595,9 @@ function onDeviceReady() {
                         });
                     }
                 },
+                
+                last_page_index: null,
+                
                 read: function(params, callback) {
                     if ("id" in params) {
                         // get inside project page
@@ -749,6 +752,8 @@ function onDeviceReady() {
                         });
                     } else {
                         // get ALL projects page
+                        if(params.pageIndex === this.last_page_index)return;
+                        this.last_page_index = params.pageIndex;
                         if ("pageIndex" in params && "pageSize" in params) {
                             var result = [], logged_user = SESSION.get("user_id");
                             console.log(params)
@@ -766,14 +771,8 @@ function onDeviceReady() {
                                 DB.limit(params.pageSize, (params.pageIndex - 1) * params.pageSize);
 
                                 DB.query(function(projects) {
-//                                    console.log("projects")
-//                                    console.log(projects)
-//                                    projects.forEach(function(pp) {
-//                                        pp.status = 1;
-//                                    });
                                     var others_limit = params.pageSize - projects.length;
                                     if (others_limit > 0) {
-                                        
                                         //if project length < page size(8) 
                                         // then GET also some projects without me
                                         DB.select("p.id, p.level, p.title, p.color, p.creator_id, p.creationTime, p.descr, u.id as uid, u.name, u.pinyin, u.avatar, u.company_id, u.position, u.phoneNum, u.email, u.adress, u.isNewUser, u.QRCode, c.title as company, c.companyAdress, c.creator_id as company_creator_id, 2 as status");
@@ -787,13 +786,7 @@ function onDeviceReady() {
 //                                        DB.limit(params.pageSize - projects.length, (params.pageIndex - 1) * params.pageSize);
                                         DB.limit(others_limit, params.othersOffset);
                                         DB.query(function(projects_others) {
-//                                            console.log(projects_others)
-//                                            projects_others.forEach(function(pp) {
-//                                                pp.status = 2;
-//                                            });
                                             projects = projects.concat(projects_others); // add not status 2 project to the end
-//                                            console.log(projects)
-                                            
                                             if(projects.length > 0){
                                                 
                                                 projects.forEach(function(pr) {
@@ -806,12 +799,6 @@ function onDeviceReady() {
                                                     DB.where('p.id ="' + pr.id + '"');
 
                                                     DB.query(function(partners) {
-//                                                        var status = 2;
-//                                                        partners.forEach(function(pp) {
-//                                                            if (pp.uid == logged_user) {
-//                                                                status = 1;
-//                                                            }
-//                                                        });
                                                         DB.select("COUNT(pc.read) as unread");
                                                         DB.from("xiao_project_comments AS pc");
                                                         DB.where('pc.project_id ="' + pr.id + '"');
@@ -847,10 +834,6 @@ function onDeviceReady() {
                                                                 users: partners
                                                             });
                                                             if (result.length == projects.length) {
-        //                                                            console.log(result)
-//                                                                result.sort(function(a, b) {
-//                                                                    return a.status - b.status
-//                                                                });
                                                                 if (params.pageSize - projects.length === 0) {
                                                                     DB.select("create_projects");
                                                                     DB.from("xiao_users");
@@ -914,12 +897,6 @@ function onDeviceReady() {
 //                                            DB.group_by('p.id');
 
                                             DB.query(function(partners) {
-//                                                var status = 2;
-//                                                partners.forEach(function(pp) {
-//                                                    if (pp.uid == logged_user) {
-//                                                        status = 1;
-//                                                    }
-//                                                });
                                                 DB.select("COUNT(pc.read) as unread");
                                                 DB.from("xiao_project_comments AS pc");
                                                 DB.where('pc.project_id ="' + pr.id + '"');
@@ -955,10 +932,6 @@ function onDeviceReady() {
                                                         users: partners
                                                     });
                                                     if (result.length == projects.length) {
-//                                                            console.log(result)
-//                                                        result.sort(function(a, b) {
-//                                                            return a.status - b.status
-//                                                        });
                                                         if (params.pageSize - projects.length === 0) {
                                                             DB.select("create_projects");
                                                             DB.from("xiao_users");
@@ -988,19 +961,6 @@ function onDeviceReady() {
                                             });
                                             API._clear_tables_to_sync();
                                         });
-                                        
-//                                        DB.select("create_projects");
-//                                        DB.from("xiao_users");
-//                                        DB.where('id="' + SESSION.get('user_id') + '"');
-//                                        DB.col(function(createProjects) {
-//                                            callback({
-//                                                projects: [],
-//                                                pageIndex: params.pageIndex,
-//                                                pageSize: params.pageSize,
-//                                                createProjects: createProjects,
-//                                                emptyFolders: params.pageSize - projects.length
-//                                            });
-//                                        });
                                     }
                                 });
                                 API._clear_tables_to_sync();
@@ -1023,7 +983,10 @@ function onDeviceReady() {
                      }
                      */
                     callback ? API.remove("xiao_projects", 'id="' + id + '"', callback) : API.remove("xiao_projects", 'id="' + id + '"');
-                    ;
+                },
+                        
+                getArchive: function(id, callback){
+                    
                 }
 
             };

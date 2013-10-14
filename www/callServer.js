@@ -165,7 +165,12 @@
                 console.log(params);
                 
                 return []
+            },
+            sendToDo    : function(params, complete){
+                console.log(params)
+                Mdls.Todo.create(params, complete);
             }
+            
         });
 
 
