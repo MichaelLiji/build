@@ -1,4 +1,4 @@
-﻿(function(Deep, NonstaticClass, StaticClass, PagePanel, OverflowPanel, CallServer){
+(function(Deep, NonstaticClass, StaticClass, PagePanel, OverflowPanel, CallServer){
 this.GlobalSearch = (function(OverflowPanel, Panel, UserAnchorList, Global, forEach, config){
 	function GlobalSearch(selector, groupHtml){
 		///	<summary>
@@ -7,7 +7,7 @@ this.GlobalSearch = (function(OverflowPanel, Panel, UserAnchorList, Global, forE
 		/// <param name="selector" type="string">对应的元素选择器</param>
 		/// <param name="groupHtml" type="jQun.HTML">分组的html模板</param>
 		var globalSearch = this, textEl = this.find(">header input"),
-			
+
 			groupPanel = new OverflowPanel(this.find(".globalSearch_content>ul")[0]);
 
 		this.assign({
@@ -345,7 +345,7 @@ this.Todo = (function(ChatList, OverflowPanel, Global){
 		chatList : undefined,
 		fill : function(id){
 			var todo = this, chatListContent = this.chatList.chatListContent;
-		
+
 			CallServer.open("getTodo", { id : id }, function(data){
 				var figureEl = todo.find(">section>figure");
 
@@ -376,35 +376,48 @@ this.Todo = (function(ChatList, OverflowPanel, Global){
 ));
 
 this.SendTodo = (function(UserManagementList, Validation, Global, validationHandle){
-	function SendTodo(selector, infoHtml){
+	function SendTodo(selector){
 		var sendTodo = this, titleBar = Global.titleBar,
-		
+
 			titleValidation = new Validation(this.find('li[desc="title"]>input'), validationHandle),
 
-			dateValidation = new Validation(this.find('li[desc="endDate"]>input[type="text"]'), validationHandle);
+			dateValidation = new Validation(this.find('li[desc="endDate"]>input[type="text"]'), validationHandle),
+
+			userManagementList = new UserManagementList("请选择该To Do的执行者");
 
 		this.assign({
 			dateValidation : dateValidation,
-			infoHtml : infoHtml,
-			titleValidation : titleValidation
+			titleValidation : titleValidation,
+			userManagementList : userManagementList
 		});
+
+		userManagementList.appendTo(this.header[0]);
+		userManagementList.setMaxLength(1);
 
 		// 提交按钮绑定事件
 		this.attach({
 			beforeshow : function(e){
+				userManagementList.clearUsers();
+
 				titleBar.find('button[action="sendTodoCompleted"]').onuserclick = function(){
 					if(!titleValidation.validate())
 						return;
 
 					if(!dateValidation.validate())
 						return;
-
+                                        console.log("userManagementList.projectId")
+                                        console.log(userManagementList.projectId)
+                                        console.log("userManagementList.getAllUsers()[0]")
+                                        console.log(userManagementList.getAllUsers()[0])
 					CallServer.open("sendTodo", {
-						attachment : [],
+						attachments : [],
 						title : titleValidation.validationEl.value,
 						date : sendTodo.endDate.getTime(),
 						remind : sendTodo.remind ? 1 : 0,
-						desc : sendTodo.find("textarea").innerHTML
+						desc : sendTodo.find("textarea").innerHTML,
+						userId : userManagementList.getAllUsers()[0],
+//						projectId : userManagementList.projectId
+						projectId : sendTodo.projectId
 					}, function(data){
 						Global.history.go("todo").fill(data.id);
 					});
@@ -454,17 +467,19 @@ this.SendTodo = (function(UserManagementList, Validation, Global, validationHand
 	SendTodo.properties({
 		dateValidation : undefined,
 		endDate : new Date(),
-		fill : function(id){
-			var sendTodo = this;
-
-			CallServer.open("getUser", { id : id }, function(data){
-				sendTodo.find(">header").innerHTML = sendTodo.infoHtml.render(data);
-			});
-		},
-		infoHtml : undefined,
+		projectId : -1,
 		// 完成时候是否提醒
 		remind : false,
-		titleValidation : undefined
+		resetProjectId : function(id){
+			this.projectId = id;
+		},
+		selectUser : function(userData){
+			var sendTodo = this;
+
+			this.userManagementList.userList.addUsers([userData]);
+		},
+		titleValidation : undefined,
+		userManagementList : undefined
 	});
 
 	return SendTodo.constructor;
@@ -494,7 +509,7 @@ this.Archive = (function(AnchorList, Global){
 				archive.key = archive.id;
 				archive.desc = new Date(archive.completeDate).toLocaleDateString();
 			});
-			
+
 			overflowPanel.innerHTML = "";
 			new AnchorList(archives, true).appendTo(overflowPanel[0]);
 
@@ -548,7 +563,7 @@ this.ArchivedProjectView = (function(AnchorList, Panel){
 
 	function ArchivedProjectView(selector, attachmentsHtml, todoContentHtml){
 		var archivedProjectView = this,
-		
+
 			todoContent = new TodoContent.constructor(todoContentHtml);
 
 		this.assign({
@@ -560,7 +575,7 @@ this.ArchivedProjectView = (function(AnchorList, Panel){
 			clickanchor : function(e){
 				var expendEl = archivedProjectView.find('li[key="' + e.anchor + '"]');
 
-				
+
 
 				e.stopPropagation();
 				todoContent.create(e.anchor).appendTo(expendEl[0]);
@@ -591,7 +606,7 @@ this.ArchivedProjectView = (function(AnchorList, Panel){
 				});
 
 				archiveProjectView.header.find("ul").innerHTML = archiveProjectView.attachmentsHtml.render(data.project);
-				
+
 				sectionEl.innerHTML = "";
 				anchorList = new AnchorList(data.todoList, true)
 				anchorList.appendTo(sectionEl[0]);
@@ -610,9 +625,9 @@ this.ArchivedProjectView = (function(AnchorList, Panel){
 this.ProjectManagement = (function(UserManagementList, AnchorList, Global, anchorListData){
 	function ProjectManagement(selector){
 		var projectManagement = this,
-		
+
 			anchorList = new AnchorList(anchorListData),
-			
+
 			userManagementList = new UserManagementList("选择成员").appendTo(this.find(">header")[0]);
 
 		this.assign({
@@ -635,7 +650,7 @@ this.ProjectManagement = (function(UserManagementList, AnchorList, Global, ancho
 						CallServer.open("archiveProject", {
 							id : projectManagement.id
 						}, function(){
-							// Global.history.go("archive");
+							Global.history.go("archive");
 						});
 					}
 
@@ -658,8 +673,16 @@ this.ProjectManagement = (function(UserManagementList, AnchorList, Global, ancho
 
 		anchorList.attach({
 			clickanchor : function(e){
+				var anchor = e.anchor;
+
 				e.stopPropagation();
-				Global.history.go(e.anchor);
+
+				if(anchor === "sendTodo"){
+                                    console.log("projectManagement.id")
+                                    console.log(projectManagement.id)
+					Global.history.go(anchor).resetProjectId(projectManagement.id);
+					return;
+				}
 			}
 		}, true);
 
@@ -680,6 +703,7 @@ this.ProjectManagement = (function(UserManagementList, AnchorList, Global, ancho
 				projectManagement.userManagementList.userList.addUsers(data.users);
 
 				Global.titleBar.resetTitle("项目管理：" + data.title);
+				projectManagement.id = id;
 			});
 		},
 		id : -1,

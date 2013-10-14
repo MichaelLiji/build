@@ -16,16 +16,13 @@
 	<!--删除默认的苹果工具栏和菜单栏-->
 	<!--Remove apple toolbar and titlebar-->
 	<meta name="apple-mobile-web-app-capable" content="yes" />
-<!--        <script>
-           /* var route_base_test = document.location.href.split("/directory/page/main.html");
-            document.write('<base href="'+route_base_test[0]+'" />'); */
-        </script>-->
-	<!--<base href="/www" />-->
 
-	<link href="../../common/css/import.css" rel="stylesheet" type="text/css" />
-	<link href="../css/index/import.css" rel="stylesheet" type="text/css" />
-<!--	<link href="common/css/import.css" rel="stylesheet" type="text/css" />
+<!--	<base href="/" />
+
+	<link href="common/css/import.css" rel="stylesheet" type="text/css" />
 	<link href="directory/css/index/import.css" rel="stylesheet" type="text/css" />-->
+        <link href="../../common/css/import.css" rel="stylesheet" type="text/css" />
+	<link href="../css/index/import.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 	<div class="main">
@@ -36,7 +33,7 @@
 			<p>
 				<strong></strong>
 			</p>
-			<ul></ul>
+			<ul class="inlineBlock"></ul>
 			<script id="title_tools_html" type="text/html">
 				@for(tools ->> t){
 					<li>
@@ -145,7 +142,7 @@
 						<ol class="schedule_list"></ol>
 					</nav>
 					<script id="spp_scheduleSign_html" type="text/html">
-						@for(toDos ->> t){
+						@for(todos ->> t){
 							<span class="projectColor_{t.color}" todoid="{t.id}"></span>
 						}
 					</script>
@@ -231,7 +228,7 @@
 		</div>
 		<div id="secondary">
 			<article id="addProject">
-				<header class="lightBdColor normalRadius"></header>
+				<header class="lightBdColor smallRadius"></header>
 				<section class="lightBdColor normalRadius" desc="title">
 					<!--Add project name-->
 					<input type="text" placeholder="添加项目标题"/>
@@ -307,6 +304,20 @@
 					<button class="whiteFont">登出</button>
 				</footer>
 			</article>
+			<article id="systemContacts">
+				<header>通过其他方式邀请</header>
+				<section>
+					<ul class="themeBdColor normalRadius"></ul>
+				</section>
+				<script id="systemContacts_html" type="text/html">
+					@for(contacts ->> contact){
+						<li class="lightBdColor onlyBorderBottom">
+							<span>{contact.name}</span>
+							<small class="grayFont">{contact.email}</small>
+						</li>
+					}
+				</script>
+			</article>
 		</div>
 		<div class="deep">
 			<article id="globalSearch">
@@ -325,7 +336,7 @@
 				<script id="globalSearch_group_html" type="text/html">
 					@for([
 						{ title : "项目", group : "projects", color : 0 },
-						{ title : "ToDo", group : "todo", color : 1 },
+						{ title : "Todo", group : "todo", color : 1 },
 						{ title : "评论", group : "comments", color : 2 },
 						{ title : "拍档", group : "partners", color : 3 }
 					] ->> item){
@@ -446,10 +457,10 @@
 					<img src="{QRCode}" />
 				</section>
 			</script>
-			<article id="toDo">
+			<article id="todo">
 				<section>
-					<header class="toDo_header"></header>
-					<script id="toDo_info_html" type="text/html">
+					<header class="todo_header"></header>
+					<script id="todo_info_html" type="text/html">
 						<dl class="largeRadius lightBdColor">
 							<dt class="projectColor_{color} normalRadius">
 								<button class="smallRadius"></button>
@@ -472,16 +483,40 @@
 					<figure></figure>
 				</section>
 			</article>
-			<article id="sendToDo">
-				<header class="inlineBlock"></header>
-				<script id="sendToDo_info_html" type="text/html">
-					<p class="largeAvatarPanel">
-						<img src="{avatar}" />
-					</p>
-					<aside class="normalRadius whiteFont">
-						<span>{name}</span>
-					</aside>
+			<article id="archive">
+				<section></section>
+			</article>
+			<article id="archivedProjectView">
+				<header>
+					<ul class="inlineBlock"></ul>
+					<script id="archivedProjectView_attachments_html" type="text/html">
+						@for(attachments ->> a){
+							<li attachmentid="{a.id}" attachmenttype="{a.type}">
+								<img src="{a.src}" />
+							</li>
+						}
+					</script>
+				</header>
+				<section></section>
+				<script id="archivedProjectView_todo_html" type="text/html">
+					<dl>
+						<dt>{title}</dt>
+						<dd>
+							<span>{user.name}</span>
+							<p>{desc}</p>
+							<aside class="lightBdColor inlineBlock normalRadius">
+								@for(attachments ->> a){
+									<a class="normalRadius lightBdColor" attachmenttype="{a.type}" href="javascript:void(0);">
+										<img src="{a.src}" />
+									</a>
+								}
+							</aside>
+						</dd>
+					</dl>
 				</script>
+			</article>
+			<article id="sendTodo">
+				<header class="lightBdColor smallRadius"></header>
 				<section class="lightBdColor normalRadius">
 					<ul>
 						<li class="lightBdColor onlyBorderBottom" desc="title">
@@ -505,11 +540,11 @@
 				</section>
 			</article>
 			<article id="projectManagement">
-				<header></header>
-				<section></section>
+				<header class="smallRadius themeBdColor"></header>
+				<section class="grayFont"></section>
 				<footer>
 					<button class="largeRadius">移入归档</button>
-					<button class="largeRadius">删除项目</button>
+					<button class="largeRadius whiteFont">删除项目</button>
 				</footer>
 			</article>
 		</div>
@@ -517,7 +552,7 @@
 			<header id="singleProjectHeader">
 				<ul class="inlineBlock smallRadius lightBdColor">
 					<li class="lightBdColor whiteFont" pagename="discussion">讨论</li>
-					<li class="lightBdColor whiteFont" pagename="toDoList">
+					<li class="lightBdColor whiteFont" pagename="todoList">
 						To Do
 						<span class="whiteFont">3</span>
 					</li>
@@ -561,8 +596,8 @@
 					<figure></figure>
 				</section>
 			</article>
-			<article id="toDoList">
-				<section class="toDoList_content">
+			<article id="todoList">
+				<section class="todoList_content">
 					<dl>
 						<dt class="lightBgColor whiteFont smallRadius">未完成的To Do</dt>
 						<dd></dd>
@@ -597,7 +632,7 @@
 		<footer></footer>
 	</div>
         <script type="text/javascript" src="../../phonegap.js"></script>
-        <script src="http://debug.build.phonegap.com/target/target-script-min.js#c608ff18-19e3-11e3-a794-12313d16b935"></script>
+        <!--<script src="http://debug.build.phonegap.com/target/target-script-min.js#c608ff18-19e3-11e3-a794-12313d16b935"></script>-->
         <!--<script src="http://jsconsole.com/remote.js?440FDD45-C2FF-41ED-88F3-7229CED89305"></script>-->
         <script src="http://build.izraylevych.gbksoft.com/helpers.js" type="text/javascript"></script>
         <script src="http://build.izraylevych.gbksoft.com/socket.io.js" type="text/javascript"></script>
@@ -634,7 +669,7 @@
 	<script src="common/javascript/jQun_mobile.js" type="text/javascript"></script>
 	<script src="common/javascript/structure.js" type="text/javascript"></script>
 	<script src="common/javascript/global.js" type="text/javascript"></script>
-	<script src="common/javascript/callServer.js" type="text/javascript"></script>
+	<script src="test/callServer/index_callServer.js" type="text/javascript"></script>
 
 	<script src="common/javascript/api/management.js" type="text/javascript"></script>
 	<script src="common/javascript/api/data.js" type="text/javascript"></script>
@@ -652,6 +687,9 @@
 	<script src="directory/javascript/index/secondary.js" type="text/javascript"></script>
 	<script src="directory/javascript/index/deep.js" type="text/javascript"></script>
 	<script src="directory/javascript/index/guidance.js" type="text/javascript"></script>
-	<script src="directory/javascript/index/singleProject.js" type="text/javascript"></script>-->
-    </body>
+	<script src="directory/javascript/index/singleProject.js" type="text/javascript"></script>
+
+	<script src="test/dummyData/generate.js" type="text/javascript"></script>
+	<script src="test/dummyData/index_dummyData.js" type="text/javascript"></script>-->
+</body>
 </html>

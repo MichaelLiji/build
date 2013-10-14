@@ -317,11 +317,9 @@ this.UserSelectionList = (function(UserIndexList, CallServer, Global, selectUser
 		});
 
 		this.attach({
-			userclick : function(e){
-				var targetEl = jQun(e.target);
-
+			userclick : function(e, targetEl){
 				if(targetEl.between(">*>button", this).length > 0){
-					var users = [], maxLength = userSelectionList.maxLength;
+					var users = [];
 
 					userIndexList.find(">ol figure>p.selected").forEach(function(element){
 						var el = jQun(element), parentEl = el.parent();
@@ -332,11 +330,6 @@ this.UserSelectionList = (function(UserIndexList, CallServer, Global, selectUser
 							name : parentEl.find(">figcaption").innerHTML
 						});
 					});
-
-					if(users.length > maxLength){
-						alert("您最多只能选择" + maxLength + "位用户！");
-						return;
-					}
 
 					clickButtonEvent.setEventAttrs({
 						users : users,
@@ -362,10 +355,6 @@ this.UserSelectionList = (function(UserIndexList, CallServer, Global, selectUser
 	UserSelectionList = new NonstaticClass(UserSelectionList, null, Panel.prototype);
 
 	UserSelectionList.properties({
-		maxLength : Infinity,
-		setMaxLength : function(length){
-			this.maxLength = length;
-		},
 		toggleUser : function(id){
 			this.userIndexList.find('>ol figure>p[userid="' + id + '"]').classList.toggle("selected");
 		},
@@ -483,13 +472,21 @@ this.UserManagementList = (function(UserList, UserSelectionList, OverflowPanel, 
 					userSelectionList.attach({
 						clickbutton : function(e){
 							if(e.buttonType === "ok"){
+								var users = e.users, maxLength = userManagementList.maxLength;
+
+								if(users.length > maxLength){
+									e.stopPropagation();
+									alert("只能至多选择" + maxLength + "位用户！");
+									return;
+								}
+
 								// 清除所有用户
 								userManagementList.clearUsers();
 								// 选择后，点击确认并添加用户
 								userList.addUsers(e.users);
 							}
 						}
-					});
+					}, true);
 					return;
 				}
 
@@ -511,6 +508,10 @@ this.UserManagementList = (function(UserList, UserSelectionList, OverflowPanel, 
 		},
 		getAllUsers : function(){
 			return this.userList.getAllUsers();
+		},
+		maxLength : Infinity,
+		setMaxLength : function(length){
+			this.maxLength = length;
 		},
 		userList : undefined
 	});

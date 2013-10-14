@@ -77,7 +77,7 @@ this.Loader = (function(Storage, Index, HTML){
 			return new Index.SPP.Schedule("#schedule", new HTML(jQun("#spp_scheduleSign_html")));
 		},
 		sendTodo : function(){
-			return new Index.Deep.SendTodo("#sendTodo", new HTML(jQun("#sendTodo_info_html")));
+			return new Index.Deep.SendTodo("#sendTodo");
 		},
 		spp : function(){
 			return new Index.SPP.Self("#SPP");

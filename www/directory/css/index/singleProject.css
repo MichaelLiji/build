@@ -1,6 +1,7 @@
 ﻿#singleProject > * {
 	padding : 0 10px;
 	top : 36px;
+	overflow : hidden;
 }
 
 #singleProjectHeader {
@@ -50,7 +51,6 @@
 
 #discussion {
 	bottom : 52px;
-	overflow : hidden;
 }
 .discussion_info > dt {
 	height : 30px;
@@ -126,6 +126,7 @@
 
 #workStream > ul > li {
 	margin-top : 5px;
+	min-height : 62px;
 }
 #workStream li > figure {
 	width : 62px;

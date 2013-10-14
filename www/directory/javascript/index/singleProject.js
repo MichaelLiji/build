@@ -141,7 +141,10 @@ this.Discussion = (function(ProjectPanel, ChatList){
 				})
 			},
 			clickdo : function(e){
-				Global.history.go("sendTodo").fill(projecetId);
+				var sendTodo = Global.history.go("sendTodo");
+
+				sendTodo.selectUser(e.message.poster);
+				sendTodo.resetProjectId(projecetId);
 			}
 		});
 

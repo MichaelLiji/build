@@ -19,10 +19,10 @@
 //                Mdls.Partner(complete);
                 console.log("getWorkStream");
                 console.log(params);
-                Mdls.Partner.read(function(data) {
-                    console.log(data);
-                    complete(data);
-                });
+//                Mdls.Partner.read(function(data) {
+//                    console.log(data);
+//                    complete(data);
+//                });
 
             },
             getPartnerGroups: function(_params, complete) {
@@ -106,6 +106,16 @@
                     complete(data);
                 });
             },
+            editProjectInfo: function(params, complete){
+                console.log(params)
+                // for now
+                // userIds: Array[3]
+                    //0: "undefined"
+                    //1: "undefined"
+                    //2: "undefined"
+                // project_id: ALSO NEEDED
+//                Mdls.Project.update(params, complete);
+            },
             myInformation: function(_params, complete) {
                 // Mdls.User.read(function(data){
                 // 	data['count'] = 123;
@@ -126,7 +136,6 @@
                 Mdls.User.create(params, complete);
             },
             // toDoCompleted : function(){ },
-            // sendToDo : function(){ },
             getToDo: function(params, complete) {
                 console.log(params);
 //                 Mdls.Todo.read({project_id: params.id}, complete);
@@ -144,10 +153,18 @@
 ////                    complete(data);
 ////                });
 //             },
-            getToDoList: function(params, complete) {
+            getTodoList: function(params, complete) {
                 console.log(params);
 //                 Mdls.Todo.read({project_id: params.id}, complete);
                 Mdls.Todo.read({project_id: params.id}, function(data) {
+                    console.log(data);
+                    complete(data);
+                });
+            },
+            getTodo: function(params, complete) {
+                console.log(params);
+//                 Mdls.Todo.read({project_id: params.id}, complete);
+                Mdls.Todo.read(params, function(data) {
                     console.log(data);
                     complete(data);
                 });
@@ -160,9 +177,23 @@
 //                    complete(data);
 //                });
             },
-            sendToDo    : function(params, complete){
+            sendTodo    : function(params, complete){
                 console.log(params)
-                Mdls.Todo.create(params, complete);
+//                attachment: Array[0]
+//                creator_id: "4"
+//                date: 1381760403700
+//                desc: ""
+//                projectId: "20131010120006f6705041_xiao_projects"
+//                remind: 1
+//                title: "gggbbbvv"
+//                userId: "17"
+                Mdls.Todo.create({
+                    creator_id  : params.creator_id,
+                    user_id     : params.userId,
+                    title       : params.title,
+                    descr       : params.desc,
+                    project_id  : params.projectId
+                }, complete);
             },
             getAllArchives: function(params, complete){
                 console.log(params);

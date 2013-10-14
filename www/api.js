@@ -984,6 +984,35 @@ function onDeviceReady() {
                     }
 
                 },
+                
+                update: function(params, callback){
+//                    var params = {project_id: "sdasd121212", userIds:[1,2,3,4]}
+                    DB.select("pp.user_id");
+                    DB.from("xiao_project_partners as pp");
+                    DB.where('pp.project_id ="'+params.project_id+'"');
+                    API.read(function(data){
+                        var users = [], remove_array = [], add_array = [];
+                        data.forEach(function(el){
+                            users.push(el.user_id);
+                        });
+                        params.userIds.forEach(function(el){
+                            if(users.indexOf(el) === -1){
+                                remove_array.push(el);
+                            }
+                        });
+                        users.forEach(function(el){
+                            if(params.userIds.indexOf(el) === -1){
+                                add_array.push(el);
+                            }
+                        });
+                        // amke queries delete and add
+                        // amke queries delete and add
+                        // amke queries delete and add
+                        // amke queries delete and add
+                        // amke queries delete and add
+                    });
+                },
+                
                 remove: function(id, callback) {
                     // Удаление проекта
                     // У меня вопрос:
@@ -1357,7 +1386,7 @@ function onDeviceReady() {
                             DB.from("xiao_todos as t");
                             DB.where('t.project_id = "' + params.project_id + '"');
                             DB.where('t.user_id = "' + SESSION.get("user_id") + '"');
-                            DB.where('t.finished = "0"');
+                            DB.where('t.finished <> "1"');
                             DB.query(function(todos) {
                                 make_callback({uncompleted: todos});
                             });
