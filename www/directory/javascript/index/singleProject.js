@@ -1,10 +1,20 @@
 ﻿(function(SingleProject, NonstaticClass, Panel, OverflowPanel, Event, CallServer, Global){
 this.ProjectPanel = (function(PagePanel, loadProjectEvent){
-	function ProjectPanel(selector){};
+	function ProjectPanel(selector){
+		var projectPanel = this;
+
+		this.attach({
+			beforeshow : function(){
+				Global.titleBar.find('button[action="projectManagement"]').onuserclick = function(){
+					Global.history.go("projectManagement").fill(projectPanel.projectId);
+				};
+			}
+		});
+	};
 	ProjectPanel = new NonstaticClass(ProjectPanel, "Bao.Page.Index.SingleProject.ProjectPanel", PagePanel.prototype);
 
 	ProjectPanel.override({
-		tools : [{ urlname : "javascript:void(0);", action : "projectDetails" }]
+		tools : [{ urlname : "javascript:void(0);", action : "projectManagement" }]
 	});
 
 	ProjectPanel.properties({
@@ -20,8 +30,11 @@ this.ProjectPanel = (function(PagePanel, loadProjectEvent){
 
 				loadProjectEvent.setEventAttrs({ project : project });
 				loadProjectEvent.trigger(pagePanel[0]);
+
+				pagePanel.projectId = id;
 			});
-		}
+		},
+		projectId : -1
 	});
 
 	return ProjectPanel.constructor;
@@ -65,7 +78,7 @@ this.Header = (function(focusTabEvent){
 			focusTabEvent.setEventAttrs({ pageName : pagename });
 			focusTabEvent.trigger(focusedEl[0]);
 		},
-		setToDoLength : function(length){
+		setTodoLength : function(length){
 			this.find('>ul>li>span').innerHTML = length;
 		}
 	});
@@ -128,7 +141,7 @@ this.Discussion = (function(ProjectPanel, ChatList){
 				})
 			},
 			clickdo : function(e){
-				Global.history.go("sendToDo").fill(projecetId);
+				Global.history.go("sendTodo").fill(projecetId);
 			}
 		});
 
@@ -166,18 +179,18 @@ this.Discussion = (function(ProjectPanel, ChatList){
 	Bao.UI.Control.Chat.ChatList
 ));
 
-this.ToDoList = (function(ProjectPanel, AnchorList, formatKey){
-	function ToDoList(selector){
-		var toDoList = this;
+this.TodoList = (function(ProjectPanel, AnchorList, formatKey){
+	function TodoList(selector){
+		var todoList = this;
 
 		this.attach({
 			loadproject : function(e){
 				var project = e.project;
 
-				CallServer.open("getToDoList", { id : project.id }, function(data){
-					var completedEl = toDoList.find(">section>dl:first-child>dd"),
+				CallServer.open("getTodoList", { id : project.id }, function(data){
+					var completedEl = todoList.find(">section>dl:first-child>dd"),
 
-						uncompletedEl = toDoList.find(">section>dl:last-child>dd");
+						uncompletedEl = todoList.find(">section>dl:last-child>dd");
 
 					data = formatKey(data);
 
@@ -193,15 +206,15 @@ this.ToDoList = (function(ProjectPanel, AnchorList, formatKey){
 		this.attach({
 			clickanchor : function(e){
 				e.stopPropagation();
-				Global.history.go("toDo").fill(e.anchor);
+				Global.history.go("todo").fill(e.anchor);
 			}
 		}, true);
 
 		new OverflowPanel(this.find(">section")[0]);
 	};
-	ToDoList = new NonstaticClass(ToDoList, "Bao.Pge.Index.SingleProject.ToDoList", ProjectPanel.prototype);
+	TodoList = new NonstaticClass(TodoList, "Bao.Pge.Index.SingleProject.TodoList", ProjectPanel.prototype);
 
-	return ToDoList.constructor;
+	return TodoList.constructor;
 }(
 	this.ProjectPanel,
 	Bao.UI.Control.List.AnchorList,
@@ -234,7 +247,7 @@ this.WorkStream = (function(ProjectPanel, LevelAnchorList){
 					asideEls = ulEl.find("aside");
 
 					data.forEach(function(dt, i){
-						new LevelAnchorList(dt.toDoList).appendTo(asideEls[i]);
+						new LevelAnchorList(dt.todoList).appendTo(asideEls[i]);
 					});
 				});
 			}

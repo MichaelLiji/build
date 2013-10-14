@@ -160,15 +160,28 @@
 //                    complete(data);
 //                });
             },
-            getAllArchives: function(params, complete){
-                
-                console.log(params);
-                
-                return []
-            },
             sendToDo    : function(params, complete){
                 console.log(params)
                 Mdls.Todo.create(params, complete);
+            },
+            getAllArchives: function(params, complete){
+                console.log(params);
+                Mdls.Project.getArchive(params, complete);
+            },
+            getArchivedProject: function(params, complete){
+                Mdls.Project.getArchive(params, complete);
+            },
+            ArchiveDetail: function(params, complete){
+                console.log(params)
+//                Mdls.Project.getArchive(params, complete)
+            },
+            getSystemContacts   : function(params, complete){
+                console.log(params)
+//                Mdls.Contacts.read(complete)
+                Mdls.Contacts.read(function(data){
+                    console.log(data);
+                    complete(data)
+                });
             }
             
         });

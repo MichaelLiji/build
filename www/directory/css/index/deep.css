@@ -302,67 +302,67 @@
 	height : 100%;
 }
 
-#toDo {
+#todo {
 	bottom : 42px;
 }
-.toDo_header {
+.todo_header {
 	padding : 10px 10px 0 10px;
 }
-.toDo_header > dl{
+.todo_header > dl{
 	padding : 5px 10px;
 }
-.toDo_header dt {
+.todo_header dt {
 	height : 30px;
 	padding : 4px;
 }
-.toDo_header dt > button {
+.todo_header dt > button {
 	height : 22px;
 	width : 34px;
 	padding : 3px 9px;
 	border : 1px solid #fff;
 	background : transparent url(/common/image/width24.png) 0 -800px no-repeat content-box content-box;
 }
-.toDo_header dt > span {
+.todo_header dt > span {
 	margin-left : 8px;
 	font-size : 15px;
 	line-height : 22px;
 }
-.toDo_header dd {
+.todo_header dd {
 	margin-top : 10px;
 }
-.toDo_header dd > figure {
+.todo_header dd > figure {
 	text-align : right;
 }
-.toDo_header dd p {
+.todo_header dd p {
 	padding : 0 8px;
 	text-align : left;
 }
-.toDo_header dd aside {
+.todo_header dd aside {
 	margin-top : 20px;
 	display : inline-block;
 	padding : 5px;
 }
-.toDo_header dd aside:empty {
+.todo_header dd aside:empty {
 	display : none;
 }
-#toDo > section {
+#todo > section {
 	padding-bottom : 10px;
 }
-#toDo > section > figure {
+#todo > section > figure {
 	padding : 0 10px;
 }
 
-#sendToDo {
+#sendTodo {
 	padding : 0 10px;
 }
-#sendToDo > header {
+#sendTodo > header {
 	padding : 10px 0;
 	text-align : center;
 }
-#sendToDo > header > p {
+#sendTodo > header > p {
 	background-color : #fff;
 }
-#sendToDo > header > aside {
+#sendTodo > header > aside {
 	height : 34px;
 	width : 125px;
 	border : 1px solid #f1af10;
@@ -372,7 +372,7 @@
 	left : -8px;
 	z-index : -1;
 }
-#sendToDo > header span {
+#sendTodo > header span {
 	display : block;
 	background-color : #f1af10;
 	width : 100%;
@@ -380,29 +380,29 @@
 	line-height : 26px;
 	font-size : 15px;
 }
-#sendToDo > section {
+#sendTodo > section {
 	margin-bottom : 5px;
 	overflow : hidden;
 	font-size : 14px;
 }
-#sendToDo > section input, #sendToDo > section textarea, #sendToDo > section > span {
+#sendTodo > section input, #sendTodo > section textarea, #sendTodo > section > span {
 	display : block;
 	height : 42px;
 	width : 100%;
 	padding : 10px 15px;
 	border : 0 none;
 }
-#sendToDo > section input[type="date"] {
+#sendTodo > section input[type="date"] {
 	margin-top : -42px;
 	opacity : 0;
 }
-#sendToDo > section > span {
+#sendTodo > section > span {
 	background-color : #fff;
 }
-#sendToDo > section[desc="remind"] {
+#sendTodo > section[desc="remind"] {
 	position : relative;
 }
-#sendToDo > section > button {
+#sendTodo > section > button {
 	width : 58px;
 	height : 24px;
 	background-color : #d29500;
@@ -411,7 +411,7 @@
 	right : 5px;
 	border : 1px solid transparent;
 }
-#sendToDo button > span {
+#sendTodo button > span {
 	float : right;
 	height : 22px;
 	width : 22px;
@@ -419,15 +419,15 @@
 	background-color : #fff;
 	opacity : 0.7;
 }
-#sendToDo button > span.reminded {
+#sendTodo button > span.reminded {
 	float : left;
 	opacity : 1;
 }
-#sendToDo > section textarea {
+#sendTodo > section textarea {
 	min-height : 140px;
 	max-height : 140px;
 }
-#titleBar button[action="sendToDoCompleted"] {
+#titleBar button[action="sendTodoCompleted"] {
 	background-color : #f1af10;
 	background : #f1af10 url(/common/image/width24.png) 7px -118px no-repeat;
 }
@@ -475,4 +475,27 @@
 }
 #archive .anchorList li {
 	background-image : -webkit-linear-gradient(left, transparent, transparent 10px, #fff 10px, #fff);
+}
+
+#archivedProjectView > header {
+	max-height : 180px;
+	overflow : hidden;
+}
+#archivedProjectView > header li {
+	width : 90px;
+	height : 90px;
+	margin : 0;
+}
+#archivedProjectView > header li[attachmenttype="voice"] {
+	border : 33px solid #fff;
+	padding : 0;
+	background-color : #fff;
+}
+#archivedProjectView > section {
+	position : absolute;
+	top : 190px;
+	bottom : 10px;
+	left : 10px;
+	right : 10px;
+	overflow : hidden;
 }

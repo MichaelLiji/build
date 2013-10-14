@@ -16,6 +16,13 @@ this.Loader = (function(Storage, Index, HTML){
 		archive : function(){
 			return new Index.Deep.Archive("#archive");
 		},
+		archivedProjectView : function(){
+			return new Index.Deep.ArchivedProjectView(
+				"#archivedProjectView",
+				new HTML(jQun("#archivedProjectView_attachments_html")),
+				new HTML(jQun("#archivedProjectView_todo_html"))
+			);
+		},
 		businessCard : function(){
 			return new Index.Secondary.BusinessCard("#businessCard", new HTML(jQun("#businessCard_html")));
 		},
@@ -69,8 +76,8 @@ this.Loader = (function(Storage, Index, HTML){
 			this.load("spp");
 			return new Index.SPP.Schedule("#schedule", new HTML(jQun("#spp_scheduleSign_html")));
 		},
-		sendToDo : function(){
-			return new Index.Deep.SendToDo("#sendToDo", new HTML(jQun("#sendToDo_info_html")));
+		sendTodo : function(){
+			return new Index.Deep.SendTodo("#sendTodo", new HTML(jQun("#sendTodo_info_html")));
 		},
 		spp : function(){
 			return new Index.SPP.Self("#SPP");
@@ -84,12 +91,12 @@ this.Loader = (function(Storage, Index, HTML){
 		systemOption : function(){
 			return new Index.Secondary.SystemOption("#systemOption");
 		},
-		toDo : function(){
-			return new Index.Deep.ToDo("#toDo", new HTML(jQun("#toDo_info_html")));
+		todo : function(){
+			return new Index.Deep.Todo("#todo", new HTML(jQun("#todo_info_html")));
 		},
-		toDoList : function(){
+		todoList : function(){
 			this.load("singleProject");
-			return new Index.SingleProject.ToDoList("#toDoList");
+			return new Index.SingleProject.TodoList("#todoList");
 		},
 		workStream : function(){
 			this.load("singleProject");

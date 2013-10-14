@@ -1,8 +1,8 @@
 /*
  *  类库名称：jQun
  *  中文释义：骥群(聚集在一起的千里马)
- *  文档状态：1.0.6.2
- *  本次修改：HTML类，修改参数：允许传入字符串模板和元素标签，如果是元素标签，则取innerHTML作为字符串模板
+ *  文档状态：1.0.6.3
+ *  本次修改：ElementList类，增加获取元素结构的方法：header、article、section、footer等。
  *  开发浏览器信息：firefox 20.0+ 、 chrome 26.0+、基于webkit的手机浏览器
  */
 
@@ -1562,7 +1562,7 @@ this.NodeList = (function(AttributeCollection, toArray){
 	jQun.toArray
 ));
 
-this.ElementList = (function(NodeList, ChildrenCollection, ClassListCollection, window, selectorRegx){
+this.ElementList = (function(NodeList, ChildrenCollection, ClassListCollection, window, selectorRegx, setter){
 	function ElementList(_selector, _parent){
 		///	<summary>
 		///	通过指定选择器筛选元素。
@@ -1817,6 +1817,15 @@ this.ElementList = (function(NodeList, ChildrenCollection, ClassListCollection, 
 	});
 
 	ElementList.properties({
+		article : {
+			get : function(){
+				///	<summary>
+				///	获取元素的章节部分(直接子元素标签：article)。
+				///	</summary>
+				return this.find(">article");
+			},
+			set : setter
+		},
 		children : {
 			get : function(){
 				///	<summary>
@@ -1847,7 +1856,34 @@ this.ElementList = (function(NodeList, ChildrenCollection, ClassListCollection, 
 				///	<param name="className" type="string">需要设置的class字符串。</param>
 				this.set("className", className);
 			}
-		}
+		},
+		footer : {
+			get : function(){
+				///	<summary>
+				///	获取元素的脚部(直接子元素标签：footer)。
+				///	</summary>
+				return this.find(">footer");
+			},
+			set : setter
+		},
+		header : {
+			get : function(){
+				///	<summary>
+				///	获取元素的头部(直接子元素标签：header)。
+				///	</summary>
+				return this.find(">header");
+			},
+			set : setter
+		},
+		section : {
+			get : function(){
+				///	<summary>
+				///	获取元素的段落部分(直接子元素标签：section)。
+				///	</summary>
+				return this.find(">section");
+			},
+			set : setter
+		},
 	}, { gettable : true, settable : true });
 
 	return ElementList.constructor;
@@ -1857,7 +1893,15 @@ this.ElementList = (function(NodeList, ChildrenCollection, ClassListCollection, 
 	this.ClassListCollection,
 	window,
 	// selectorRegx
-	/([\#\.])([^\s\:\#\.\,\+\~\[\>\(\)]+)/g
+	/([\#\.])([^\s\:\#\.\,\+\~\[\>\(\)]+)/g,
+	// setter
+	function(element){
+		///	<summary>
+		///	设置元素的对应部分。
+		///	</summary>
+		///	<param name="element" type="element">需要设置元素的对应部分，标签应为对应标签。</param>
+		this.createList(element).insertTo(this[0], 0);
+	}
 ));
 
 this.HTMLElementList = (function(ElementList, CSSPropertyCollection, addProperty){

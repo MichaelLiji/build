@@ -105,9 +105,9 @@
             register: function(params, complete) {
                 Mdls.User.create(params, complete);
             },
-            // toDoCompleted : function(){ },
-            // sendToDo : function(){ },
-            getToDo: function(params, complete) {
+            // todoCompleted : function(){ },
+            // sendTodo : function(){ },
+            getTodo: function(params, complete) {
                 console.log(params);
 //                 Mdls.Todo.read({project_id: params.id}, complete);
                 Mdls.Todo.read(params, function(data) {
@@ -115,8 +115,8 @@
                     complete(data);
                 });
             },
-//             getToDoInfo : function(params, complete){ 
-//                 console.log("getToDoInfo");
+//             getTodoInfo : function(params, complete){ 
+//                 console.log("getTodoInfo");
 //                 console.log(params);
 ////                 Mdls.Todo.read({project_id: params.id}, complete);
 ////                 Mdls.Todo.read({project_id: params.id}, function(data){
@@ -124,7 +124,7 @@
 ////                    complete(data);
 ////                });
 //             },
-            getToDoList: function(params, complete) {
+            getTodoList: function(params, complete) {
                 console.log(params);
 //                 Mdls.Todo.read({project_id: params.id}, complete);
                 Mdls.Todo.read({project_id: params.id}, function(data) {

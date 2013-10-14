@@ -48,16 +48,16 @@ this.CallServer = (function(CallServer, Wait, open, allHandlers){
 		["myInformation",		"url",										"", true],
 		["praise",				new Text("url?messageId={messageId}"),		""],
 		["register",			new Text("url?name={name}&pwd={pwd}&email={email}&validation={validation}"),	""],
-		["getToDo",				new Text("url?id={id}"),					"", true],
-		["getToDoList",			new Text("url?id={id}"),					"",	true],
-		["sendToDo",			new Text("url?title={title}&remind={remind}&desc={desc}&attachments={attachments}&date={date}"), "POST"],
-		["toDoCompleted",		new Text("url?id={id}"),					""],
+		["getTodo",				new Text("url?id={id}"),					"", true],
+		["getTodoList",			new Text("url?id={id}"),					"",	true],
+		["sendTodo",			new Text("url?title={title}&remind={remind}&desc={desc}&attachments={attachments}&date={date}"), "POST"],
+		["todoCompleted",		new Text("url?id={id}"),					""],
 		["getWorkStream",		new Text("url?id={id}"),					"", true],
 		["addComment",			new Text("url?text={text}&type={type}&projectId={projectId}&attachment={attachment}"),	""],
 		["createGroup",			new Text("url?users=[users]&name={name}"),	""],
-		// 以下是还没有写到interface里的
 		["getSystemContacts",	"url",										"", true],
-		["getAllArchives",		"url",										"", true]
+		["getAllArchives",		"url",										"", true],
+		["getArchivedProject",	new Text("url?id={id}"),					"", true]
 	], allHandlers);
 
 	return CallServer;
@@ -137,8 +137,8 @@ this.CallServer = (function(CallServer, Wait, open, allHandlers){
 					date : localDate.getDate()
 				});
 
-				d.toDos.forEach(function(toDo){
-					toDo.key = toDo.id;
+				d.todos.forEach(function(todo){
+					todo.key = todo.id;
 				});
 			});
 
@@ -237,20 +237,20 @@ this.CallServer = (function(CallServer, Wait, open, allHandlers){
 
 			return data;
 		},
-		getToDo : function(data){
-			data = Index.Deep.getToDoInfo();
+		getTodo : function(data){
+			data = Index.Deep.getTodoInfo();
 
 			return data;
 		},
-		getToDoList : function(data){
+		getTodoList : function(data){
 			var completed = [], uncompleted = [];
 
 			jQun.forEach(Bao.Test.DummyData.Generate.Number.random(15), function(){
-				completed.push(Index.Deep.getToDoInfo());
+				completed.push(Index.Deep.getTodoInfo());
 			}, this);
 
 			jQun.forEach(Bao.Test.DummyData.Generate.Number.random(15), function(){
-				uncompleted.push(Index.Deep.getToDoInfo());
+				uncompleted.push(Index.Deep.getTodoInfo());
 			}, this);
 
 			data = {
@@ -260,7 +260,7 @@ this.CallServer = (function(CallServer, Wait, open, allHandlers){
 
 			return data;
 		},
-		sendToDo : function(data){
+		sendTodo : function(data){
 			data = { id : Bao.Test.DummyData.Generate.Number.random(15) };
 
 			return data;
@@ -269,14 +269,14 @@ this.CallServer = (function(CallServer, Wait, open, allHandlers){
 			var ws = [];
 
 			jQun.forEach(Bao.Test.DummyData.Generate.Number.random(15), function(){
-				var toDoList = [];
+				var todoList = [];
 
 				jQun.forEach(Bao.Test.DummyData.Generate.Number.random(5), function(){
-					toDoList.push(Index.Deep.getToDoInfo());
+					todoList.push(Index.Deep.getTodoInfo());
 				});
 
 				ws.push({
-					toDoList : toDoList,
+					todoList : todoList,
 					user : Index.Common.getUser()
 				});
 			}, this);
@@ -292,6 +292,14 @@ this.CallServer = (function(CallServer, Wait, open, allHandlers){
 		},
 		getAllArchives : function(data){
 			data = Index.SPP.getProjects();
+
+			return data;
+		},
+		getArchivedProject : function(data){
+			data = {
+				project : Index.SingleProject.getSingleProject(),
+				todoList : Index.Deep.getTodoInfoList()
+			};
 
 			return data;
 		}

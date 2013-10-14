@@ -128,7 +128,7 @@ this.Deep = (function(SingleProject){
 	Deep = new StaticClass(null, "Bao.Test.DummyData.Deep");
 
 	Deep.properties({
-		getToDoInfo : function(){
+		getTodoInfo : function(){
 			return {
 				id : Number.random(100),
 				color : Number.random(6),
@@ -136,17 +136,18 @@ this.Deep = (function(SingleProject){
 				desc : String.random(30),
 				attachments : Common.getAttachments(),
 				messages : SingleProject.getMessages(),
-				endTime : new Date().getTime()
+				endTime : new Date().getTime(),
+				user : Common.getUser()
 			};
 		},
-		getToDoInfoList : function(){
-			var toDoInfoList = [];
+		getTodoInfoList : function(){
+			var todoInfoList = [];
 
 			jQun.forEach(Number.random(10), function(){
-				toDoInfoList.push(this());
-			}, this.getToDoInfo);
+				todoInfoList.push(this());
+			}, this.getTodoInfo);
 
-			return toDoInfoList;
+			return todoInfoList;
 		}
 	});
 
@@ -210,10 +211,10 @@ this.SPP = (function(SingleProject, Deep){
 			endDate.setMonth(beginDate.getMonth() + 3, 0);
 
 			for(var j = endDate.getTime();beginDate.getTime() < j;){
-				var toDos = [];
+				var todos = [];
 
 				jQun.forEach(Number.random(5), function(){
-					toDos.push({
+					todos.push({
 						title : String.random(),
 						desc : String.random(),
 						color : Number.random(6),
@@ -225,7 +226,7 @@ this.SPP = (function(SingleProject, Deep){
 
 				schedule.push({
 					time : beginDate.setDate(beginDate.getDate() + 1),
-					toDos : toDos
+					todos : todos
 				});
 			}
 

@@ -114,13 +114,13 @@
 	display : none;
 }
 
-.toDoList_content > dl:last-child {
+.todoList_content > dl:last-child {
 	margin-top : 5px;
 }
-.toDoList_content > dl > dt {
+.todoList_content > dl > dt {
 	text-align : center;
 }
-.toDoList_content > dl > dd {
+.todoList_content > dl > dd {
 	margin-top : 5px;
 }
 
@@ -143,7 +143,7 @@
 	background-color : #fff;
 }
 
-#titleBar button[action="projectDetails"] {
+#titleBar button[action="projectManagement"] {
 	border : 8px solid #f1af0f;
 	background : url(/common/image/width12.png) no-repeat 0 -180px content-box content-box;
 }

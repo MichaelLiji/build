@@ -62,10 +62,11 @@ with(this){
 		desc : "abc" // string : description of the project
 	};
 
-	this.DS_toDoInfo = {
+	this.DS_todoInfo = {
 		id : 1,
 		title : "sss",
 		desc : "aaa",
+		user : DS_user,
 		attachments : [
 			DS_attachment,
 			// ...
@@ -79,7 +80,7 @@ with(this){
 		endTime : new Date().getTime()
 	};
 
-	this.DS_scheduleToDoInfo = {
+	this.DS_scheduleTodoInfo = {
 		title : "sss",
 		desc : "sadasda",
 		color : 1, // number : from 0 to 5(0 : orange, 1 : tan, 2 : cyan, 3 : blue, 4 : henna, 5 : purple)
@@ -90,10 +91,10 @@ with(this){
 
 	this.DS_schedule = {
 		time : 111, // number : time ticks
-		toDos : [
-			DS_scheduleToDoInfo,
+		todos : [
+			DS_scheduleTodoInfo,
 			// ...
-			DS_scheduleToDoInfo
+			DS_scheduleTodoInfo
 		]
 	};
 }

@@ -238,12 +238,14 @@ this.UserIndexList = (function(OverflowPanel, UserList, panelHtml, listHtml){
 			///	</summary>
 			/// <param name="data" type="*">用户数据</param>
 			/// <param name="_avatarSize" type="string">头像大小</param>
+			var userIndexList = this;
+
 			this.innerHTML = listHtml.render(data);
 			this.set("top", "0", "css");
 
-			data.userListCollection.forEach(function(userList){
-				new UserList(_avatarSize).refresh(userList.users).appendTo(
-					this.find('li[letter="' + userList.firstLetter + '"] dd')[0]
+			data.userListCollection.forEach(function(userListData){
+				new UserList(_avatarSize).refresh(userListData.users).appendTo(
+					this.find('li[letter="' + userListData.firstLetter + '"] dd')[0]
 				);
 			}, this);
 
@@ -293,6 +295,10 @@ this.UserSelectionList = (function(UserIndexList, CallServer, Global, selectUser
 		
 			userIndexList = new UserIndexList();
 
+		this.assign({
+			userIndexList : userIndexList
+		});
+
 		this.combine(selectUsersHtml.create({ text : text }));
 
 		// 将userIndexList添加至fillEl
@@ -303,7 +309,7 @@ this.UserSelectionList = (function(UserIndexList, CallServer, Global, selectUser
 				var el = targetEl.between(">ol figure>p", this);
 
 				if(el.length > 0){
-					el.classList.toggle("selected");
+					userSelectionList.toggleUser(el.getAttribute("userid"));
 				}
 
 				e.stopPropagation();
@@ -315,7 +321,7 @@ this.UserSelectionList = (function(UserIndexList, CallServer, Global, selectUser
 				var targetEl = jQun(e.target);
 
 				if(targetEl.between(">*>button", this).length > 0){
-					var users = [];
+					var users = [], maxLength = userSelectionList.maxLength;
 
 					userIndexList.find(">ol figure>p.selected").forEach(function(element){
 						var el = jQun(element), parentEl = el.parent();
@@ -326,6 +332,11 @@ this.UserSelectionList = (function(UserIndexList, CallServer, Global, selectUser
 							name : parentEl.find(">figcaption").innerHTML
 						});
 					});
+
+					if(users.length > maxLength){
+						alert("您最多只能选择" + maxLength + "位用户！");
+						return;
+					}
 
 					clickButtonEvent.setEventAttrs({
 						users : users,
@@ -349,6 +360,17 @@ this.UserSelectionList = (function(UserIndexList, CallServer, Global, selectUser
 		});
 	};
 	UserSelectionList = new NonstaticClass(UserSelectionList, null, Panel.prototype);
+
+	UserSelectionList.properties({
+		maxLength : Infinity,
+		setMaxLength : function(length){
+			this.maxLength = length;
+		},
+		toggleUser : function(id){
+			this.userIndexList.find('>ol figure>p[userid="' + id + '"]').classList.toggle("selected");
+		},
+		userIndexList : undefined
+	});
 	
 	return UserSelectionList.constructor;
 }(
@@ -453,10 +475,16 @@ this.UserManagementList = (function(UserList, UserSelectionList, OverflowPanel, 
 					// 初始化用户选择列表
 					var userSelectionList = new UserSelectionList(text);
 
+					userList.getAllUsers().forEach(function(userId){
+						userSelectionList.toggleUser(userId);
+					});
+
 					// 添加事件
 					userSelectionList.attach({
 						clickbutton : function(e){
 							if(e.buttonType === "ok"){
+								// 清除所有用户
+								userManagementList.clearUsers();
 								// 选择后，点击确认并添加用户
 								userList.addUsers(e.users);
 							}

@@ -5,7 +5,7 @@ this.Schedule = (function(Calendar, LevelAnchorList, groupingHtml){
 			dateData : data
 		}));
 
-		new LevelAnchorList(data.toDos).appendTo(this.find("dd")[0]);
+		new LevelAnchorList(data.todos).appendTo(this.find("dd")[0]);
 	};
 	Grouping = new NonstaticClass(Grouping, null, Panel.prototype);
 
@@ -51,7 +51,7 @@ this.Schedule = (function(Calendar, LevelAnchorList, groupingHtml){
 			},
 			clickanchor : function(e){
 				e.stopPropagation();
-				Global.history.go("toDo").fill(e.anchor);
+				Global.history.go("todo").fill(e.anchor);
 			}
 		}, true);
 	};
@@ -85,7 +85,7 @@ this.Schedule = (function(Calendar, LevelAnchorList, groupingHtml){
 					return;
 				
 				asideEl.innerHTML = signHtml.render(dt);
-				asideAttr.set("todoslength", dt.toDos.length);
+				asideAttr.set("todoslength", dt.todos.length);
 			});
 		});
 
@@ -194,7 +194,7 @@ this.Schedule = (function(Calendar, LevelAnchorList, groupingHtml){
 	Control.Time.Calendar,
 	Control.List.LevelAnchorList,
 	new jQun.HTML([
-		'<li time="{dateData.time}" todoslength="{dateData.toDos.length}">',
+		'<li time="{dateData.time}" todoslength="{dateData.todos.length}">',
 			'<dt class="whiteFont">',
 				'<span class="lightBgColor smallRadius">{dateData.localeDateString}</span>',
 			'</dt>',
@@ -233,7 +233,8 @@ this.Project = (function(){
 		batchLoad.setParam("pageIndex", 0, 1);
 		batchLoad.setParam("pageSize", 10);
 		batchLoad.setParam("pageMax", -1);
-                batchLoad.setParam("othersOffset", 0);
+		batchLoad.setParam("othersOffset", 0);
+
 		this.attach({
 			beforeshow : function(){
 				project.load(true);

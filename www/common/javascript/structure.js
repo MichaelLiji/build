@@ -31,9 +31,10 @@ this.Bao = (function(Bao){
 					AboutBaoPiQi : null,
 					Account : null,
 					Archive : null,
+					ArchivedProjectView : null,
 					ProjectManagement : null,
 					QRCode : null,
-					ToDo : null
+					Todo : null
 				}),
 				Guidance : new Namespace({ // ../../directory/javascript/index/guidance.js
 					CreateFirstProject : null,
@@ -60,7 +61,7 @@ this.Bao = (function(Bao){
 					Discussion : null,
 					Header : null,
 					Self : null,
-					ToDoList : null
+					TodoList : null
 				})
 			})
 		}),
@@ -98,6 +99,7 @@ this.Bao = (function(Bao){
 					UserAnchorList : null,
 					UserIndexList : null,
 					UserList : null,
+					UserManagementList : null,
 					UserSelectionList : null
 				}),
 				Time : new Namespace().members({ // ui/control/time.js

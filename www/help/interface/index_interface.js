@@ -182,7 +182,7 @@ with(window.index_dataStructure){ // from ../dataStructure/index_dataStructure.j
 				return : null
 			}
 		*/
-		["toDoCompleted",		new Text("url?id={id}"),					""],
+		["todoCompleted",		new Text("url?id={id}"),					""],
 
 		/*
 			{
@@ -201,17 +201,17 @@ with(window.index_dataStructure){ // from ../dataStructure/index_dataStructure.j
 				}
 			}	
 		*/
-		["sendToDo",			new Text("url?title={title}&remind={remind}&desc={desc}&attachments={attachments}&date={date}"), "POST"],
+		["sendTodo",			new Text("url?title={title}&remind={remind}&desc={desc}&attachments={attachments}&date={date}"), "POST"],
 
 		/*
 			{
 				params : {
 					id : 1 // the id of todo
 				},
-				return : DS_toDoInfo
+				return : DS_todoInfo
 			}
 		*/
-		["getToDoInfo",				new Text("url?id={id}"),					"", true],
+		["getTodoInfo",				new Text("url?id={id}"),					"", true],
 
 		/*
 			{
@@ -219,13 +219,13 @@ with(window.index_dataStructure){ // from ../dataStructure/index_dataStructure.j
 					id : 1 // the id of project
 				},
 				return : [
-					DS_toDoInfo,
+					DS_todoInfo,
 					// ...
-					DS_toDoInfo
+					DS_todoInfo
 				]
 			}
 		*/
-		["getToDoList",			new Text("url?id={id}"),					"",	true],
+		["getTodoList",			new Text("url?id={id}"),					"",	true],
 
 
 		/*
@@ -256,7 +256,44 @@ with(window.index_dataStructure){ // from ../dataStructure/index_dataStructure.j
 				}
 			}
 		*/
-		["addComment",			new Text("url?text={text}&type={type}"),	""]
+		["addComment",			new Text("url?text={text}&type={type}"),	""],
+
+		/*
+			{
+				params : null,
+				return : DS_users
+			}
+		*/
+		["getSystemContacts",	"url",										"", true],
+
+		/*
+			{
+				params : null,
+				return : [
+					DS_project,
+					// ..
+					DS_project
+				]
+			}
+		*/
+		["getAllArchives",		"url",										"", true],
+
+		/*
+			{
+				params : {
+					id : 123 // number : the id of archived project
+				},
+				return : {
+					project : DS_project,
+					todoList : [
+						DS_todoInfo,
+						// ..,
+						DS_todoInfo
+					]
+				}
+			}
+		*/
+		["getArchivedProject",	new Text("url?id={id}"),					"", true]
 	]);
 }
 }(
