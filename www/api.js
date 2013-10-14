@@ -7,12 +7,44 @@
 //    d) PHONE - communication to Phonegap API
 //      1. Phone - basic class for phonegap API --- all listed below are clildren of this class
 //      2. VoiceMessage - API for voice messages
-//    e) SOCKET - web-sockets for project and todo chat
+//      3. Files - FS object
+//      4. Conatcts - API for Phone COntacts
+//    e) SOCKET - web-sockets. The main need is project and todo chat. And they are used as a basic server-browser transport
 //  ALL queries are going to local db and if server connection is esteblished then tables are sync with server
 //   - othervise data which needed to be synced is triggerred to sync table and will be synced when connection to server will be esteblished
 //
-//local DB automaticaly created but to fix something or to reload we can use Models.TEST.INIT() or other methods there -- also see last lines of this file
-//BROWSER_TEST_VERSION = true;
+// For PreProduction we use recreation local db and storage each time _init_storage and _init_db methods (see last lines of this file)
+// All the application CONFIGS are in the CONFIG section (line 45)
+// routes are saved in the CONFIG
+// to get route url from the application we use ROUTE(url)   --> line63
+//
+// ALSO for production SERVER must be private variable (var SERVER)  --> to debug we use it like GLOBAL   --> SERVER   === for production put "var"
+//
+// See helpers.js file also   ---> we use helper function from this file(like ID generation, some time functions etc)
+//
+// in each function I have commented test data --> I commented it to see what data should be ---> also is used for tests
+//
+// all new DB tables should be added to array SERVER.DB._init_tables   ---> this array is used for sync method and for DB creation
+//
+// all files downloads/uploads from/to server are go throught SERVER.PHONE.FILES.upload/dowload ---> which saves all in local FS
+//
+// to tell the front-end part the application to START we use EVENTS (find lines below in this file)
+//        var a = document.createEvent("HTMLEvents");
+//        a.initEvent("appload", true, true);
+//        document.dispatchEvent(a);
+//
+// ABOUT ORM+SYNC USAGE:
+// - basicly we just use API methods like read, insert, update etc
+// - but if we need to make query to sereral tables one afeter one etc --> we manualy sync DBs like : API._sync([tables.....]) and then make queries to this DBs like DB.select() and then DB.query(callback)
+// - when we manually make queries to DB they are saved to the array of tables needed to synced -to reset this manualy use API._clear_tables_to_sync method
+//
+//  Liji has file Callserver.js ---> see it in the / or in common/javascript (see that one which is currently used in html)
+//              this file is used to trigger Models methods ---> to get some data ;)
+//
+// PLEASE MENTION THAT SOCKET no interten method should be improved with .on("error"  ...etc   ---> in production
+
+
+
 BROWSER_TEST_VERSION = function check_dev() {
     var ua = navigator.userAgent.toLowerCase();
     if (ua.match(/(iphone|ipod|ipad)/i)) {
@@ -29,26 +61,13 @@ BROWSER_TEST_VERSION = function check_dev() {
     return device === "desktop" ? true : false;
 }();
 
-Models = {};
-//Models.UsersCounter = {
-//    read: function(callback) {
-//        callback({count: 100000, validationImage: "src"});
-////                        SOCKET.request("counter", {}, function(result) {
-////                            
-////                        });
-//    }
-//
-//};
-//console.log(Models)
+Models = {}; // Models are needed to be created in the following method. As they are used before the device ready actually. They are filled later.
+
 BROWSER_TEST_VERSION ? onDeviceReady() : document.addEventListener("deviceready", onDeviceReady, false);
 
 
 function onDeviceReady() {
-//    if (parseFloat(window.device.version) >= 7.0) {
-//          document.body.style.marginTop = "20px";
-//          // OR do whatever layout you need here, to expand a navigation bar etc
-//    }
-//    navigator.splashscreen.hide();
+
     // APPLICATION CONFIGS
     // APPLICATION CONFIGS
     // APPLICATION CONFIGS
@@ -62,10 +81,10 @@ function onDeviceReady() {
         server_url: "http://212.8.40.254:5959",
 //        server_url: "http://192.168.200.110:3000",
         audio_format: "wav",
-        root_dir: "BAO",
-        route: function(url) {
-            return  this.server_url + this.routes[url];
-        }
+        root_dir: "BAO"//,
+//        route: function(url) {
+//            return  this.server_url + this.routes[url];
+//        }
     };
 
     var ROUTE = function(url) {
@@ -78,16 +97,15 @@ function onDeviceReady() {
     var inited_fs = null;
 
     if (BROWSER_TEST_VERSION) {
-        server_start();
-
+        server_start(); // ---> FIRE-UP POINT
     } else {
 //        alert("BROWSER_TEST_VERSION WITHOUT FS");
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
             fs.root.getDirectory(CONFIG.root_dir, {create: true, exclusive: false}, function(dir) {
-
                 inited_fs = dir;
 
-                server_start();
+                server_start(); // ---> FIRE-UP POINT
+                
             }, function(err1, err2) {
                 console.log(err1);
                 console.log(err2);
@@ -99,8 +117,6 @@ function onDeviceReady() {
     }
 
     function server_start() {
-//        var a = new window.Event("applicationload");
-//        alert("adsadasdasdas")
         var a = document.createEvent("HTMLEvents");
         a.initEvent("appload", true, true);
 
@@ -116,8 +132,6 @@ function onDeviceReady() {
             // Models
             // Models
             // Models
-//            return Models = {
-//            Models = {
             Models.Contacts = {
                 // we do not save contacts to any DB (local or remote) as they are already stored in the phone
                 // so we simply query them from phone
@@ -149,11 +163,13 @@ function onDeviceReady() {
                     callback ? SOCKET.request("email", data, callback) : SOCKET.request("email", data);
                 },
                 invite_via_sms: function() {
-                    //  request to server
+                    // Kyle told not to use any stuff for sms
+                    // just basic phone send sms features --> so in HTML <a href="sms:+380978822222222"
                 }
             };
 
             Models.UsersCounter = {
+                // uncomment all the stuff below for PRODUCTION
                 read: function(callback) {
 //                    SOCKET.request("counter", {}, function(result) {
 //                        if (result) {
@@ -344,7 +360,6 @@ function onDeviceReady() {
                                 SESSION.set("user_name", result.user.name);
                                 SESSION.set("user_email", result.user.email);
                                 SESSION.set("user_pwd", result.user.pwd);
-                                console.log(result)
                                 callback(result);
 //                                    if (result.user.isNewUser == 1){
 //    //                                    alert("cool");
@@ -454,9 +469,7 @@ function onDeviceReady() {
                     });
                 },
                 record_stop: function() {
-//            alert("api.js before")
                     PHONE.VoiceMessage.record_stop();
-//            alert("api.js after")
                 },
                 record_play: function() {
                     //                        if(this._last_record_path === null){return false;}
@@ -1534,7 +1547,6 @@ function onDeviceReady() {
             // Models 
 
 
-//            window.dispatchEvent(a);
             document.dispatchEvent(a);
 
         }(
@@ -2946,10 +2958,6 @@ function onDeviceReady() {
                                         }()
 
                                         );
-
-
-
-//                                init_app(); // start wrapper functon
 
                             }
                 }

@@ -43,8 +43,8 @@ this.Global = (function(Fixed, Management, HTML, Browser, inputs, inputEvents){
 				});
 
 				// 首先要登录才会用登录用户的数据
-				// history.go("login");
-				history.go("login").login(1);
+				 history.go("login");
+//				history.go("login").login(1);
 				//history.go("archivedProjectView").fill(1);
 			},
 			login : function(e){
