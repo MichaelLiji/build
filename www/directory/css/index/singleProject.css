@@ -5,10 +5,9 @@
 
 #singleProjectHeader {
 	display : block;
-	position : relative;
+	position : static;
 	background-color : #f7f7f7;
-	z-index : 2;
-	top : 0;
+	height : 36px;
 	padding : 5px 0;
 }
 #singleProjectHeader > ul {
@@ -51,6 +50,7 @@
 
 #discussion {
 	bottom : 52px;
+	overflow : hidden;
 }
 .discussion_info > dt {
 	height : 30px;

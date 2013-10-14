@@ -114,7 +114,8 @@ this.SingleProject = (function(){
 				unread : Number.random(2) > 1 ? 0 : Number.random(),
 				desc : String.random(1000),
 				status : Number.random(4) > 2 ? 1 : 2,
-				attachments : Common.getAttachments()
+				attachments : Common.getAttachments(),
+				completeDate : new Date().setMonth(Number.random(10), Number.random(30))
 			};
 		}
 	})

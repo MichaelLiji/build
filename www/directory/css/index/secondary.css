@@ -13,9 +13,6 @@
 	padding : 0;
 	max-height : 200px;
 }
-#addProject > header > .userManagementList {
-	padding : 10px 5px;
-}
 
 #addProject textarea, #addProject input {
 	display : block;
@@ -157,4 +154,41 @@
 	background-color : #cf312e;
 	background-clip : content-box;
 	font-size : 20px;
+}
+#systemOption li[key="globalSearch"], #systemOption li[key="accountConnection"], #systemOption li[key="qrCode"] {
+	display : none;
+}
+
+
+#systemContacts {
+	padding : 10px 0;
+}
+#systemContacts > header {
+	padding : 0 20px;
+	color : #cc2c27;
+	height : 20px;
+	line-height : 20px;
+}
+#systemContacts > section {
+	margin-top : 10px;
+	position : absolute;
+	top : 30px;
+	bottom : 10px;
+	left : 0;
+	right : 0;
+	padding : 0 20px;
+	overflow : hidden;
+}
+#systemContacts > section li {
+	padding : 10px;
+}
+#systemContacts > section span {
+	font-size : 15px;
+}
+#systemContacts > section small {
+	display : block;
+	margin-top : 5px;
+}
+#titleBar button[action="systemContacts_done"] {
+	background : #cc2c27 url(/common/image/width24.png) no-repeat 7px -118px;
 }

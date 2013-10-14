@@ -260,6 +260,9 @@
 	padding-left : 24px;
 	background : url(/common/image/width24.png) 5px -442px no-repeat;
 }
+#titleBar button[action="addPartner"] {
+	background-color : #e26815;
+}
 
 
 #tab_SPP {

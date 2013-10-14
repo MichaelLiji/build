@@ -470,7 +470,7 @@ this.ChatInput = (function(Global, messageCompletedEvent, reader){
 				}
 
 				if(targetEl.between(">p>input", this).length > 0){
-					targetEl.focus();
+					//targetEl.focus();
 					return;
 				}
 			},

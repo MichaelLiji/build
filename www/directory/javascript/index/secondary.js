@@ -204,9 +204,39 @@ this.SystemOption = (function(AnchorList, anchorData){
 		{ key : "account", title : "我的账户" },
 		{ key : "accountConnection", title : "连接账户" },
 		{ key : "qrCode", title : "我的二维码" },
-		{ key : "file", title : "查看归档" },
+		{ key : "archive", title : "查看归档" },
 		{ key : "aboutBaoPiQi", title : "关于暴脾气" }
 	]
+));
+
+this.SystemContacts = (function(OverflowPanel, Global){
+	function SystemContacts(selector, contactsHtml){
+		var systemContacts = this, overflowPanel = new OverflowPanel(this.find(">section>ul"));
+		
+		this.attach({
+			beforeshow : function(){
+				Global.titleBar.find('button[action="systemContacts_done"]').onuserclick = function(){
+					alert("done");
+				};
+			}
+		});
+
+		CallServer.open("getSystemContacts", null, function(contacts){
+			overflowPanel.innerHTML = contactsHtml.render({ contacts : contacts });
+			overflowPanel.setTop(0);
+		});
+	};
+	SystemContacts = new NonstaticClass(SystemContacts, "Bao.Page.Index.Secondary.SystemContacts", PagePanel.prototype);
+
+	SystemContacts.override({
+		title : "邀请朋友",
+		tools : [{ urlname : "javascript:void(0);", action : "systemContacts_done" }]
+	});
+
+	return SystemContacts.constructor;
+}(
+	Bao.API.DOM.OverflowPanel,
+	Bao.Global
 ));
 
 Secondary.members(this);

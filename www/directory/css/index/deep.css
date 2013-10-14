@@ -435,3 +435,44 @@
 #workStream li > figure {
 	
 }
+
+#projectManagement {
+	padding : 10px;
+}
+#projectManagement > *:not(:first-child) {
+	margin-top : 10px;
+}
+#projectManagement > header {
+	max-height : 200px;
+	overflow : hidden;
+}
+#projectManagement > footer > button {
+	display : block;
+	width : 100%;
+	height : 42px;
+	font-size : 18px;
+}
+#projectManagement > footer > button:first-child {
+	background-color : transparent;
+	border : 1px solid #f1ba95;
+	color : #e16615;
+}
+#projectManagement > footer > button:last-child {
+	margin-top : 5px;
+	background-color : #ffc000;
+	border : 0 none;
+}
+#titleBar button[action="projectManagement_done"] {
+	background : #ffc000 url(/common/image/width24.png) no-repeat 7px -118px
+}
+
+#archive .anchorList > ul {
+	border-radius : 0;
+}
+#archive .anchorList > ul, #archive .anchorList li {
+	border-left : 0 none;
+	border-right : 0 none;
+}
+#archive .anchorList li {
+	background-image : -webkit-linear-gradient(left, transparent, transparent 10px, #fff 10px, #fff);
+}

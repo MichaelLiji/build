@@ -751,38 +751,49 @@ function onDeviceReady() {
                         // get ALL projects page
                         if ("pageIndex" in params && "pageSize" in params) {
                             var result = [], logged_user = SESSION.get("user_id");
+                            console.log(params)
+                            params.othersOffset = (params.othersOffset ? params.othersOffset : 0);
                             API._sync(["xiao_projects", "xiao_project_partners", "xiao_users", "xiao_project_comments", "xiao_companies"], function() {
-                                DB.select("p.id, p.level, p.title, p.color, p.creator_id, p.creationTime, p.descr, u.id as uid, u.name, u.pinyin, u.avatar, u.company_id, u.position, u.phoneNum, u.email, u.adress, u.isNewUser, u.QRCode, c.title as company, c.companyAdress, c.creator_id as company_creator_id");
+                                // get all projects with ME
+                                DB.select("p.id, p.level, p.title, p.color, p.creator_id, p.creationTime, p.descr, u.id as uid, u.name, u.pinyin, u.avatar, u.company_id, u.position, u.phoneNum, u.email, u.adress, u.isNewUser, u.QRCode, c.title as company, c.companyAdress, c.creator_id as company_creator_id, 1 as status");
                                 DB.from("xiao_project_partners AS pp");
 //                                DB.from("xiao_projects AS p");
                                 DB.join("xiao_projects AS p", "pp.project_id = p.id");
                                 DB.join("xiao_users AS u", "u.id = p.creator_id");
                                 DB.join("xiao_companies AS c", "u.company_id = c.id");
                                 DB.where('pp.user_id = "' + SESSION.get("user_id") + '"');
+                                DB.group_by('p.id');
                                 DB.limit(params.pageSize, (params.pageIndex - 1) * params.pageSize);
 
                                 DB.query(function(projects) {
-                                    console.log("projects")
-                                    console.log(projects)
-                                    projects.forEach(function(pp) {
-                                        pp.status = 1;
-                                    });
-                                    if (params.pageSize - projects.length > 0) {
-                                        console.log("aassa")
-                                        DB.select("p.id, p.level, p.title, p.color, p.creator_id, p.creationTime, p.descr, u.id as uid, u.name, u.pinyin, u.avatar, u.company_id, u.position, u.phoneNum, u.email, u.adress, u.isNewUser, u.QRCode, c.title as company, c.companyAdress, c.creator_id as company_creator_id");
-        //                                    DB.from("xiao_project_partners AS pp");
-                                        DB.from("xiao_projects AS p");
-        //                                    DB.join("xiao_projects AS p", "pp.project_id = p.id");
+//                                    console.log("projects")
+//                                    console.log(projects)
+//                                    projects.forEach(function(pp) {
+//                                        pp.status = 1;
+//                                    });
+                                    var others_limit = params.pageSize - projects.length;
+                                    if (others_limit > 0) {
+                                        
+                                        //if project length < page size(8) 
+                                        // then GET also some projects without me
+                                        DB.select("p.id, p.level, p.title, p.color, p.creator_id, p.creationTime, p.descr, u.id as uid, u.name, u.pinyin, u.avatar, u.company_id, u.position, u.phoneNum, u.email, u.adress, u.isNewUser, u.QRCode, c.title as company, c.companyAdress, c.creator_id as company_creator_id, 2 as status");
+                                        DB.from("xiao_project_partners AS pp");
+//                                        DB.from("xiao_projects AS p");
+                                        DB.join("xiao_projects AS p", "pp.project_id = p.id");
                                         DB.join("xiao_users AS u", "u.id = p.creator_id");
                                         DB.join("xiao_companies AS c", "u.company_id = c.id");
-        //                                    DB.where('pp.user_id = "' + SESSION.get("user_id") + '"');
-                                        DB.limit(params.pageSize - projects.length, (params.pageIndex - 1) * params.pageSize);
+                                        DB.group_by('p.id');
+                                        DB.having('pp.user_id <> "' + SESSION.get("user_id") + '"');
+//                                        DB.limit(params.pageSize - projects.length, (params.pageIndex - 1) * params.pageSize);
+                                        DB.limit(others_limit, params.othersOffset);
                                         DB.query(function(projects_others) {
-                                            console.log(projects_others)
-                                            projects_others.forEach(function(pp) {
-                                                pp.status = 2;
-                                            });
-                                            projects.concat(projects_others); // add not status 2 project to the end
+//                                            console.log(projects_others)
+//                                            projects_others.forEach(function(pp) {
+//                                                pp.status = 2;
+//                                            });
+                                            projects = projects.concat(projects_others); // add not status 2 project to the end
+//                                            console.log(projects)
+                                            
                                             if(projects.length > 0){
                                                 
                                                 projects.forEach(function(pr) {
@@ -805,7 +816,7 @@ function onDeviceReady() {
                                                         DB.from("xiao_project_comments AS pc");
                                                         DB.where('pc.project_id ="' + pr.id + '"');
                                                         DB.where('pc.read ="0"');
-                                                        DB.group_by('pc.read');
+//                                                        DB.group_by('pc.read');
 
                                                         DB.col(function(unread) {
                                                             result.push({
@@ -849,7 +860,8 @@ function onDeviceReady() {
                                                                             projects: result,
                                                                             pageIndex: params.pageIndex,
                                                                             pageSize: params.pageSize,
-                                                                            createProjects: createProjects,
+//                                                                            createProjects: createProjects,
+                                                                            othersOffset: params.othersOffset + others_limit,
                                                                             emptyFolders: params.pageSize - projects.length
                                                                         });
                                                                     });
@@ -859,6 +871,7 @@ function onDeviceReady() {
                                                                         projects: result,
                                                                         pageIndex: params.pageIndex,
                                                                         pageSize: params.pageSize,
+                                                                        othersOffset: params.othersOffset + others_limit,
                                                                         emptyFolders: params.pageSize - projects.length
                                                                     });
                                                                 }
@@ -879,7 +892,8 @@ function onDeviceReady() {
                                                         projects: [],
                                                         pageIndex: params.pageIndex,
                                                         pageSize: params.pageSize,
-                                                        createProjects: createProjects,
+//                                                        createProjects: createProjects,
+                                                        othersOffset: params.othersOffset + others_limit,
                                                         emptyFolders: params.pageSize - projects.length
                                                     });
                                                 });
@@ -897,6 +911,7 @@ function onDeviceReady() {
                                             DB.join("xiao_users AS u", "u.id = p.creator_id");
                                             DB.join("xiao_companies AS c", "u.company_id = c.id");
                                             DB.where('p.id ="' + pr.id + '"');
+//                                            DB.group_by('p.id');
 
                                             DB.query(function(partners) {
 //                                                var status = 2;
@@ -909,7 +924,7 @@ function onDeviceReady() {
                                                 DB.from("xiao_project_comments AS pc");
                                                 DB.where('pc.project_id ="' + pr.id + '"');
                                                 DB.where('pc.read ="0"');
-                                                DB.group_by('pc.read');
+//                                                DB.group_by('pc.read');
 
                                                 DB.col(function(unread) {
                                                     result.push({
@@ -953,7 +968,7 @@ function onDeviceReady() {
                                                                     projects: result,
                                                                     pageIndex: params.pageIndex,
                                                                     pageSize: params.pageSize,
-                                                                    createProjects: createProjects,
+//                                                                    createProjects: createProjects,
                                                                     emptyFolders: params.pageSize - projects.length
                                                                 });
                                                             });
@@ -1463,8 +1478,11 @@ function onDeviceReady() {
                                                             return this._sql += ' ORDER BY ' + order;
                                                         },
                                                         group_by: function(group) {
-                                                            return this._sql += ' ORDER BY ' + group;
+                                                            return this._sql += ' GROUP BY ' + group;
                                                         },
+                                                        having: function(having){
+                                                            return this._sql += ' HAVING ' + having;
+                                                        },            
                                                         limit: function(limit, offset) {
                                                             return this._sql += ' LIMIT ' + limit + (offset ? (" OFFSET " + offset) : "");
                                                         },
@@ -1495,7 +1513,7 @@ function onDeviceReady() {
                                                                 }
 //                                                                console.log(db_result);
 //                                                                if (db_result.length == 0 && !(sql.match(/sync/)))
-                                                                    console.log(sql);
+//                                                                    console.log(sql);
 
                                                                 return (callback ? callback(db_result) : true);
                                                             }

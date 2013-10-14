@@ -46,7 +46,7 @@ this.AnchorList = (function(Global, anchorListHtml, clickAnchorEvent){
 										'<span>{?~data.title}</span>',
 										'<small>{?~data.time}</small>',
 									'</dt>',
-									'<dd>{?~data.desc}</dd>',
+									'<dd class="grayFont">{?~data.desc}</dd>',
 								'</dl>',
 							'</aside>',
 							'<p>',

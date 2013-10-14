@@ -248,8 +248,9 @@ this.OverflowPanel = (function(Panel, IntervalTimer, setTopEvent, leaveborder){
 		this.assign({
 			panelStyle : panelStyle
 		});
-
+		
 		this.set("overflow", "", "attr");
+		
 		panelStyle.position = "relative";
 
 		this.attach({
@@ -259,7 +260,7 @@ this.OverflowPanel = (function(Panel, IntervalTimer, setTopEvent, leaveborder){
 			},
 			continuousgesture : function(e){
 				var top = overflowPanel.getTop() + e.gestureOffsetY;
-
+				
 				if(e.isLastOfGestureType){
 					isLeaveborder = false;
 
@@ -316,7 +317,7 @@ this.OverflowPanel = (function(Panel, IntervalTimer, setTopEvent, leaveborder){
 		panelStyle : undefined,
 		setTop : function(top){
 			this.panelStyle.top = Math.round(top) + "px";
-
+			
 			setTopEvent.setEventAttrs({
 				overflowPanel : this
 			});

@@ -48,13 +48,16 @@ this.CallServer = (function(CallServer, Wait, open, allHandlers){
 		["myInformation",		"url",										"", true],
 		["praise",				new Text("url?messageId={messageId}"),		""],
 		["register",			new Text("url?name={name}&pwd={pwd}&email={email}&validation={validation}"),	""],
-		["getToDoInfo",				new Text("url?id={id}"),					"", true],
+		["getToDo",				new Text("url?id={id}"),					"", true],
 		["getToDoList",			new Text("url?id={id}"),					"",	true],
 		["sendToDo",			new Text("url?title={title}&remind={remind}&desc={desc}&attachments={attachments}&date={date}"), "POST"],
 		["toDoCompleted",		new Text("url?id={id}"),					""],
 		["getWorkStream",		new Text("url?id={id}"),					"", true],
 		["addComment",			new Text("url?text={text}&type={type}&projectId={projectId}&attachment={attachment}"),	""],
-		["createGroup",		new Text("url?users=[users]&name={name}"),	""]
+		["createGroup",			new Text("url?users=[users]&name={name}"),	""],
+		// 以下是还没有写到interface里的
+		["getSystemContacts",	"url",										"", true],
+		["getAllArchives",		"url",										"", true]
 	], allHandlers);
 
 	return CallServer;
@@ -234,7 +237,7 @@ this.CallServer = (function(CallServer, Wait, open, allHandlers){
 
 			return data;
 		},
-		getToDoInfo : function(data){
+		getToDo : function(data){
 			data = Index.Deep.getToDoInfo();
 
 			return data;
@@ -279,6 +282,16 @@ this.CallServer = (function(CallServer, Wait, open, allHandlers){
 			}, this);
 
 			data = ws;
+
+			return data;
+		},
+		getSystemContacts : function(data){
+			data = Index.Common.getUsers();
+
+			return data;
+		},
+		getAllArchives : function(data){
+			data = Index.SPP.getProjects();
 
 			return data;
 		}

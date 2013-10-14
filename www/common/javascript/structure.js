@@ -30,6 +30,7 @@ this.Bao = (function(Bao){
 				Deep : new Namespace({ // ../../directoy/javascript/index/deep.js
 					AboutBaoPiQi : null,
 					Account : null,
+					Archive : null,
 					ProjectManagement : null,
 					QRCode : null,
 					ToDo : null
@@ -52,6 +53,7 @@ this.Bao = (function(Bao){
 					AddProject : null,
 					BusinessCard : null,
 					SingleProject : null,
+					SystemContacts : null,
 					SystemOption : null
 				}),
 				SingleProject : new Namespace({ // ../../directoy/javascript/index/singleProject.js

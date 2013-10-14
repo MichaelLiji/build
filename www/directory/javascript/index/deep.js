@@ -477,19 +477,101 @@ this.SendToDo = (function(Validation, Global, validationHandle){
 	}
 ));
 
-this.ProjectManagement = (function(UserManagementList, AnchorList, anchorListData){
-	function ProjectManagement(selector){
-		var anchorList = new AnchorList(anchorListData);
+this.Archive = (function(AnchorList, OverflowPanel, Global){
+	function Archive(selector){
+		var archive = this, overflowPanel = new OverflowPanel(this.find(">section")[0]);
 
-		new UserManagementList("选择成员").appendTo(this.find(">header")[0]);
-		anchorList.appendTo(this.find(">section")[0]);
-		window.as = anchorList;
+		this.attach({
+			clickanchor : function(e){
+				e.stopPropagation();
+				Global.history.go("ArchiveDetail").fill(e.anchor);
+			}
+		}, true);
+
+		CallServer.open("getAllArchives", null, function(archives){
+			archives.forEach(function(archive){
+				archive.key = archive.id;
+				archive.desc = new Date(archive.completeDate).toLocaleDateString();
+			});
+			
+			overflowPanel.innerHTML = "";
+			new AnchorList(archives, true).appendTo(overflowPanel[0]);
+
+			archives.forEach(function(archive){
+				overflowPanel.find('li[key="' + archive.id + '"]').classList.add("projectColor_" + archive.color);
+			});
+		});
+	};
+	Archive = new NonstaticClass(Archive, "Bao.Page.Index.Deep.Archive", PagePanel.prototype);
+
+	Archive.override({
+		title : "归档"
+	});
+
+	return Archive.constructor;
+}(
+	Bao.UI.Control.List.AnchorList,
+	Bao.API.DOM.OverflowPanel,
+	Bao.Global
+));
+
+this.ProjectManagement = (function(UserManagementList, AnchorList, Global, anchorListData){
+	function ProjectManagement(selector){
+		var projectManagement = this,
+		
+			anchorList = new AnchorList(anchorListData),
+			
+			userManagementList = new UserManagementList("选择成员").appendTo(this.find(">header")[0]);
+
+		this.assign({
+			userManagementList : userManagementList
+		});
+
+		this.attach({
+			beforeshow : function(){
+				Global.titleBar.find('button[action="projectManagement_done"]').onuserclick = function(){
+					CallServer.open("editProjectInfo", {
+						userIds : userManagementList.userList.getAllUsers()
+					}, function(){
+						Global.history.go("singleProject").fill(projectManagement.id);
+					});
+				};
+			},
+			userclick : function(e, targetEl){
+				if(targetEl.between(">footer>button:first-child", this).length > 0){
+					if(confirm("确定将此项目归档吗？")){
+						CallServer.open("archiveProject", {
+							id : projectManagement.id
+						}, function(){
+							// Global.history.go("archive");
+						});
+					}
+
+					return;
+				}
+
+				if(targetEl.between(">footer>button:last-child", this).length > 0){
+					if(confirm("确定将此项目删除吗？")){
+						CallServer.open("removeProject", {
+							id : projectManagement.id
+						}, function(){
+							Global.history.go("project");
+						});
+					}
+
+					return;
+				}
+			}
+		});
+
 		anchorList.attach({
 			clickanchor : function(e){
 				e.stopPropagation();
-				console.log(e);
+				Global.history.go(e.anchor);
 			}
 		}, true);
+
+		anchorList.appendTo(this.find(">section")[0]);
 	};
 	ProjectManagement = new NonstaticClass(ProjectManagement, "Bao.Page.Index.Deep.ProjectManagement", PagePanel.prototype);
 
@@ -500,17 +582,23 @@ this.ProjectManagement = (function(UserManagementList, AnchorList, anchorListDat
 
 	ProjectManagement.properties({
 		fill : function(id){
+			var projectManagement = this;
+
 			CallServer.open("getSingleProject", { id : id }, function(data){
-				console.log(data);
+				projectManagement.userManagementList.userList.addUsers(data.users);
+
+				Global.titleBar.resetTitle("项目管理：" + data.title);
 			});
 		},
-		id : -1
+		id : -1,
+		userManagementList : undefined
 	});
 
 	return ProjectManagement.constructor;
 }(
 	Bao.UI.Control.List.UserManagementList,
 	Bao.UI.Control.List.AnchorList,
+	Bao.Global,
 	// anchorListData
 	[
 		{ title : "发送 To Do", key : "sendToDo" } //,

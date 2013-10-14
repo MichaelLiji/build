@@ -23,8 +23,10 @@ this.Schedule = (function(Calendar, LevelAnchorList, groupingHtml){
 				var date = new Date(dateTable.getFocused().get("time", "attr") - 0),
 				
 					top = scheduleContent.get("top", "css").split("px").join("") - 0 || 0;
-
+					
+				// 如果top小于0，说明滚动区域上方还有一部分未显示
 				if(top < 0){
+					// 如果高度加上top小于父容器高度，说明离开底部
 					if(scheduleContent.height() + top <= scheduleContent.parent().height()){
 						date.setDate(date.getDate() + 1);
 					}
@@ -33,19 +35,25 @@ this.Schedule = (function(Calendar, LevelAnchorList, groupingHtml){
 
 							pointEl = jQun(document.elementFromPoint(rect.left + scheduleContent.width() / 2, rect.top + 20)).between(">li", this);
 
-						if(pointEl[0] !== topLi){
+						// 如果对应日期元素切换（即日期切换），而且是向上滑动
+						if(pointEl[0] !== topLi && e.gestureOffsetY < 0){
 							topLi = pointEl[0];
 							date = new Date(pointEl.get("time", "attr") - 0);
 						}
 					}
 				}
+				// 如果滚动区域上方已经全部显示
 				else {
 					date.setDate(date.getDate() - 1);
 				}
 				
 				dateTable.focus(date);
+			},
+			clickanchor : function(e){
+				e.stopPropagation();
+				Global.history.go("toDo").fill(e.anchor);
 			}
-		});
+		}, true);
 	};
 	ScheduleContent = new NonstaticClass(ScheduleContent, null, OverflowPanel.prototype);
 
@@ -225,7 +233,7 @@ this.Project = (function(){
 		batchLoad.setParam("pageIndex", 0, 1);
 		batchLoad.setParam("pageSize", 10);
 		batchLoad.setParam("pageMax", -1);
-
+                batchLoad.setParam("othersOffset", 0);
 		this.attach({
 			beforeshow : function(){
 				project.load(true);
@@ -401,6 +409,10 @@ this.Partner = (function(Navigator, UserIndexList, InputSelectionList, Validatio
 			},
 			beforeshow : function(){
 				partner.load();
+
+				Global.titleBar.find('button[action="addPartner"]').onuserclick = function(){
+					Global.history.go("systemContacts");
+				};
 			}
 		});
 
@@ -410,7 +422,11 @@ this.Partner = (function(Navigator, UserIndexList, InputSelectionList, Validatio
 
 	Partner.override({
 		hideBackButton : true,
-		title : "MY PARTNERS 拍档"
+		title : "MY PARTNERS 拍档",
+		tools : [
+			{ username : "addPartner", action : "addPartner" },
+			{ urlname : "systemOption", action : "set" }
+		]
 	});
 
 	Partner.properties({

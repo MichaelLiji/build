@@ -99,6 +99,7 @@
                 Mdls.User.login(params, complete);
             },
             getProjects: function(params, complete) {
+                console.log(params)
                 Mdls.Project.read(params, function(data){
                     console.log("getProjects data")
                     console.log(data);
@@ -158,6 +159,12 @@
 //                    console.log(data);
 //                    complete(data);
 //                });
+            },
+            getAllArchives: function(params, complete){
+                
+                console.log(params);
+                
+                return []
             }
         });
 

@@ -8,13 +8,16 @@ this.Loader = (function(Storage, Index, HTML){
 			return new Index.Deep.AboutBaoPiQi("#aboutBaoPiQi");
 		},
 		account : function(){
-			return new Index.Deep.Account("#account", new HTML("account_html", true));
+			return new Index.Deep.Account("#account", new HTML(jQun("#account_html")));
 		},
 		addProject : function(){
 			return new Index.Secondary.AddProject("#addProject");
 		},
+		archive : function(){
+			return new Index.Deep.Archive("#archive");
+		},
 		businessCard : function(){
-			return new Index.Secondary.BusinessCard("#businessCard", new HTML("businessCard_html", true));
+			return new Index.Secondary.BusinessCard("#businessCard", new HTML(jQun("#businessCard_html")));
 		},
 		createFirstProject : function(){
 			this.load("guidance");
@@ -22,17 +25,17 @@ this.Loader = (function(Storage, Index, HTML){
 		},
 		discussion : function(){
 			this.load("singleProject");
-			return new Index.SingleProject.Discussion("#discussion", new HTML("discussion_info_html", true));
+			return new Index.SingleProject.Discussion("#discussion", new HTML(jQun("#discussion_info_html")));
 		},
 		globalSearch : function(){
-			return new Index.Deep.GlobalSearch("#globalSearch", new HTML("globalSearch_group_html", true));
+			return new Index.Deep.GlobalSearch("#globalSearch", new HTML(jQun("#globalSearch_group_html")));
 		},
 		guidance : function(){
 			return new Index.Guidance.Self("#guidance");
 		},
 		invitation : function(){
 			this.load("guidance");
-			return new Index.Guidance.Invitation("#invitation", new HTML("invitation_html", true));
+			return new Index.Guidance.Invitation("#invitation", new HTML(jQun("#invitation_html")));
 		},
 		load : function(name){
 			var pagePanel = this.pageStorage.get(name);
@@ -50,24 +53,24 @@ this.Loader = (function(Storage, Index, HTML){
 		pageStorage : new Storage(),
 		partner : function(){
 			this.load("spp");
-			return new Index.SPP.Partner("#partner", new HTML("spp_partnerGroups_html", true));
+			return new Index.SPP.Partner("#partner", new HTML(jQun("#spp_partnerGroups_html")));
 		},
 		project : function(){
 			this.load("spp");
-			return new Index.SPP.Project("#project", new HTML("spp_project_html", true));
+			return new Index.SPP.Project("#project", new HTML(jQun("#spp_project_html")));
 		},
 		projectManagement : function(){
 			return new Index.Deep.ProjectManagement("#projectManagement");
 		},
 		qrCode : function(){
-			return new Index.Deep.QRCode("#QRCode", new HTML("QRCode_html", true));
+			return new Index.Deep.QRCode("#QRCode", new HTML(jQun("#QRCode_html")));
 		},
 		schedule : function(){
 			this.load("spp");
-			return new Index.SPP.Schedule("#schedule", new HTML("spp_scheduleSign_html", true));
+			return new Index.SPP.Schedule("#schedule", new HTML(jQun("#spp_scheduleSign_html")));
 		},
 		sendToDo : function(){
-			return new Index.Deep.SendToDo("#sendToDo", new HTML("sendToDo_info_html", true));
+			return new Index.Deep.SendToDo("#sendToDo", new HTML(jQun("#sendToDo_info_html")));
 		},
 		spp : function(){
 			return new Index.SPP.Self("#SPP");
@@ -75,11 +78,14 @@ this.Loader = (function(Storage, Index, HTML){
 		singleProject : function(){
 			return new Index.SingleProject.Self("#singleProject");
 		},
+		systemContacts : function(){
+			return new Index.Secondary.SystemContacts("#systemContacts", new HTML(jQun("#systemContacts_html")));
+		},
 		systemOption : function(){
 			return new Index.Secondary.SystemOption("#systemOption");
 		},
 		toDo : function(){
-			return new Index.Deep.ToDo("#toDo", new HTML("toDo_info_html", true));
+			return new Index.Deep.ToDo("#toDo", new HTML(jQun("#toDo_info_html")));
 		},
 		toDoList : function(){
 			this.load("singleProject");
@@ -87,7 +93,7 @@ this.Loader = (function(Storage, Index, HTML){
 		},
 		workStream : function(){
 			this.load("singleProject");
-			return new Index.SingleProject.WorkStream("#workStream", new HTML("workStream_info_html", true));
+			return new Index.SingleProject.WorkStream("#workStream", new HTML(jQun("#workStream_info_html")));
 		}
 	});
 
