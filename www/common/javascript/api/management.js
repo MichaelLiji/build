@@ -151,7 +151,7 @@ this.History = (function(List, Loader, redirectEvent){
 				}
 			}
 
-			var panel, old;
+			var panel, old, opener;
 
 			redirectEvent.trigger(window);
 
@@ -168,8 +168,18 @@ this.History = (function(List, Loader, redirectEvent){
 				panel.show();
 			}
 
+			if(old){
+				var o = old.opener;
+
+				opener = o === name ? this.getNameByIndex(lastIdx - 1) : o;
+			}
+			else {
+				opener = this.getNameByIndex(lastIdx);
+			}
+
 			this.push({
 				self : name,
+				// opener : _isBack ? (old ? old.name : null) : this.getNameByIndex(lastIdx)
 				opener : _isBack ? (old ? old.opener : null) : this.getNameByIndex(lastIdx)
 			});
 			return panel;

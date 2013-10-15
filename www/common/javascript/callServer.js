@@ -239,18 +239,18 @@
                             return {
                                 schedules: data
                             };
+                        },
+                        getMessages : function(data) {
+                            var id = Bao.Global.loginUser.id;
+
+                            data.forEach(function(dt) {
+                                var poster = dt.poster;
+
+                                poster.isLoginUser = poster.id == id;
+                            });
+
+                            return data;
                         }
-//                        getMessages: function(data) {
-//                            var id = Bao.Global.loginUser.id;
-//
-//                            data.forEach(function(dt) {
-//                                var poster = dt.poster;
-//
-//                                poster.isLoginUser = poster.id === id;
-//                            });
-//
-//                            return data;
-//                        }
                     }
             ));
 

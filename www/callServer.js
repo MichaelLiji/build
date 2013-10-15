@@ -56,10 +56,15 @@
                         break;
                     case "todo":
 //                        Mdls.TodoChat.chat_init(params.id, complete)
+                        Mdls.TodoChat.chat_init(params.id, function(data){
+                            console.log(data);
+                            complete(data);
+                        });
                         break;
                 }
             },
             addComment: function(params, complete) {
+//                alert("project")
                 console.log(params)
                 var _params = {};
                 switch (params.type) {
@@ -102,6 +107,7 @@
                         };
                         break;
                     case "voice":
+                        console.log("TODO-VOICE")
                         console.log(params)
                         _params = {
                             todo_id: params.todoId,

@@ -57,7 +57,9 @@ this.CallServer = (function(CallServer, Wait, open, allHandlers){
 		["createGroup",			new Text("url?users=[users]&name={name}"),	""],
 		["getSystemContacts",	"url",										"", true],
 		["getAllArchives",		"url",										"", true],
-		["getArchivedProject",	new Text("url?id={id}"),					"", true]
+		["getArchivedProject",	new Text("url?id={id}"),					"", true],
+
+		["addCommentForTodo",			new Text("url?text={text}&type={type}&projectId={projectId}"),	""]
 	], allHandlers);
 
 	return CallServer;
@@ -304,6 +306,11 @@ this.CallServer = (function(CallServer, Wait, open, allHandlers){
 			return data;
 		},
 		addComment : function(data){
+			data = { id : Bao.Test.DummyData.Generate.Number.random(99999) };
+
+			return data;
+		},
+		addCommentForTodo : function(data){
 			data = { id : Bao.Test.DummyData.Generate.Number.random(99999) };
 
 			return data;

@@ -72,11 +72,6 @@ with(this){
 			// ...
 			DS_attachment
 		],
-		messages : [
-			DS_message,
-			// ...
-			DS_message
-		],
 		endTime : new Date().getTime()
 	};
 

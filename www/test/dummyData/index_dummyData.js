@@ -135,7 +135,6 @@ this.Deep = (function(SingleProject){
 				title : String.random(),
 				desc : String.random(30),
 				attachments : Common.getAttachments(),
-				messages : SingleProject.getMessages(),
 				endTime : new Date().getTime(),
 				user : Common.getUser()
 			};

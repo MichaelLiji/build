@@ -272,7 +272,7 @@ this.AboutBaoPiQi = (function(){
 	return AboutBaoPiQi.constructor;
 }());
 
-this.Todo = (function(ChatList, OverflowPanel, Global){
+this.Todo = (function(ChatList, OverflowPanel, Global, Voice){
 	function Todo(selector, infoHtml){
 		var todo = this, chatList = new ChatList(), overflowPanel = new OverflowPanel(this.find(">section")[0]);
 
@@ -307,7 +307,7 @@ this.Todo = (function(ChatList, OverflowPanel, Global){
 						if(type !== "voice")
 							return;
 
-
+						e.message.attachment.resetId(data.id);
 					}
 				);
 			},
@@ -321,6 +321,9 @@ this.Todo = (function(ChatList, OverflowPanel, Global){
 				}, function(){
 					message.addPraise(loginUser);
 				})
+			},
+			clickplay : function(e){
+				Voice.play(e.voiceId, "todo");
 			}
 		});
 
@@ -356,9 +359,11 @@ this.Todo = (function(ChatList, OverflowPanel, Global){
 
 				todo.find(">section>header").innerHTML = todo.infoHtml.render(data);
 
-				data.messages.forEach(function(msg){
-					this.appendMessageToGroup(msg);
-				}, chatListContent);
+				CallServer.open("getMessages", { id : id, type : "todo" }, function(messages){
+					messages.forEach(function(msg){
+						this.appendMessageToGroup(msg);
+					}, chatListContent);
+				});
 			});
 
 			this.id = id;
@@ -372,7 +377,8 @@ this.Todo = (function(ChatList, OverflowPanel, Global){
 }(
 	Bao.UI.Control.Chat.ChatList,
 	Bao.API.DOM.OverflowPanel,
-	Bao.Global
+	Bao.Global,
+	Bao.API.Media.Voice
 ));
 
 this.SendTodo = (function(UserManagementList, Validation, Global, validationHandle){

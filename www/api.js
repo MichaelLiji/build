@@ -487,7 +487,7 @@ function onDeviceReady() {
                     //                        if(this._last_record_path === null){return false;}
                     PHONE.VoiceMessage.record_play(this._last_record_path);
                 },
-                play: function(id) {
+                play: function(id, type) {
                     var _this = this;
                     if (id == this._last_play_id && this._last_play_path != null) {
                         console.log("PLAY SAME FILE!!!");
@@ -496,32 +496,71 @@ function onDeviceReady() {
                     } else {
                         // if new media file
                         // we check db if this file exists in local fs
-                        DB.select('pc.id, pc.local_path, pc.server_path');
-                        DB.from('xiao_project_comments AS pc');
-                        DB.where('pc.id="' + id + '"');
-                        DB.row(function(data) {
-                            console.log("PLAY data");
-                            console.log(data);
-                            if (data.local_path != "" && data.local_path != undefined) {
-                                console.log("file exists");
-                                // if this file exists in local db then there is a local path in the db
-                                PHONE.VoiceMessage.play(data['local_path']);
-                                _this._last_play_path = data.local_path;
-                            } else {
-                                console.log("no file");
-                                PHONE.VoiceMessage.download(data['server_path'], function(new_local_path) {
-                                    console.log("new_local_path");
-                                    console.log(new_local_path);
-                                    PHONE.VoiceMessage.play(new_local_path);
-                                    _this._last_play_path = new_local_path;
-                                    DB.update("xiao_project_comments", {local_path: new_local_path}, 'id="' + id + '"');
+                        if(type != "project" && type != "todo"){alert("no type");return;}
+//                        switch (type) {
+//                            case "project":
+                                DB.select('pc.id, pc.local_path, pc.server_path');
+                                DB.from('xiao_'+type+'_comments AS pc');
+                                DB.where('pc.id="' + id + '"');
+                                DB.row(function(data) {
+                                    console.log("PLAY data");
+                                    console.log(data);
+                                    if (data.local_path != "" && data.local_path != undefined) {
+                                        console.log("file exists");
+                                        // if this file exists in local db then there is a local path in the db
+                                        PHONE.VoiceMessage.play(data['local_path']);
+                                        _this._last_play_path = data.local_path;
+                                    } else {
+                                        console.log("no file");
+                                        PHONE.VoiceMessage.download(data['server_path'], function(new_local_path) {
+                                            console.log("new_local_path");
+                                            console.log(new_local_path);
+                                            PHONE.VoiceMessage.play(new_local_path);
+                                            _this._last_play_path = new_local_path;
+                                            DB.update('xiao_'+type+'_comments', {local_path: new_local_path}, 'id="' + id + '"');
+                                        });
+                                        // if local_path is empty we need to download file from server
+                                        // and then play
+        //                                        PHONE.VoiceMessage.play(_this._last_play_path);
+                                    }
                                 });
-                                // if local_path is empty we need to download file from server
-                                // and then play
-//                                        PHONE.VoiceMessage.play(_this._last_play_path);
-                            }
-                        });
-                        API._clear_tables_to_sync();
+                                API._clear_tables_to_sync();
+//                                break;
+//                            
+//                            case "todo":
+//                                DB.select('pc.id, pc.local_path, pc.server_path');
+//                                DB.from('xiao_project_comments AS pc');
+//                                DB.where('pc.id="' + id + '"');
+//                                DB.row(function(data) {
+//                                    console.log("PLAY data");
+//                                    console.log(data);
+//                                    if (data.local_path != "" && data.local_path != undefined) {
+//                                        console.log("file exists");
+//                                        // if this file exists in local db then there is a local path in the db
+//                                        PHONE.VoiceMessage.play(data['local_path']);
+//                                        _this._last_play_path = data.local_path;
+//                                    } else {
+//                                        console.log("no file");
+//                                        PHONE.VoiceMessage.download(data['server_path'], function(new_local_path) {
+//                                            console.log("new_local_path");
+//                                            console.log(new_local_path);
+//                                            PHONE.VoiceMessage.play(new_local_path);
+//                                            _this._last_play_path = new_local_path;
+//                                            DB.update("xiao_project_comments", {local_path: new_local_path}, 'id="' + id + '"');
+//                                        });
+//                                        // if local_path is empty we need to download file from server
+//                                        // and then play
+//        //                                        PHONE.VoiceMessage.play(_this._last_play_path);
+//                                    }
+//                                });
+//                                API._clear_tables_to_sync();
+//                                break;
+//                                
+//                            default:
+//                                alert("no type");
+//                                return;
+//                        
+//                        }
                         /*
                          API.read(function(data){
                          console.log(data);
@@ -550,6 +589,9 @@ function onDeviceReady() {
                 pause: function() {
                     // probably we will need to pass file name here
                     PHONE.VoiceMessage.pause();
+                },
+                get_current_position : function(callback){
+                    PHONE.VoiceMessage.getPlayTime(callback);
                 },
                 save: function() {
                     /* here we save file to db and make try to upload to server */
@@ -781,7 +823,7 @@ function onDeviceReady() {
                         this.last_page_index = params.pageIndex;
                         if ("pageIndex" in params && "pageSize" in params) {
                             var result = [], logged_user = SESSION.get("user_id");
-                            console.log(params)
+//                            console.log(params)
                             params.othersOffset = (params.othersOffset ? params.othersOffset : 0);
                             API._sync(["xiao_projects", "xiao_project_partners", "xiao_users", "xiao_project_comments", "xiao_companies"], function() {
                                 // get all projects with ME
@@ -1332,6 +1374,7 @@ function onDeviceReady() {
                                         email: mess.email,
                                         adress: mess.adress,
                                         isNewUser: mess.isNewUser,
+                                        isLoginUser: login_user == mess.uid,
 //                                            isLeader: leader,
                                         QRCode: mess.QRCode
                                     },
@@ -1397,7 +1440,7 @@ function onDeviceReady() {
                             DB.select();
                             DB.from("xiao_todos as t");
                             DB.where('t.project_id = "' + params.project_id + '"');
-                            DB.where('t.user_id = "' + SESSION.get("user_id") + '"');
+                            DB.where('(t.user_id = "' + SESSION.get("user_id") + '" OR t.creator_id = "' + SESSION.get("user_id") + '")');
                             DB.where('t.finished <> "1"');
                             DB.query(function(todos) {
                                 make_callback({uncompleted: todos});
@@ -1405,7 +1448,7 @@ function onDeviceReady() {
                             DB.select();
                             DB.from("xiao_todos as t");
                             DB.where('t.project_id = "' + params.project_id + '"');
-                            DB.where('t.user_id = "' + SESSION.get("user_id") + '"');
+                            DB.where('(t.user_id = "' + SESSION.get("user_id") + '" OR t.creator_id = "' + SESSION.get("user_id") + '")');
                             DB.where('t.finished = "1"');
                             DB.query(function(todos) {
                                 make_callback({completed: todos});
@@ -1449,7 +1492,7 @@ function onDeviceReady() {
             };
             Models.TodoChat = {
                 chat_init: function(project_id, callback) {
-                    alert("todochat init")
+//                    alert("todochat init")
 
                     // existing messages
                     DB.select("tc.id, tc.content, tc.type, tc.server_path, tc.local_path, tc.todo_id, tc.user_id, tc.update_time, tc.read, u.id as uid, u.name, u.pinyin, u.avatar, u.company_id, u.position, u.phoneNum, u.email, u.adress, u.isNewUser, u.QRCode, c.title as company, c.companyAdress, c.creator_id as company_creator_id");
@@ -1464,6 +1507,7 @@ function onDeviceReady() {
                         var mess_result = [], unread = 0;
                         if (messages.length > 0) {
                             messages.forEach(function(mess) {
+                                console.log(mess.uid)
 //                                    var leader = mess.isLeader == "1" ? true : false,
 //                                            new_user = mess.isNewUser == "0" ? true : false;
                                 unread += (mess.read == 0 ? 1 : 0);
@@ -1482,7 +1526,7 @@ function onDeviceReady() {
                                         email: mess.email,
                                         adress: mess.adress,
                                         isNewUser: mess.isNewUser,
-                                        isLoginUser: login_user === mess.uid,
+                                        isLoginUser: login_user == mess.uid,
 //                                            isLeader: mess.isLeader,
                                         QRCode: mess.QRCode
                                     },
@@ -1537,7 +1581,9 @@ function onDeviceReady() {
                                         email: mess.email,
                                         adress: mess.adress,
                                         isNewUser: mess.isNewUser,
+                                        isLoginUser: login_user == mess.uid,
 //                                            isLeader: leader,
+
                                         QRCode: mess.QRCode
                                     },
                                     attachment: {
@@ -1567,6 +1613,20 @@ function onDeviceReady() {
                     });
 //                        alert(SESSION.get("user_id"));
                 }
+                
+//                
+//                send_message: function(message, callback) {
+////                    alert("sending mesage...");
+//                    console.log("sending mesage...");
+//                    message['user_id'] = SESSION.get("user_id"); // push user_id to message data
+//                    API.insert("xiao_project_comments", message, function(insert_id) {
+//                        message['id'] = insert_id;
+//                        console.log('API.insert("xiao_project_comments"');
+//                        console.log(message);
+//                        callback(message);
+//                    });
+////                        alert(SESSION.get("user_id"));
+//                }
 
             };
             Models.Calendar = {
