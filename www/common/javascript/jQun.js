@@ -1883,7 +1883,7 @@ this.ElementList = (function(NodeList, ChildrenCollection, ClassListCollection, 
 				return this.find(">section");
 			},
 			set : setter
-		},
+		}
 	}, { gettable : true, settable : true });
 
 	return ElementList.constructor;
