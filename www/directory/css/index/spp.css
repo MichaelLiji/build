@@ -89,7 +89,7 @@
 	box-sizing : content-box;
 	opacity : 0.5;
 	padding : 29px 0;
-	background : url(/common/image/width24.png) no-repeat center -275px content-box content-box;
+	background : url(../../../common/image/width24.png) no-repeat center -275px content-box content-box;
 }
 #project figure[status="-1"] > * {
 	display : none;
@@ -119,13 +119,13 @@
 	padding : 6px 0;
 	width : 33px;
 	text-indent : 0;
-	background : url(/common/image/width12.png) 0 -29px content-box content-box;
+	background : url(../../../common/image/width12.png) 0 -29px content-box content-box;
 }
 #project strong > span {
 	height : 9px;
 	width : 9px;
 	margin-left : 3px;
-	background : url(/common/image/width12.png) no-repeat 0 -15px;
+	background : url(../../../common/image/width12.png) no-repeat 0 -15px;
 }
 #project strong > span:first-child {
 	margin-left : 0;
@@ -171,7 +171,7 @@
 	display : none;
 }
 #titleBar button[action="set"] {
-	background : #ffc000 url(/common/image/width24.png) 0px -375px no-repeat content-box content-box;
+	background : #ffc000 url(../../../common/image/width24.png) 0px -375px no-repeat content-box content-box;
 	border : 7px solid #ffc000;
 }
 
@@ -228,7 +228,7 @@
 	line-height : 0;
 	text-indent : 15px;
 	white-space : nowrap;
-	background : url(/common/image/width12.png) 3px -150px no-repeat content-box content-box;
+	background : url(../../../common/image/width12.png) 3px -150px no-repeat content-box content-box;
 }
 #partner .group button.focused {
 	background-color : #00b0d6;
@@ -258,7 +258,7 @@
 }
 #mask[action="添加组拍档"] header > input {
 	padding-left : 24px;
-	background : url(/common/image/width24.png) 5px -442px no-repeat;
+	background : url(../../../common/image/width24.png) 5px -442px no-repeat;
 }
 #titleBar button[action="addPartner"] {
 	background-color : #e26815;
@@ -307,7 +307,7 @@
 	border : 0 none;
 	display : block;
 	padding : 9px;
-	background : url(/common/image/width24.png) 0 0 no-repeat content-box content-box;
+	background : url(../../../common/image/width24.png) 0 0 no-repeat content-box content-box;
 }
 #tab_SPP li[tab="project"] > button {
 	background-position : 3px -25px;

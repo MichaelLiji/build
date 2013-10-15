@@ -1339,7 +1339,7 @@ function onDeviceReady() {
                     });
                 },
                 send_message: function(message, callback) {
-                    alert("sending mesage...");
+//                    alert("sending mesage...");
                     console.log("sending mesage...");
                     message['user_id'] = SESSION.get("user_id"); // push user_id to message data
                     API.insert("xiao_project_comments", message, function(insert_id) {

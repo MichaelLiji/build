@@ -470,7 +470,7 @@ this.ChatInput = (function(Global, messageCompletedEvent, reader){
 				}
 
 				if(targetEl.between(">p>input", this).length > 0){
-					//targetEl.focus();
+					targetEl.focus();
 					return;
 				}
 			},
@@ -630,7 +630,7 @@ this.ChatList = (function(ChatInput, ChatListContent, listPanelHtml){
 				'<button></button>',
 				'<p>',
 					'<button class="smallRadius">按住说话</button>',
-					'<input class="smallRadius" type="text" placeholder="输入文字.." />',
+					'<input class="smallRadius" type="text" placeholder="输入文字.." stayput="" />',
 				'</p>',
 				'<aside>',
 					'<button></button>',

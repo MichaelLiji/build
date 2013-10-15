@@ -1,4 +1,4 @@
-(function(Deep, NonstaticClass, StaticClass, PagePanel, OverflowPanel, CallServer){
+﻿(function(Deep, NonstaticClass, StaticClass, PagePanel, OverflowPanel, CallServer){
 this.GlobalSearch = (function(OverflowPanel, Panel, UserAnchorList, Global, forEach, config){
 	function GlobalSearch(selector, groupHtml){
 		///	<summary>
@@ -7,7 +7,7 @@ this.GlobalSearch = (function(OverflowPanel, Panel, UserAnchorList, Global, forE
 		/// <param name="selector" type="string">对应的元素选择器</param>
 		/// <param name="groupHtml" type="jQun.HTML">分组的html模板</param>
 		var globalSearch = this, textEl = this.find(">header input"),
-
+			
 			groupPanel = new OverflowPanel(this.find(".globalSearch_content>ul")[0]);
 
 		this.assign({
@@ -345,7 +345,7 @@ this.Todo = (function(ChatList, OverflowPanel, Global){
 		chatList : undefined,
 		fill : function(id){
 			var todo = this, chatListContent = this.chatList.chatListContent;
-
+		
 			CallServer.open("getTodo", { id : id }, function(data){
 				var figureEl = todo.find(">section>figure");
 
@@ -378,11 +378,11 @@ this.Todo = (function(ChatList, OverflowPanel, Global){
 this.SendTodo = (function(UserManagementList, Validation, Global, validationHandle){
 	function SendTodo(selector){
 		var sendTodo = this, titleBar = Global.titleBar,
-
+		
 			titleValidation = new Validation(this.find('li[desc="title"]>input'), validationHandle),
 
 			dateValidation = new Validation(this.find('li[desc="endDate"]>input[type="text"]'), validationHandle),
-
+			
 			userManagementList = new UserManagementList("请选择该To Do的执行者");
 
 		this.assign({
@@ -405,10 +405,7 @@ this.SendTodo = (function(UserManagementList, Validation, Global, validationHand
 
 					if(!dateValidation.validate())
 						return;
-                                        console.log("userManagementList.projectId")
-                                        console.log(userManagementList.projectId)
-                                        console.log("userManagementList.getAllUsers()[0]")
-                                        console.log(userManagementList.getAllUsers()[0])
+
 					CallServer.open("sendTodo", {
 						attachments : [],
 						title : titleValidation.validationEl.value,
@@ -416,7 +413,6 @@ this.SendTodo = (function(UserManagementList, Validation, Global, validationHand
 						remind : sendTodo.remind ? 1 : 0,
 						desc : sendTodo.find("textarea").innerHTML,
 						userId : userManagementList.getAllUsers()[0],
-//						projectId : userManagementList.projectId
 						projectId : sendTodo.projectId
 					}, function(data){
 						Global.history.go("todo").fill(data.id);
@@ -509,7 +505,7 @@ this.Archive = (function(AnchorList, Global){
 				archive.key = archive.id;
 				archive.desc = new Date(archive.completeDate).toLocaleDateString();
 			});
-
+			
 			overflowPanel.innerHTML = "";
 			new AnchorList(archives, true).appendTo(overflowPanel[0]);
 
@@ -563,7 +559,7 @@ this.ArchivedProjectView = (function(AnchorList, Panel){
 
 	function ArchivedProjectView(selector, attachmentsHtml, todoContentHtml){
 		var archivedProjectView = this,
-
+		
 			todoContent = new TodoContent.constructor(todoContentHtml);
 
 		this.assign({
@@ -573,12 +569,27 @@ this.ArchivedProjectView = (function(AnchorList, Panel){
 
 		this.attach({
 			clickanchor : function(e){
-				var expendEl = archivedProjectView.find('li[key="' + e.anchor + '"]');
+				var expendEl = archivedProjectView.find('li[key="' + e.anchor + '"]'),
 
-
+					classList = expendEl.classList;
 
 				e.stopPropagation();
+
+				if(classList.contains("expend")){
+					expendEl.find(">dl").remove();
+					classList.remove("expend");
+					return;
+				}
+
+				var el = archivedProjectView.find("li.expend");
+
+				if(el.length > 0){
+					el.find(">dl").remove();
+					el.classList.remove("expend");
+				}
+
 				todoContent.create(e.anchor).appendTo(expendEl[0]);
+				classList.add("expend");
 			}
 		}, true);
 
@@ -596,19 +607,27 @@ this.ArchivedProjectView = (function(AnchorList, Panel){
 			var archiveProjectView = this;
 
 			CallServer.open("getArchivedProject", { id : id }, function(data){
-				var anchorList, todoList = data.todoList, sectionEl = archiveProjectView.section;
+				var anchorList, anchorListData = [],
+					
+					sectionEl = archiveProjectView.section, todoList = data.todoList;
 
 				archiveProjectView.todoContent.resetData(todoList);
 
 				todoList.forEach(function(todo){
-					todo.key = todo.id;
-					todo.desc = new Date(todo.endTime).toLocaleDateString();
-				});
+					var t = this({}, todo);
+
+					this(t, {
+						key : todo.id,
+						desc : new Date(todo.endTime).toLocaleDateString()
+					});
+
+					anchorListData.push(t);
+				}, jQun.set);
 
 				archiveProjectView.header.find("ul").innerHTML = archiveProjectView.attachmentsHtml.render(data.project);
-
+				
 				sectionEl.innerHTML = "";
-				anchorList = new AnchorList(data.todoList, true)
+				anchorList = new AnchorList(anchorListData, true);
 				anchorList.appendTo(sectionEl[0]);
 				new OverflowPanel(anchorList);
 			});
@@ -625,9 +644,9 @@ this.ArchivedProjectView = (function(AnchorList, Panel){
 this.ProjectManagement = (function(UserManagementList, AnchorList, Global, anchorListData){
 	function ProjectManagement(selector){
 		var projectManagement = this,
-
+		
 			anchorList = new AnchorList(anchorListData),
-
+			
 			userManagementList = new UserManagementList("选择成员").appendTo(this.find(">header")[0]);
 
 		this.assign({
@@ -678,8 +697,6 @@ this.ProjectManagement = (function(UserManagementList, AnchorList, Global, ancho
 				e.stopPropagation();
 
 				if(anchor === "sendTodo"){
-                                    console.log("projectManagement.id")
-                                    console.log(projectManagement.id)
 					Global.history.go(anchor).resetProjectId(projectManagement.id);
 					return;
 				}

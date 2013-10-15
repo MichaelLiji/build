@@ -190,6 +190,8 @@ with(window.index_dataStructure){ // from ../dataStructure/index_dataStructure.j
 					title : "sss",
 					remind : 0, // number : 0 -> false, 1 -> true
 					desc : "sss",
+					userId : 11,
+					projectId : 22,
 					attachments : [
 						DS_attachment,
 						// ...

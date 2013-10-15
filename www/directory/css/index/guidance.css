@@ -125,7 +125,7 @@
 	height : 35px;
 	margin-bottom : 10px;
 	padding : 0 20px 0 40px;
-	background : url(/common/image/width24.png) 10px -496px no-repeat;
+	background : url(../../../common/image/width24.png) 10px -496px no-repeat;
 }
 #invitation > section li:last-child {
 	margin-bottom : 0;
@@ -154,7 +154,7 @@
 	border-radius : 38px;
 	padding : 2px 0;
 	border-width : 7px;
-	background-image : url(/common/image/width24.png);
+	background-image : url(../../../common/image/width24.png);
 	background-position : 0 -550px;
 	background-repeat : no-repeat;
 	background-origin : content-box;

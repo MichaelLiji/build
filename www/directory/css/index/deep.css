@@ -27,7 +27,7 @@
 .globalSearch_header > nav > button{
 	width : 100%;
 	padding : 7px 0;
-	background : transparent url(/common/image/width12.png) no-repeat 9px -105px content-box content-box;
+	background : transparent url(../../../common/image/width12.png) no-repeat 9px -105px content-box content-box;
 }
 .globalSearch_header > aside {
 	position : absolute;
@@ -47,7 +47,7 @@
 	width : 34px;
 	right : 0;
 	padding : 6px 9px;
-	background : transparent url(/common/image/width24.png) 0 -475px no-repeat content-box content-box;
+	background : transparent url(../../../common/image/width24.png) 0 -475px no-repeat content-box content-box;
 }
 .globalSearch_content dl > dt {
 	height : 15px;
@@ -182,7 +182,7 @@
 #titleBar button[action="editAccount"] {
 	border : 1px solid #39a85a;
 	border-width : 6px 5px;
-	background : #39a85a url(/common/image/width24.png) 1px -425px no-repeat;
+	background : #39a85a url(../../../common/image/width24.png) 1px -425px no-repeat;
 	background-clip : content-box;
 }
 #titleBar button[action="submit account"] {
@@ -320,7 +320,7 @@
 	width : 34px;
 	padding : 3px 9px;
 	border : 1px solid #fff;
-	background : transparent url(/common/image/width24.png) 0 -800px no-repeat content-box content-box;
+	background : transparent url(../../../common/image/width24.png) 0 -800px no-repeat content-box content-box;
 }
 .todo_header dt > span {
 	margin-left : 8px;
@@ -411,7 +411,7 @@
 }
 #titleBar button[action="sendTodoCompleted"] {
 	background-color : #f1af10;
-	background : #f1af10 url(/common/image/width24.png) 7px -118px no-repeat;
+	background : #f1af10 url(../../../common/image/width24.png) 7px -118px no-repeat;
 }
 
 #workStream li > figure {
@@ -445,7 +445,7 @@
 	border : 0 none;
 }
 #titleBar button[action="projectManagement_done"] {
-	background : #ffc000 url(/common/image/width24.png) no-repeat 7px -118px
+	background : #ffc000 url(../../../common/image/width24.png) no-repeat 7px -118px
 }
 
 #archive .anchorList > ul {
@@ -480,4 +480,57 @@
 	left : 10px;
 	right : 10px;
 	overflow : hidden;
+}
+#archivedProjectView li {
+	background-color : #fff;
+}
+#archivedProjectView li.expend {
+	height : auto;
+	padding-bottom : 8px;
+}
+#archivedProjectView li > nav a {
+	-webkit-transform : rotate(-90deg);
+}
+#archivedProjectView li.expend > nav {
+	height : 36px;
+}
+#archivedProjectView li.expend > nav a {
+	-webkit-transform : rotate(90deg);
+}
+.archivedProjectView_todoContent {
+	width : 100%;
+	padding : 9px;
+	box-sizing : content-box;
+	outline : 8px solid #e1e1e1;
+	margin : 10px 0 0 -10px;
+}
+.archivedProjectView_todoContent > dt {
+	height : 30px;
+	line-height : 30px;
+	font-size : 15px;
+	text-indent : 10px;
+}
+.archivedProjectView_todoContent > dd {
+	text-align : right;
+}
+.archivedProjectView_todoContent > dd > * {
+	margin-top : 5px;
+}
+.archivedProjectView_todoContent > dd > *:not(aside) {
+	text-align : left;
+}
+.archivedProjectView_todoContent > dd > span {
+	display : block;
+	text-indent : 10px;
+}
+.archivedProjectView_todoContent > dd > p {
+	padding : 5px 10px;
+}
+.archivedProjectView_todoContent > dd > aside {
+	display : inline-block;
+}
+.archivedProjectView_todoContent a[attachmenttype] {
+	height : 34px;
+	width : 34px;
+	display : inline-block;
 }

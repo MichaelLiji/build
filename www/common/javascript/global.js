@@ -9,6 +9,9 @@ this.Global = (function(Fixed, Management, HTML, Browser, inputs, inputEvents){
 		jQun(window).attach({
 			touchstart : function(e, targetEl){
 				if(targetEl.between('input[type="text"], input[type="password"], textarea').length > 0){
+					if(targetEl.getAttribute("stayput") != null)
+						return;
+
 					var input = targetEl[0];
 
 					if(inputs.indexOf(input) === -1){
@@ -44,11 +47,11 @@ this.Global = (function(Fixed, Management, HTML, Browser, inputs, inputEvents){
 
 				// 首先要登录才会用登录用户的数据
 				 history.go("login");
-//				history.go("sendTodo").selectUser(1);
-				//history.go("archivedProjectView").fill(1);
+//				history.go("login").login();
 			},
 			login : function(e){
 				Global.loginUser = e.loginUser;
+				//Global.history.go("archivedProjectView").fill(2);
 			}
 		});
 	};

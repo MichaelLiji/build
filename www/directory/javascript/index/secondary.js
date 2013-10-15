@@ -140,7 +140,7 @@ this.BusinessCard = (function(Global, LoadingBar, clickAvatarEvent){
 			},
 			userclick : function(e, targetEl){
 				if(targetEl.between(">footer", this).length > 0){
-					Global.history.go("sendTodo").fill(1);
+					// Global.history.go("sendTodo").fill(1);
 					return;
 				}
 			}

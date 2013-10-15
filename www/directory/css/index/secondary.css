@@ -85,7 +85,7 @@
 #businessCard dl[desc="userinfo"] li {
 	height : 18px;
 	line-height : 18px;
-	background : url(/common/image/width12.png) 1px -115px no-repeat;
+	background : url(../../../common/image/width12.png) 1px -115px no-repeat;
 	padding-left : 15px;
 	text-overflow : ellipsis;
 	overflow : hidden;
@@ -103,6 +103,9 @@
 #businessCard aside > img {
 	width : 100%;
 	height : 100%;
+}
+#businessCard p[desc="authority"] {
+	display : none;
 }
 #businessCard p[desc="authority"], #businessCard > footer {
 	height : 45px;
@@ -126,6 +129,7 @@
 	background-color : #fff;
 }
 #businessCard > footer {
+	display : none;
 	margin : 8px 10px;
 }
 #businessCard > footer > button {
@@ -190,5 +194,5 @@
 	margin-top : 5px;
 }
 #titleBar button[action="systemContacts_done"] {
-	background : #cc2c27 url(/common/image/width24.png) no-repeat 7px -118px;
+	background : #cc2c27 url(../../../common/image/width24.png) no-repeat 7px -118px;
 }

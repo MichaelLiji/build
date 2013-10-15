@@ -6,7 +6,9 @@
 
 #singleProjectHeader {
 	display : block;
-	position : static;
+	position : relative;
+	top : 0;
+	z-index : 2;
 	background-color : #f7f7f7;
 	height : 36px;
 	padding : 5px 0;
@@ -51,6 +53,10 @@
 
 #discussion {
 	bottom : 52px;
+	overflow : visible;
+}
+#discussion > section {
+	min-height : 100%;
 }
 .discussion_info > dt {
 	height : 30px;
@@ -146,5 +152,5 @@
 
 #titleBar button[action="projectManagement"] {
 	border : 8px solid #f1af0f;
-	background : url(/common/image/width12.png) no-repeat 0 -180px content-box content-box;
+	background : url(../../../common/image/width12.png) no-repeat 0 -180px content-box content-box;
 }
