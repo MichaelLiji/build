@@ -262,6 +262,7 @@
 }
 #titleBar button[action="addPartner"] {
 	background-color : #e26815;
+	display : none;
 }
 
 

@@ -159,7 +159,7 @@ this.History = (function(List, Loader, redirectEvent){
 				panel = Loader.pageStorage[this[idx].self];
 				// 显示当前的panel
 				panel.show(null, _isBack);
-				old = this.splice(idx, 1);
+				old = this.splice(idx, 1)[0];
 				lastIdx = lastIdx - 1;
 			}
 			else {
@@ -170,7 +170,7 @@ this.History = (function(List, Loader, redirectEvent){
 
 			this.push({
 				self : name,
-				opener : _isBack ? (old ? old.name : null) : this.getNameByIndex(lastIdx)
+				opener : _isBack ? (old ? old.opener : null) : this.getNameByIndex(lastIdx)
 			});
 			return panel;
 		},

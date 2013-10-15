@@ -302,6 +302,11 @@ this.CallServer = (function(CallServer, Wait, open, allHandlers){
 			};
 
 			return data;
+		},
+		addComment : function(data){
+			data = { id : Bao.Test.DummyData.Generate.Number.random(99999) };
+
+			return data;
 		}
 	}
 ));

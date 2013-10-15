@@ -20,6 +20,9 @@ this.Attachment = (function(){
 	Attachment.properties({
 		base64 : "",
 		id : -1,
+		resetId : function(id){
+			this.id = id;
+		},
 		src : "javascript:void(0);",
 		type : "image"
 	});

@@ -62,7 +62,19 @@ BROWSER_TEST_VERSION = function check_dev() {
 }();
 
 Models = {}; // Models are needed to be created in the following method. As they are used before the device ready actually. They are filled later.
+Models.UsersCounter = {
+                // uncomment all the stuff below for PRODUCTION
+                read: function(callback) {
+//                    SOCKET.request("counter", {}, function(result) {
+//                        if (result) {
+//                            callback(result);
+//                        } else {
+                    callback({count: 100000, validationImage: "src"});
+//                        }
+//                    });
+                }
 
+            };
 BROWSER_TEST_VERSION ? onDeviceReady() : document.addEventListener("deviceready", onDeviceReady, false);
 
 
@@ -1437,6 +1449,7 @@ function onDeviceReady() {
             };
             Models.TodoChat = {
                 chat_init: function(project_id, callback) {
+                    alert("todochat init")
 
                     // existing messages
                     DB.select("tc.id, tc.content, tc.type, tc.server_path, tc.local_path, tc.todo_id, tc.user_id, tc.update_time, tc.read, u.id as uid, u.name, u.pinyin, u.avatar, u.company_id, u.position, u.phoneNum, u.email, u.adress, u.isNewUser, u.QRCode, c.title as company, c.companyAdress, c.creator_id as company_creator_id");

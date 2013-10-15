@@ -425,7 +425,7 @@ this.Partner = (function(Navigator, UserIndexList, InputSelectionList, Validatio
 		hideBackButton : true,
 		title : "MY PARTNERS 拍档",
 		tools : [
-			{ username : "addPartner", action : "addPartner" },
+			{ urlname : "javascript:void(0);", action : "addPartner" },
 			{ urlname : "systemOption", action : "set" }
 		]
 	});

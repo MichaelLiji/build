@@ -125,7 +125,7 @@ this.Discussion = (function(ProjectPanel, ChatList){
 						if(type !== "voice")
 							return;
 
-
+						e.message.attachment.resetId(data.id);
 					}
 				);
 			},

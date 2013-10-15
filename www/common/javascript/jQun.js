@@ -25,7 +25,7 @@ jQun = (function(argRegx, argListRegx, every, toNative){
 		///	<summary>
 		///	返回一个通过指定选择器筛选出来的元素集合。
 		///	</summary>
-		///	<param name="_selector" type="string, element，array">选择器、html、dom元素或dom元素数组。</param>
+		///	<param name="_selector" type="string, element, array">选择器、html、dom元素或dom元素数组。</param>
 		if(jQun.isInstanceOf(this, arguments.callee)){
 			return this.creator.apply(this, arguments);
 		}
@@ -633,15 +633,25 @@ this.Namespace = (function(){
 		///	<summary>
 		///	开辟一个命名空间。
 		///	</summary>
-		return Object.create(this.self);
+		
+		//return Object.create(this.self);
 	};
 	Namespace = new NonstaticClass(Namespace, "Namespace");
 
 	Namespace.properties({
+		/*
 		self : Namespace.properties.call(Object.create(null), {
 			constructor : Namespace.constructor,
 			members : Namespace.assign
 		})
+		*/
+		members : function(members){
+			///	<summary>
+			///	给该命名空间赋予成员。
+			///	</summary>
+			this.assign(members);
+			return this;
+		}
 	});
 
 	return Namespace.constructor;

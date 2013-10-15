@@ -90,6 +90,31 @@
 //                };
                 Mdls.ProjectChat.send_message(_params, complete);
             },
+            addCommentForTodo: function(params, complete){
+                console.log(params)
+                var _params = {};
+                switch (params.type) {
+                    case "text":
+                        _params = {
+                            todo_id: params.todoId,
+                            content: params.text,
+                            type: params.type
+                        };
+                        break;
+                    case "voice":
+                        console.log(params)
+                        _params = {
+                            todo_id: params.todoId,
+                            content: params.text,
+                            type: params.type,
+                            local_path: params.attachment.src
+                        };
+                        break;
+                    default:
+                        return;
+                }
+                Mdls.TodoChat.send_message(_params, complete);
+            },
             getUser: function(params, complete) {
                 Mdls.Partner.read(params.id, complete);
             },
