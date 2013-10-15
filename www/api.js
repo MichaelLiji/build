@@ -487,7 +487,7 @@ function onDeviceReady() {
                     //                        if(this._last_record_path === null){return false;}
                     PHONE.VoiceMessage.record_play(this._last_record_path);
                 },
-                play: function(id, type) {
+                play: function(id, type, callback) {
                     var _this = this;
                     if (id == this._last_play_id && this._last_play_path != null) {
                         console.log("PLAY SAME FILE!!!");
@@ -509,6 +509,7 @@ function onDeviceReady() {
                                         console.log("file exists");
                                         // if this file exists in local db then there is a local path in the db
                                         PHONE.VoiceMessage.play(data['local_path']);
+                                        callback(PHONE.VoiceMessage.getDuration());
                                         _this._last_play_path = data.local_path;
                                     } else {
                                         console.log("no file");
@@ -516,6 +517,7 @@ function onDeviceReady() {
                                             console.log("new_local_path");
                                             console.log(new_local_path);
                                             PHONE.VoiceMessage.play(new_local_path);
+                                            callback(PHONE.VoiceMessage.getDuration());
                                             _this._last_play_path = new_local_path;
                                             DB.update('xiao_'+type+'_comments', {local_path: new_local_path}, 'id="' + id + '"');
                                         });
@@ -2910,6 +2912,11 @@ function onDeviceReady() {
                                                                     function(err) {
 
                                                                     });
+                                                        };
+                                                        
+                                                        this.getDuration = function(){
+                                                            // synchronous function
+                                                            return this.audio.getDuration();
                                                         };
 
                                                     }
