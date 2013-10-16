@@ -167,20 +167,26 @@ this.History = (function(List, Loader, redirectEvent){
 				panel = Loader.load(name);
 				panel.show();
 			}
-
-			if(old){
-				var o = old.opener;
-
-				opener = o === name ? this.getNameByIndex(lastIdx - 1) : o;
+			/*
+			if(_isBack){
+				opener = old ? old.opener : null
 			}
 			else {
-				opener = this.getNameByIndex(lastIdx);
-			}
+				var lastPage = this[lastIdx];
 
+				opener = this.getNameByIndex(lastIdx);
+
+				if(lastPage){
+					if(lastPage.opener === name){
+						opener = old.opener;
+					}
+				}
+			}
+			*/
 			this.push({
 				self : name,
-				// opener : _isBack ? (old ? old.name : null) : this.getNameByIndex(lastIdx)
-				opener : _isBack ? (old ? old.opener : null) : this.getNameByIndex(lastIdx)
+				opener : _isBack ? (old ? old.name : null) : this.getNameByIndex(lastIdx)
+				//opener : opener
 			});
 			return panel;
 		},
@@ -261,10 +267,10 @@ this.Timer = (function(setTimeout, clearTimeout){
 			if(this.isEnabled)
 				return;
 
-			this.assign({
-				index : -1,
-				isEnabled : true
-			});
+			var timer = this;
+
+			this.index = -1;
+			this.isEnabled = true;
 
 			// 设置计时器
 			this.index = setTimeout(function(){
@@ -273,7 +279,7 @@ this.Timer = (function(setTimeout, clearTimeout){
 				if(!_ontimeout)
 					return;
 
-				_ontimeout();
+				_ontimeout.call(timer);
 			}.bind(this), this.timeout || 200);
 		}
 	});
@@ -293,7 +299,7 @@ this.IntervalTimer = (function(Timer){
 	IntervalTimer.override({
 		start : function(oninterval, _times){
 			///	<summary>
-			///	开始计时器，该计时器需要人为手动停止。
+			///	开始计时器，如果为无限循环，则该计时器需要人为手动停止。
 			///	</summary>
 			///	<param name="oninterval" type="function">间隔时间所执行的函数。</param>
 			///	<param name="_times" type="number">执行次数。</param>
@@ -319,7 +325,7 @@ this.IntervalTimer = (function(Timer){
 				}
 
 				// 执行间隔函数
-				oninterval(i);
+				oninterval.call(this, i);
 
 				// 如果该计时器在oninterval函数内被中断，就return
 				if(!intervalTimer.isEnabled)

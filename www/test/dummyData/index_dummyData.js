@@ -20,7 +20,8 @@ this.Common = Common = (function(){
 			return {
 				id : Number.id(),
 				type : type,
-				src : type === "voice" ? "javascript:void(0);" : "../../test/image/avatar/" + Number.random(16) + ".jpg"
+				src : type === "voice" ? "javascript:void(0);" : "../../test/image/avatar/" + Number.random(16) + ".jpg",
+				from : "project"
 			};
 		},
 		getAttachments : function(){

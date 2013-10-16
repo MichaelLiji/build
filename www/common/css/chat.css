@@ -44,14 +44,17 @@
 	min-height : 38px;
 	padding : 8px 10px;
 }
+.chatList_message[action="voice"] figcaption {
+	padding : 8px 15px;
+}
 .chatList_message figcaption > span {
 	word-break : break-word;
 }
 .chatList_message figcaption > a {
-	height : 2px;
+	height : 22px;
 	width : 100%;
 	display : inline-block;
-	background-color : rgba(0, 0, 0, 0.3);
+	background-image : -webkit-linear-gradient(top, transparent 10px, rgba(0, 0, 0, 0.3) 10px, rgba(0, 0, 0, 0.3) 12px, transparent 12px);
 	border-color : #fff;
 }
 .chatList_message figcaption > img {
@@ -62,10 +65,13 @@
 	height : 22px;
 	width : 22px;
 	border-radius : 22px;
+	position : relative;
+	left : -11px;
 	border : 0 none;
 	background : url(../image/width24.png) 0 -725px no-repeat;
-	position : relative;
-	top : -11px;
+}
+.chatList_message a.playing > button {
+	background : url(../image/width24.png) 0 -700px no-repeat;
 }
 .chatList_message:not([action="text"]) figcaption > span,
 .chatList_message:not([action="voice"]) figcaption > a,

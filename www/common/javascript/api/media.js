@@ -1,5 +1,5 @@
 ﻿(function(Media, NonstaticClass, StaticClass){
-this.Voice = (function(Panel, Models){
+this.Voice = (function(IntervalTimer, Models){
 	function Voice(){};
 	Voice = new StaticClass(Voice, "Bao.API.Media");
 
@@ -10,11 +10,25 @@ this.Voice = (function(Panel, Models){
 
 			Models.VoiceMessage.pause();
 		},
-		play : function(id, type){
-			if(!Models.VoiceMessage)
-				return;
+		play : function(id, type, callback, _position){
+			if(!Models.VoiceMessage){
+				new IntervalTimer(1000).start(function(i){
+					i = i + (_position || 0);
 
-			Models.VoiceMessage.play(id, type);
+					callback.call(this, i, 5);
+				}, 5 - (_position || 0));
+				return;
+			}
+
+			Models.VoiceMessage.play(id, type, function(len){
+				new IntervalTimer(1000).start(function(i){
+					callback.call(this, i, len);
+				}, len);
+			});
+
+			if(_position){
+				Models.VoiceMessage.set_current_position(_position);
+			}
 		},
 		recordStart : function(){
 			if(!Models.VoiceMessage)
@@ -50,7 +64,7 @@ this.Voice = (function(Panel, Models){
 
 	return Voice;
 }(
-	Bao.API.DOM.Panel,
+	Bao.API.Management.IntervalTimer,
 	window.Models || {}
 ));
 

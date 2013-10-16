@@ -1,15 +1,17 @@
-﻿(function(Chat, NonstaticClass, Panel, HTML, Event, Global, set){
+﻿(function(Chat, NonstaticClass, Panel, HTML, Event, Global, Voice, set){
 this.Attachment = (function(){
-	function Attachment(type, id, _src, _base64){
+	function Attachment(type, from, id, _src, _base64){
 		///	<summary>
 		///	附件。
 		///	</summary>
 		/// <param name="type" type="string">附件类型</param>
 		/// <param name="id" type="string">附件id</param>
+		/// <param name="from" type="string">附件的来源</param>
 		/// <param name="_src" type="string">附件src</param>
 		/// <param name="_base64" type="string">附件的64位字符串编码(目前仅用于图片)</param>
 		this.assign({
 			base64 : _base64 || (type === "image" ? _src : ""),
+			from : from,
 			id : id,
 			src : _src,
 			type : type
@@ -19,6 +21,7 @@ this.Attachment = (function(){
 
 	Attachment.properties({
 		base64 : "",
+		from : "",
 		id : -1,
 		resetId : function(id){
 			this.id = id;
@@ -71,7 +74,74 @@ this.ImageBox = (function(imageBoxHtml){
 	].join(""))
 ));
 
-this.Message = (function(Attachment, ImageBox, clickDoEvent, clickPraiseEvent, clickPlayEvent, forEach, messageHtml, praiseHtml){
+this.ActiveVoice = (function(round){
+	function ActiveVoice(selector, id, from){
+		var activeVoice = this;
+		
+		this.assign({
+			from : from,
+			id : id,
+			buttonStyle : this.find(">button").style
+		});
+
+		this.attach({
+			userclick : function(e){
+				e.stopPropagation();
+				activeVoice[activeVoice.isPlaying ? "stop" : "play"]();
+			}
+		}, true);
+
+		this.play();
+	};
+	ActiveVoice = new NonstaticClass(ActiveVoice, "Bao.UI.Control.Chat.ActiveVoice", Panel.prototype);
+
+	ActiveVoice.properties({
+		from : "",
+		id : -1,
+		isPlaying : false,
+		// 暂停点
+		pausePosition : 0,
+		play : function(){
+			var activeVoice = this, buttonStyle = this.buttonStyle;
+
+			Voice.play(this.id, this.from, function(i, max){
+				if(!activeVoice.isPlaying){
+					activeVoice.pausePosition = i - 1;
+
+					this.stop();
+					return;
+				}
+
+				buttonStyle.marginLeft = round(i * 100 / max) + "%";
+
+				if(i !== max){
+					return;
+				}
+
+				setTimeout(function(){
+					buttonStyle.marginLeft = 0;
+					activeVoice.stop();
+				}, 1000);
+			}, this.pausePosition);
+
+			this.isPlaying = true;
+			this.classList.add("playing");
+		},
+		stop : function(){
+			this.pausePosition = 0;
+			this.isPlaying = false;
+			this.classList.remove("playing");
+			Voice.stop();
+		}
+	});
+
+	return ActiveVoice.constructor;
+}(
+	Math.round
+));
+
+
+this.Message = (function(Attachment, ImageBox, ActiveVoice, clickDoEvent, clickPraiseEvent, forEach, messageHtml, praiseHtml){
 	function Message(msg){
 		///	<summary>
 		///	单个信息。
@@ -80,7 +150,7 @@ this.Message = (function(Attachment, ImageBox, clickDoEvent, clickPraiseEvent, c
 		var message = this, attachment = msg.attachment;
 
 		this.assign({
-			attachment : attachment ? new Attachment(msg.type, attachment.id, attachment.src, attachment.base64) : undefined,
+			attachment : attachment ? new Attachment(msg.type, attachment.from, attachment.id, attachment.src, attachment.base64) : undefined,
 			color : msg.color,
 			id : msg.id,
 			isSending : msg.isSending,
@@ -106,10 +176,13 @@ this.Message = (function(Attachment, ImageBox, clickDoEvent, clickPraiseEvent, c
 					return;
 				}
 
+				var voicePanel = targetEl.between(">a", this);
+
 				// 播放语音
-				if(targetEl.between(">a>button", this).length > 0){
-					clickPlayEvent.setEventAttrs({ voiceId : message.attachment.id });
-					clickPlayEvent.trigger(targetEl[0]);
+				if(voicePanel.length > 0){
+					var attachment = message.attachment;
+
+					new ActiveVoice(voicePanel[0], attachment.id, attachment.from);
 					return;
 				}
 			}
@@ -230,12 +303,11 @@ this.Message = (function(Attachment, ImageBox, clickDoEvent, clickPraiseEvent, c
 }(
 	this.Attachment,
 	this.ImageBox,
+	this.ActiveVoice,
 	// clickDoEvent
 	new Event("clickdo"),
 	// clickPraiseEvent
 	new Event("clickpraise"),
-	// clickPlayEvent
-	new Event("clickplay"),
 	jQun.forEach,
 	// messageHtml
 	new HTML([
@@ -456,7 +528,7 @@ this.ChatListContent = (function(MessageGroup){
 	this.MessageGroup
 ));
 
-this.ChatInput = (function(Global, Voice, messageCompletedEvent, reader){
+this.ChatInput = (function(Global, messageCompletedEvent, reader){
 	function ChatInput(selector){
 		///	<summary>
 		///	聊天输入。
@@ -583,7 +655,6 @@ this.ChatInput = (function(Global, Voice, messageCompletedEvent, reader){
 	return ChatInput.constructor;
 }(
 	Bao.Global,
-	Bao.API.Media.Voice,
 	// messageCompletedEvent
 	new jQun.Event("messagecompleted"),
 	// reader
@@ -662,5 +733,6 @@ Chat.members(this);
 	jQun.HTML,
 	jQun.Event,
 	Bao.Global,
+	Bao.API.Media.Voice,
 	jQun.set
 ));

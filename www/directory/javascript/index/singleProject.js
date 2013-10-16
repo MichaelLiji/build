@@ -89,7 +89,7 @@ this.Header = (function(focusTabEvent){
 	new Event("focustab")
 ));
 
-this.Discussion = (function(ProjectPanel, ChatList, Voice){
+this.Discussion = (function(ProjectPanel, ChatList){
 	function Discussion(selector, infoHtml){
 		///	<summary>
 		///	单个项目。
@@ -145,9 +145,6 @@ this.Discussion = (function(ProjectPanel, ChatList, Voice){
 
 				sendTodo.selectUser(e.message.poster);
 				sendTodo.resetProjectId(projecetId);
-			},
-			clickplay : function(e){
-				Voice.play(e.voiceId, "project");
 			}
 		});
 
@@ -182,8 +179,7 @@ this.Discussion = (function(ProjectPanel, ChatList, Voice){
 	return Discussion.constructor;
 }(
 	this.ProjectPanel,
-	Bao.UI.Control.Chat.ChatList,
-	Bao.API.Media.Voice
+	Bao.UI.Control.Chat.ChatList
 ));
 
 this.TodoList = (function(ProjectPanel, AnchorList, formatKey){

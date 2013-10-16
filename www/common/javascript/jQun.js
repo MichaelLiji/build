@@ -1,8 +1,8 @@
 /*
  *  类库名称：jQun
  *  中文释义：骥群(聚集在一起的千里马)
- *  文档状态：1.0.6.3
- *  本次修改：ElementList类，增加获取元素结构的方法：header、article、section、footer等。
+ *  文档状态：1.0.6.4
+ *  本次修改：对jQun、NonstaticClass、Static增加toString方法。
  *  开发浏览器信息：firefox 20.0+ 、 chrome 26.0+、基于webkit的手机浏览器
  */
 
@@ -338,6 +338,12 @@ jQun = (function(argRegx, argListRegx, every, toNative){
 				///	<param name="properties" type="object">包含一个或多个属性的键值对。</param>
 				///	<param name="_descriptor" type="object">被添加或修改属性的描述符。</param>
 				return defineProperties(this, properties, _descriptor);
+			},
+			toString : function(){
+				///	<summary>
+				///	对象字符串。
+				///	</summary>
+				return "[object jQun]";
 			}
 		});
 
@@ -415,6 +421,15 @@ this.NonstaticClass = NonstaticClass = (function(){
 	};
 	NonstaticClass = new jQun(NonstaticClass, "NonstaticClass");
 
+	NonstaticClass.override({
+		toString : function(){
+			///	<summary>
+			///	对象字符串。
+			///	</summary>
+			return "[NonstaticClass " + this.constructor.name + "]";
+		}
+	});
+
 	return NonstaticClass.constructor;
 }());
 
@@ -443,6 +458,15 @@ this.StaticClass = StaticClass = (function(){
 		return NewClass;
 	};
 	StaticClass = new jQun(StaticClass, "StaticClass");
+
+	StaticClass.override({
+		toString : function(){
+			///	<summary>
+			///	对象字符串。
+			///	</summary>
+			return "[StaticClass " + this.constructor.name + "]";
+		}
+	});
 
 	return StaticClass.constructor;
 }());

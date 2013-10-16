@@ -595,6 +595,9 @@ function onDeviceReady() {
                 get_current_position : function(callback){
                     PHONE.VoiceMessage.getPlayTime(callback);
                 },
+                set_current_position: function(pos){
+                    PHONE.VoiceMessage.seekTo(pos);
+                }, 
                 save: function() {
                     /* here we save file to db and make try to upload to server */
                 }
@@ -1326,7 +1329,8 @@ function onDeviceReady() {
                                     attachment: {
                                         id: mess.id,
                                         type: mess.type,
-                                        src: mess.server_path
+                                        src: mess.server_path,
+                                        from: "project"
                                     },
                                     praise: [],
                                     time: mess.update_time,
@@ -1383,7 +1387,8 @@ function onDeviceReady() {
                                     attachment: {
                                         id: mess.id,
                                         type: mess.type,
-                                        src: mess.server_path
+                                        src: mess.server_path,
+                                        from: "project"
                                     },
                                     praise: [],
                                     time: mess.update_time,
@@ -1439,19 +1444,21 @@ function onDeviceReady() {
 //                            API.read(callback);
                         var result = {};
                         API._sync(["xiao_todos"], function() {
-                            DB.select();
+                            DB.select('t.id, t.title, t.descr as desc, t.endTime, t.user_id');
                             DB.from("xiao_todos as t");
                             DB.where('t.project_id = "' + params.project_id + '"');
                             DB.where('(t.user_id = "' + SESSION.get("user_id") + '" OR t.creator_id = "' + SESSION.get("user_id") + '")');
                             DB.where('t.finished <> "1"');
+                            DB.order_by("t.endTime");
                             DB.query(function(todos) {
                                 make_callback({uncompleted: todos});
                             });
-                            DB.select();
+                            DB.select('t.id, t.title, t.descr as desc, t.endTime, t.user_id');
                             DB.from("xiao_todos as t");
                             DB.where('t.project_id = "' + params.project_id + '"');
                             DB.where('(t.user_id = "' + SESSION.get("user_id") + '" OR t.creator_id = "' + SESSION.get("user_id") + '")');
                             DB.where('t.finished = "1"');
+                            DB.order_by("t.endTime");
                             DB.query(function(todos) {
                                 make_callback({completed: todos});
                             });
@@ -1471,17 +1478,54 @@ function onDeviceReady() {
                         });
                     } else if ("id" in params) {
                         //get ONE todo
-                        DB.select();
-                        DB.from("xiao_todos AS t");
-//                            DB.where('t.user_id = "'+SESSION.get("user_id")+'"');
-                        DB.where('t.id = "' + params.id + '"');
-//                            API.row(callback);
-                        API.row(function(data) {
-                            console.log(data);
-                            data.attachments = [];
-                            data.messages = [];
-                            callback(data);
+                        var login_user = SESSION.get("user_id");
+                        API._sync(["xiao_todos", "xiao_users"], function(){
+                            DB.select('id, title, descr, endTime, user_id');
+                            DB.from("xiao_todos");
+                            DB.where('id = "' + params.id + '"');
+                            DB.row(function(data){
+                                DB.select("u.id as uid, u.name, u.pinyin, u.avatar, u.company_id, u.position, u.phoneNum, u.email, u.adress, u.isNewUser, u.QRCode, c.title as company, c.companyAdress");
+                                DB.from("xiao_users as u");
+                                DB.join("xiao_companies AS c", "u.company_id = c.id");
+                                DB.where('u.id="'+data.user_id+'"');
+                                DB.row(function(user_data){
+                                    callback({
+                                        id : data.id,
+                                        title : data.title,
+                                        desc : data.descr,
+                                        user : {
+                                            id: user_data.uid,
+                                            name: user_data.name,
+                                            pinyin: user_data.pinyin,
+                                            avatar: user_data.avatar,
+                                            company: user_data.company,
+                                            companyAdress: user_data.companyAdress,
+                                            position: user_data.position,
+                                            phoneNum: user_data.phoneNum,
+                                            email: user_data.email,
+                                            adress: user_data.adress,
+                                            isNewUser: user_data.isNewUser,
+                                            isLoginUser: login_user == user_data.uid,
+    //                                            isLeader: leader,
+                                            QRCode: user_data.QRCode
+                                        },
+                                        attachments : [],
+                                        endTime : data.endTime
+                                    });
+                                });
+                            });
                         });
+//                        DB.select();
+//                        DB.from("xiao_todos AS t");
+////                            DB.where('t.user_id = "'+SESSION.get("user_id")+'"');
+//                        DB.where('t.id = "' + params.id + '"');
+////                            API.row(callback);
+//                        API.row(function(data) {
+//                            console.log(data);
+//                            data.attachments = [];
+//                            data.messages = [];
+//                            callback(data);
+//                        });
                     }
                 },
                 update: function(id, data, callback) {
@@ -1535,7 +1579,8 @@ function onDeviceReady() {
                                     attachment: {
                                         id: mess.id,
                                         type: mess.type,
-                                        src: mess.server_path
+                                        src: mess.server_path,
+                                        from: "todo"
                                     },
                                     praise: [],
                                     time: mess.update_time,
@@ -1591,7 +1636,8 @@ function onDeviceReady() {
                                     attachment: {
                                         id: mess.id,
                                         type: mess.type,
-                                        src: mess.server_path
+                                        src: mess.server_path,
+                                        from: "todo"
                                     },
                                     praise: [],
                                     time: mess.update_time,
@@ -2918,7 +2964,11 @@ function onDeviceReady() {
                                                             // synchronous function
                                                             return this.audio.getDuration();
                                                         };
-
+                                                        
+                                                        this.seekTo = function(pos){
+                                                            return this.audio.seekTo(pos);
+                                                        };
+                                                        
                                                     }
 //                                                    extend(VoiceMessage, Phone);
                                                     extend(VoiceMessage, Files);

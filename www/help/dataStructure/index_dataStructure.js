@@ -25,7 +25,8 @@ with(this){
 	this.DS_attachment = {
 		id : 1, // number
 		type : "map", // string : "map", "voice" or "image"
-		src : "src.png" // string
+		src : "src.png", // string
+		from : "project" // string : "project" or "todo"
 	};
 
 	this.DS_message = {
