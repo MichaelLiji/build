@@ -293,13 +293,15 @@ this.Todo = (function(ChatList, OverflowPanel, Global){
 				if(!message.isSending)
 					return;
 
-				var type = message.type;
+				var type = message.type, attachment = message.attachment;
+
+				attachment.resetFrom("todo");
 
 				CallServer.open(
 					"addCommentForTodo",
 					{
 						todoId : todo.id,
-						attachment : message.attachment,
+						attachment : attachment,
 						text : message.text,
 						type : type
 					},
@@ -307,7 +309,7 @@ this.Todo = (function(ChatList, OverflowPanel, Global){
 						if(type !== "voice")
 							return;
 
-						e.message.attachment.resetId(data.id);
+						attachment.resetId(data.id);
 					}
 				);
 			},

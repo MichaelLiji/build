@@ -111,21 +111,23 @@ this.Discussion = (function(ProjectPanel, ChatList){
 				if(!message.isSending)
 					return;
 
-				var type = message.type;
+				var type = message.type, attachment = message.attachment;
+
+				attachment.resetFrom("project");
 
 				CallServer.open(
 					"addComment",
 					{
 						projectId : projecetId,
-						attachment : message.attachment,
+						attachment : attachment,
 						text : message.text,
 						type : type
 					},
 					function(data){
 						if(type !== "voice")
 							return;
-
-						e.message.attachment.resetId(data.id);
+						attachment.resetFrom("project");
+						attachment.resetId(data.id);
 					}
 				);
 			},

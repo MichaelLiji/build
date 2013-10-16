@@ -496,7 +496,7 @@ function onDeviceReady() {
                     } else {
                         // if new media file
                         // we check db if this file exists in local fs
-                        if(type != "project" && type != "todo"){alert("no type");return;}
+                        if(type != "project" && type != "todo"){console.log("type:");console.log(type);alert(type);alert("no type");return;}
 //                        switch (type) {
 //                            case "project":
                                 DB.select('pc.id, pc.local_path, pc.server_path');

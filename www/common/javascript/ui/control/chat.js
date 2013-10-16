@@ -23,6 +23,9 @@ this.Attachment = (function(){
 		base64 : "",
 		from : "",
 		id : -1,
+		resetFrom : function(from){
+			this.from = from;
+		},
 		resetId : function(id){
 			this.id = id;
 		},
@@ -74,13 +77,12 @@ this.ImageBox = (function(imageBoxHtml){
 	].join(""))
 ));
 
-this.ActiveVoice = (function(round){
-	function ActiveVoice(selector, id, from){
+this.ActiveVoice = (function(Attachment, round){
+	function ActiveVoice(selector, attachment){
 		var activeVoice = this;
 		
 		this.assign({
-			from : from,
-			id : id,
+			attachment :　attachment,
 			buttonStyle : this.find(">button").style
 		});
 
@@ -96,15 +98,14 @@ this.ActiveVoice = (function(round){
 	ActiveVoice = new NonstaticClass(ActiveVoice, "Bao.UI.Control.Chat.ActiveVoice", Panel.prototype);
 
 	ActiveVoice.properties({
-		from : "",
-		id : -1,
+		attachment : new Attachment(),
 		isPlaying : false,
 		// 暂停点
 		pausePosition : 0,
 		play : function(){
-			var activeVoice = this, buttonStyle = this.buttonStyle;
+			var activeVoice = this, buttonStyle = this.buttonStyle, attachment = this.attachment;
 
-			Voice.play(this.id, this.from, function(i, max){
+			Voice.play(attachment.id, attachment.from, function(i, max){
 				if(!activeVoice.isPlaying){
 					activeVoice.pausePosition = i - 1;
 
@@ -112,14 +113,16 @@ this.ActiveVoice = (function(round){
 					return;
 				}
 
-				buttonStyle.marginLeft = round(i * 100 / max) + "%";
+//				buttonStyle.marginLeft = round(i * 100 / max) + "%";
+				buttonStyle.left = round(i * 100 / max) + "%";
 
 				if(i !== max){
 					return;
 				}
 
 				setTimeout(function(){
-					buttonStyle.marginLeft = 0;
+//					buttonStyle.marginLeft = 0;
+					buttonStyle.left = 0;
 					activeVoice.stop();
 				}, 1000);
 			}, this.pausePosition);
@@ -137,6 +140,7 @@ this.ActiveVoice = (function(round){
 
 	return ActiveVoice.constructor;
 }(
+	this.Attachment,
 	Math.round
 ));
 
@@ -178,11 +182,9 @@ this.Message = (function(Attachment, ImageBox, ActiveVoice, clickDoEvent, clickP
 
 				var voicePanel = targetEl.between(">a", this);
 
-				// 播放语音
+				// 播放语音，同一个按钮只会进入这里一次，因为之后会被ActiveVoice类给截断冒泡
 				if(voicePanel.length > 0){
-					var attachment = message.attachment;
-
-					new ActiveVoice(voicePanel[0], attachment.id, attachment.from);
+					new ActiveVoice(voicePanel[0], message.attachment);
 					return;
 				}
 			}

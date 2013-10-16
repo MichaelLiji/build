@@ -53,7 +53,8 @@
 .chatList_message figcaption > a {
 	height : 22px;
 	width : 100%;
-	display : inline-block;
+	/*display : inline-block;*/
+	display : block;
 	background-image : -webkit-linear-gradient(top, transparent 10px, rgba(0, 0, 0, 0.3) 10px, rgba(0, 0, 0, 0.3) 12px, transparent 12px);
 	border-color : #fff;
 }
