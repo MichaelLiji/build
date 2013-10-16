@@ -112,17 +112,17 @@ this.ActiveVoice = (function(Attachment, round){
 					this.stop();
 					return;
 				}
-
-//				buttonStyle.marginLeft = round(i * 100 / max) + "%";
-				buttonStyle.left = round(i * 100 / max) + "%";
+//                                alert(i + "    " + max);
+				buttonStyle.marginLeft = round(i * 100 / max) + "%";
+//				buttonStyle.left = round(i * 100 / max) + "%";
 
 				if(i !== max){
 					return;
 				}
 
 				setTimeout(function(){
-//					buttonStyle.marginLeft = 0;
-					buttonStyle.left = 0;
+					buttonStyle.marginLeft = 0;
+//					buttonStyle.left = 0;
 					activeVoice.stop();
 				}, 1000);
 			}, this.pausePosition);

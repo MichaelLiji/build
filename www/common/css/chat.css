@@ -51,6 +51,7 @@
 	word-break : break-word;
 }
 .chatList_message figcaption > a {
+        text-indent : -11px;
 	height : 22px;
 	width : 100%;
 	/*display : inline-block;*/
@@ -63,11 +64,12 @@
 	margin : 0 auto;
 }
 .chatList_message figcaption button {
+        float: left;
 	height : 22px;
 	width : 22px;
 	border-radius : 22px;
-	position : relative;
-	left : -11px;
+/*	position : relative;
+	left : -11px;*/
 	border : 0 none;
 	background : url(../image/width24.png) 0 -725px no-repeat;
 }
