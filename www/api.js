@@ -494,6 +494,7 @@ function onDeviceReady() {
                         // if continue to play current media file
                         PHONE.VoiceMessage.play(this._last_play_path);
                     } else {
+                        alert(id+" "+this._last_play_id);
                         // if new media file
                         // we check db if this file exists in local fs
                         if(type != "project" && type != "todo"){console.log("type:");console.log(type);alert(type);alert("no type");return;}
@@ -508,17 +509,29 @@ function onDeviceReady() {
                                     if (data.local_path != "" && data.local_path != undefined) {
                                         console.log("file exists");
                                         // if this file exists in local db then there is a local path in the db
-                                        PHONE.VoiceMessage.play(data['local_path']);
-                                        callback(PHONE.VoiceMessage.getDuration());
+//                                        PHONE.VoiceMessage.play(data['local_path'], function(dur){
+                                        PHONE.VoiceMessage.play_and_get_duration(data['local_path'], function(dur){
+//                                            alert(dur);
+                                            callback(dur);
+//                                            callback(PHONE.VoiceMessage.getDuration());
+                                        });
                                         _this._last_play_path = data.local_path;
+                                        _this._last_play_id = id;
                                     } else {
                                         console.log("no file");
                                         PHONE.VoiceMessage.download(data['server_path'], function(new_local_path) {
                                             console.log("new_local_path");
                                             console.log(new_local_path);
-                                            PHONE.VoiceMessage.play(new_local_path);
-                                            callback(PHONE.VoiceMessage.getDuration());
+//                                            PHONE.VoiceMessage.play(new_local_path);
+//                                            callback(PHONE.VoiceMessage.getDuration());
+//                                            PHONE.VoiceMessage.play(new_local_path, function(dur){
+                                            PHONE.VoiceMessage.play_and_get_duration(new_local_path, function(dur){
+//                                                alert(dur);
+                                                callback(dur);
+//                                                callback(PHONE.VoiceMessage.getDuration());
+                                            });
                                             _this._last_play_path = new_local_path;
+                                            _this._last_play_id = id;
                                             DB.update('xiao_'+type+'_comments', {local_path: new_local_path}, 'id="' + id + '"');
                                         });
                                         // if local_path is empty we need to download file from server
@@ -2918,12 +2931,12 @@ function onDeviceReady() {
                                                             this.audio.play();
                                                         };
 
-                                                        this.play = function(file) {
+                                                        this.play = function(file, callback) {
 //                                                            alert(file);
-                                                            this.audio = null;
-                                                            this.audio = new Media(file, this.log_success, this.log_error);
+//                                                            this.audio = null;
+//                                                            this.audio = new Media(file, this.log_success, this.log_error);
                                                             this.audio.play();
-
+//                                                            if(callback)callback(this.audio.getDuration());
 //                                                            var _this = this;
 //                                                            console.log(this.file_path);
 //                                                            if (this.audio === null || this.file_path != file) {
@@ -2937,17 +2950,41 @@ function onDeviceReady() {
 //                                                            }
 
                                                         };
-
-                                                        this.pause = function() {
-                                                            if (this.audio) {
-                                                                this.audio.pause();
+                                                        
+                                                        this.play_and_get_duration = function(file, callback){
+                                                            if(this.audio !== null){this.audio.stop();}
+                                                            this.audio = null;
+                                                            var _this = this, counter= 0;
+                                                            this.audio = new Media(file, this.log_success, this.log_error);
+                                                            var normal_duration = this.audio.getDuration();
+                                                            if(normal_duration > 0){
+                                                                callback(normal_duration);
+                                                            }else{
+                                                                this.audio.play();this.audio.stop();
+                                                                var timerDur = setInterval(function() {
+                                                                    counter = counter + 100;
+                                                                    if (counter > 2000) {
+                                                                        callback(false);
+                                                                        clearInterval(timerDur);
+                                                                    }
+                                                                    var dur = _this.audio.getDuration();
+                                                                    if (dur > 0) {
+                                                                        if(callback)callback(dur);
+                                                                        _this.audio.play();
+                                                                        clearInterval(timerDur);
+                                                                    }
+                                                                }, 100);
                                                             }
                                                         };
 
+                                                        this.pause = function() {
+                                                            if (this.audio !== null)
+                                                                this.audio.pause();
+                                                        };
+
                                                         this.stop = function() {
-                                                            if (this.audio) {
+                                                            if (this.audio !== null) 
                                                                 this.audio.stop();
-                                                            }
                                                         };
 
                                                         this.getPlayTime = function(callback) {
@@ -2960,13 +2997,14 @@ function onDeviceReady() {
                                                                     });
                                                         };
                                                         
-                                                        this.getDuration = function(){
-                                                            // synchronous function
-                                                            return this.audio.getDuration();
-                                                        };
+//                                                        this.getDuration = function(){
+//                                                            // synchronous function
+//                                                            return this.audio.getDuration();
+//                                                        };
                                                         
                                                         this.seekTo = function(pos){
-                                                            return this.audio.seekTo(pos);
+                                                            if (this.audio !== null) 
+                                                                return this.audio.seekTo(pos);
                                                         };
                                                         
                                                     }

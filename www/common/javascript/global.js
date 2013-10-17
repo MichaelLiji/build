@@ -7,9 +7,9 @@ this.Global = (function(Fixed, Management, HTML, Browser, inputs, inputEvents){
 		var Global = this;
 
 		jQun(window).attach({
-			/*
 			touchstart : function(e, targetEl){
 				if(targetEl.between('input[type="text"], input[type="password"], textarea').length > 0){
+					/*
 					if(targetEl.getAttribute("stayput") != null)
 						return;
 
@@ -20,11 +20,17 @@ this.Global = (function(Fixed, Management, HTML, Browser, inputs, inputEvents){
 						targetEl.attach(inputEvents);
 						inputs.push(input);
 					}
+					*/
+					return;
+				}
 
+				var el = jQun(document.activeElement);
+
+				if(el.between('input[type="text"], input[type="password"], textarea').length > 0){
+					el.blur();
 					return;
 				}
 			},
-			*/
 			appload : function(){
 				// 初始化历史记录
 				var history = new Management.History();

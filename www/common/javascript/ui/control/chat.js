@@ -77,7 +77,7 @@ this.ImageBox = (function(imageBoxHtml){
 	].join(""))
 ));
 
-this.ActiveVoice = (function(Attachment, round){
+this.ActiveVoice = (function(Attachment, round, lastActiveVoice){
 	function ActiveVoice(selector, attachment){
 		var activeVoice = this;
 		
@@ -89,7 +89,7 @@ this.ActiveVoice = (function(Attachment, round){
 		this.attach({
 			userclick : function(e){
 				e.stopPropagation();
-				activeVoice[activeVoice.isPlaying ? "stop" : "play"]();
+				activeVoice[activeVoice.isPlaying ? "pause" : "play"]();
 			}
 		}, true);
 
@@ -99,39 +99,47 @@ this.ActiveVoice = (function(Attachment, round){
 
 	ActiveVoice.properties({
 		attachment : new Attachment(),
+		buttonStyle : undefined,
 		isPlaying : false,
-		// 暂停点
-		pausePosition : 0,
+		pause : function(){
+			this.isPlaying = false;
+			this.classList.remove("playing");
+			Voice.pause();
+		},
 		play : function(){
 			var activeVoice = this, buttonStyle = this.buttonStyle, attachment = this.attachment;
 
+			if(lastActiveVoice && lastActiveVoice !== this){
+				lastActiveVoice.stop();
+			}
+
 			Voice.play(attachment.id, attachment.from, function(i, max){
 				if(!activeVoice.isPlaying){
-					activeVoice.pausePosition = i - 1;
-
 					this.stop();
 					return;
 				}
-//                                alert(i + "    " + max);
-				buttonStyle.marginLeft = round(i * 100 / max) + "%";
-//				buttonStyle.left = round(i * 100 / max) + "%";
 
+				buttonStyle.left = round(i * 100 / max) + "%";
+				activeVoice.position = i;
+				
 				if(i !== max){
 					return;
 				}
 
 				setTimeout(function(){
-					buttonStyle.marginLeft = 0;
-//					buttonStyle.left = 0;
 					activeVoice.stop();
 				}, 1000);
-			}, this.pausePosition);
+			}, this.position);
 
 			this.isPlaying = true;
 			this.classList.add("playing");
+			lastActiveVoice = this;
 		},
+		// 暂停点
+		position : 0,
 		stop : function(){
-			this.pausePosition = 0;
+			this.buttonStyle.left = 0;
+			this.position = 0;
 			this.isPlaying = false;
 			this.classList.remove("playing");
 			Voice.stop();
@@ -141,7 +149,9 @@ this.ActiveVoice = (function(Attachment, round){
 	return ActiveVoice.constructor;
 }(
 	this.Attachment,
-	Math.round
+	Math.round,
+	// lastActiveVoice
+	undefined
 ));
 
 
@@ -385,7 +395,7 @@ this.MessageGroup = (function(MessageList, messageAppendedEvent, singleNumRegx, 
 		///	</summary>
 		var dt = new Date(time),
 
-			desc = "今天", t = this - dt, hours = dt.getHours();
+			desc = "今天", t = time - dt, hours = dt.getHours();
 				
 		switch(true){
 			case t < 0 :

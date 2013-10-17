@@ -120,14 +120,19 @@ this.History = (function(List, Loader, redirectEvent){
 			///	<summary>
 			///	回到上一个记录。
 			///	</summary>
-			this.go(this[this.length - 1].opener, true);
+			this.go(this[this.length - 2], true);
 		},
-		getNameByIndex : function(idx){
+		clear : function(_name){
 			///	<summary>
-			///	通过索引获取相对应历史记录名称。
+			///	清除所有记录。
 			///	</summary>
-			///	<param name="idx" type="number">对其添加或修改属性的对象。</param>
-			return idx < this.length && idx > -1 ? this[idx].self : undefined;
+			if(!_name){
+				return this.splice(0);
+			}
+
+			var idx = this.indexOf(_name);
+
+			return idx > -1 ? this.splice(idx, 1) : "";
 		},
 		go : function(name, _isBack){
 			///	<summary>
@@ -143,11 +148,11 @@ this.History = (function(List, Loader, redirectEvent){
 			// 如果是当前页，或者记录条数为0
 			if(lastIdx > -1){
 				if(idx === lastIdx){
-					return Loader.pageStorage[this[idx].self];
+					return Loader.pageStorage[this[idx]];
 				}
 				else {
 					// 隐藏上一个panel
-					Loader.pageStorage[this.getNameByIndex(lastIdx)].hide();
+					Loader.pageStorage[this[lastIdx]].hide();
 				}
 			}
 
@@ -156,58 +161,28 @@ this.History = (function(List, Loader, redirectEvent){
 			redirectEvent.trigger(window);
 
 			if(idx > -1){
-				panel = Loader.pageStorage[this[idx].self];
+				panel = Loader.pageStorage[this[idx]];
+
+				if(_isBack){
+					this.splice(idx + 1);
+				}
+				else {
+					this.push(this.splice(idx, 1)[0]);
+				}
+
 				// 显示当前的panel
 				panel.show(null, _isBack);
-				old = this.splice(idx, 1)[0];
-				lastIdx = lastIdx - 1;
 			}
 			else {
 				// 加载、初始化新panel信息
 				panel = Loader.load(name);
 				panel.show();
+				this.push(name);
 			}
-			/*
-			if(_isBack){
-				opener = old ? old.opener : null
-			}
-			else {
-				var lastPage = this[lastIdx];
-
-				opener = this.getNameByIndex(lastIdx);
-
-				if(lastPage){
-					if(lastPage.opener === name){
-						opener = old.opener;
-					}
-				}
-			}
-			*/
-			this.push({
-				self : name,
-				opener : _isBack ? (old ? old.name : null) : this.getNameByIndex(lastIdx)
-				//opener : opener
-			});
+			
 			return panel;
 		},
 		homePage : "project"
-	});
-
-	History.override({
-		indexOf : function(name){
-			var idx = -1;
-
-			this.every(function(item, i){
-				if(item.self === name){
-					idx = i;
-					return false;
-				}
-				
-				return true;
-			});
-
-			return idx;
-		}
 	});
 
 	return History.constructor;

@@ -170,9 +170,10 @@ this.Login = (function(OverflowPanel, LoginInfoManagement, loginEvent){
 					return;
 				}
 
-				var user = data.user;
+				var user = data.user, history = Global.history;
 
-				Global.history.go(user.isNewUser ? "createFirstProject" : "project");
+				history.go(user.isNewUser ? "createFirstProject" : "project");
+				history.clear("login");
 
 				loginEvent.setEventAttrs({ loginUser : user });
 				loginEvent.trigger(window);
